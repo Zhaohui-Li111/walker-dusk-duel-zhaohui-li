@@ -15,6 +15,9 @@ const TESTS := [
 	"test_hurt_pushes_away_from_attacker", "test_ko_once_then_result_and_rematch",
 	"test_every_attack_resolves_exactly_once", "test_cpu_is_deterministic_and_attacks",
 	"test_pause_freezes_the_fight",
+	# step 3: sound events, music behaviour, mute
+	"test_one_sound_per_event", "test_final_hit_sounds_hit_then_ko", "test_music_follows_the_round",
+	"test_mute_never_changes_the_fight",
 ]
 var failures := 0
 var checks := 0
@@ -294,3 +297,109 @@ func test_pause_freezes_the_fight(main: Node) -> void:
 	main.set_paused(false)
 	run_frames(main, 10)
 	expect(p1.position.x > x and main.hud.message == "", "resumes and clears the message")
+
+# --- step 3 ------------------------------------------------------------------
+
+## Signal log -> the sounds that should have been requested, in order.
+func expected_sounds(log: Array) -> Array:
+	var map := {"hit": "SFX-HIT", "blocked": "SFX-BLOCK", "whiff": "SFX-WHIFF"}
+	return log.filter(func(e): return map.has(e[0])).map(func(e): return map[e[0]])
+
+
+func test_one_sound_per_event(main: Node) -> void:
+	var p1: Fighter = main.p1
+	var p2: Fighter = main.p2
+	var audio: Node = main.audio
+	var log := record(p1)
+	p2.health = 1000                   # keep the dummy alive for the whole sequence
+	var punch_gap := in_range(p1, p2, "punch")
+	# A: punch button held for 120 frames -> one attack
+	p2.position.x = p1.position.x + punch_gap
+	p1.controller = ScriptedController.new([{"frames": 120, "attack": "punch"}])
+	run_frames(main, 120)
+	# B: mashing, a press every 3 frames for 90 frames (presses during an attack are ignored;
+	#    the dummy is pushed back by each hit, so later attacks whiff)
+	p2.position.x = p1.position.x + punch_gap
+	var segs := []
+	for i in 30:
+		segs.append({"frames": 3, "attack": "punch"})
+	p1.controller = ScriptedController.new(segs)
+	run_frames(main, 90 + 30)
+	# C: three kicks, dummy put back in range before each -> three hits
+	for i in 3:
+		p2.position.x = p1.position.x + in_range(p1, p2, "kick")
+		p1.controller = ScriptedController.new([{"frames": 40, "attack": "kick"}])
+		run_frames(main, 40)
+	# D: two punches into a blocker -> two blocks
+	p2.controller = ScriptedController.new([{"frames": 200, "block": true}])
+	for i in 2:
+		p2.position.x = p1.position.x + punch_gap
+		p1.controller = ScriptedController.new([{"frames": 40, "attack": "punch"}])
+		run_frames(main, 40)
+	# E: two attacks far out of range -> two whiffs
+	p2.controller = null
+	p2.position.x = p1.position.x + 220.0
+	p1.controller = ScriptedController.new([{"frames": 40, "attack": "kick"}, {"frames": 40, "attack": "punch"}])
+	run_frames(main, 80)
+	var want := expected_sounds(log)
+	var starts := log.count(["start", "punch"]) + log.count(["start", "kick"])
+	print("    attacks %d -> sounds %s" % [starts, audio.requests])
+	expect(audio.events == want, "sound requests match attack results one-to-one")
+	expect(want.size() == starts, "every attack produced exactly one sound (%d attacks, %d sounds)" % [starts, want.size()])
+	expect(audio.requests["SFX-HIT"] >= 5 and audio.requests["SFX-BLOCK"] == 2 and audio.requests["SFX-WHIFF"] >= 2,
+			"held punch + mash first hit + 3 kicks = 5+ hits, 2 blocks, 2+ whiffs: %s" % [audio.requests])
+	expect(audio.requests["SFX-KO"] == 0, "no K.O. sound without a K.O.")
+
+func test_final_hit_sounds_hit_then_ko(main: Node) -> void:
+	var p1: Fighter = main.p1
+	var p2: Fighter = main.p2
+	var audio: Node = main.audio
+	p2.position.x = p1.position.x + in_range(p1, p2, "punch")
+	p2.health = 5
+	p1.controller = ScriptedController.new([{"frames": 30, "attack": "punch"}])
+	run_frames(main, 30 + main.KO_FRAMES)
+	expect(audio.events == ["SFX-HIT", "SFX-KO"], "final hit: SFX-HIT then SFX-KO, once each, got %s" % [audio.events])
+	expect(audio.music_state == "stopped", "music stops at K.O.")
+
+
+func test_music_follows_the_round(main: Node) -> void:
+	# fresh() already left the title (music started there) and started round 1
+	var audio: Node = main.audio
+	expect(audio.music_state == "playing" and audio.music_starts == 1, "music started once on the title and kept playing into round 1 (%s, %d)" % [audio.music_state, audio.music_starts])
+	main.set_paused(true)
+	var bus := AudioServer.get_bus_index("Music")
+	expect(audio.music_state == "ducked" and is_equal_approx(AudioServer.get_bus_volume_db(bus), -12.0) and AudioServer.is_bus_effect_enabled(bus, 0), "pause ducks music -12 dB with the low-pass on")
+	main.set_paused(false)
+	expect(audio.music_state == "playing" and is_equal_approx(AudioServer.get_bus_volume_db(bus), 0.0) and not AudioServer.is_bus_effect_enabled(bus, 0), "resume restores music")
+	main.p2.health = 5
+	main.p2.position.x = main.p1.position.x + in_range(main.p1, main.p2, "punch")
+	main.p1.controller = ScriptedController.new([{"frames": 30, "attack": "punch"}])
+	run_frames(main, 30 + main.KO_FRAMES)
+	expect(main.phase == "result" and audio.music_state == "stopped", "music stays stopped on the result screen")
+	main.confirm()
+	expect(audio.music_state == "playing" and audio.music_starts == 2, "rematch restarts the loop from 0 (starts=%d)" % audio.music_starts)
+
+
+func test_mute_never_changes_the_fight(main: Node) -> void:
+	# The same seeded CPU fight, once with sound and once with both buses muted, must end identically.
+	var outcomes := []
+	for run in 2:
+		var m: Node = main if run == 0 else await fresh()
+		if run == 1:
+			m.audio.toggle_mute("Music")
+			m.audio.toggle_mute("SFX")
+		m.p2.controller = CpuController.new(5)
+		var segs := []
+		for i in 30:
+			segs.append({"frames": 12, "move": 1.0})
+			segs.append({"frames": 30, "attack": ["kick", "punch"][i % 2]})
+		m.p1.controller = ScriptedController.new(segs)
+		run_frames(m, 1300)
+		outcomes.append([m.p1.health, m.p2.health, m.phase, snappedf(m.p1.position.x, 0.01), snappedf(m.p2.position.x, 0.01), m.audio.events.size()])
+		if run == 1:
+			expect(m.audio.is_muted("Music") and m.audio.is_muted("SFX"), "both buses were muted")
+			m.audio.toggle_mute("Music")
+			m.audio.toggle_mute("SFX")
+			m.queue_free()
+	print("    with sound %s / muted %s" % [outcomes[0], outcomes[1]])
+	expect(outcomes[0] == outcomes[1], "muting changes nothing in the fight (and the same sounds are requested)")

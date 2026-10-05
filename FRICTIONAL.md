@@ -75,3 +75,20 @@ contributions, and generative-model outputs. Retrospective notes are labeled.
   myself yet.
 - **Still unresolved:** whether the CPU (block chance 0.55, kick chance 0.5, 10-frame reaction) is
   fun or just annoying; whether the 6 px block push feels right.
+
+## 2026-10-05 — slice step 3: sound wiring before any sound exists
+
+- **Wanted:** each of the four events to request exactly one sound, music to follow pause / K.O. /
+  rematch, and muting to change nothing in the fight (CHANGE-BRIEF failure cases 2 and 5).
+- **Observed:** Claude noticed while wiring that the K.O. signal fired before the final hit's result,
+  which would have logged SFX-KO before SFX-HIT, the reverse of panel 8; fixed and tested.
+- **Observed (test):** the first sound test expected "2 blocks, 2 whiffs" but got 1 block and 10
+  whiffs. The one-to-one checks passed; the expectation was wrong because each hit or block pushes
+  the dummy out of range. The scenario now puts the dummy back in range before each attack; the
+  one-to-one assertions were not changed.
+- **Result:** 78 automated checks pass, including a seeded CPU fight that ends identically with
+  sound on and with both buses muted.
+- **Human / Claude / model:** Claude wrote AudioDirector, the mute keys and the tests. No audio has
+  been generated, so nothing has been listened to yet.
+- **Still unresolved:** everything that needs ears: loudness balance, whether the loop seam clicks,
+  whether the -12 dB pause duck is noticeable enough.

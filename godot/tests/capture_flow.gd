@@ -54,6 +54,11 @@ func _run() -> void:
 	main.set_paused(true)
 	await shot("06_paused")
 	main.set_paused(false)
+	main.audio.toggle_mute("Music")
+	main.audio.toggle_mute("SFX")
+	await shot("06b_muted_indicator")
+	main.audio.toggle_mute("Music")
+	main.audio.toggle_mute("SFX")
 	# P8: final hit, K.O., result
 	p2.health = 5
 	p2.controller = null

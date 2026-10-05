@@ -53,6 +53,7 @@ var health := MAX_HEALTH
 var stun := 0                   # frames left in hitstun or blockstun
 var attack_kind := ""           # attack in progress, "" if none
 var attack_done := false        # this attack already resolved
+var ko_pending := false         # knocked out this frame; emitted by flush_ko()
 var show_boxes := false
 
 @onready var sprite: Sprite2D = $Sprite2D
@@ -76,6 +77,7 @@ func reset(x: float, face: int) -> void:
 	health = MAX_HEALTH
 	stun = 0
 	attack_kind = ""
+	ko_pending = false
 	_set_state("idle")
 	health_changed.emit(self, health)
 	_update_sprite()
@@ -168,6 +170,7 @@ func check_hit() -> void:
 	var point: Vector2 = (hb as Rect2).intersection(hurt).get_center()
 	var blocked := opponent.receive_hit(self, a["damage"])
 	_resolve("blocked" if blocked else "hit", point)
+	opponent.flush_ko()              # after the hit result, so SFX-HIT comes before SFX-KO
 
 
 ## Returns true if the hit was blocked. Health and state change here; nothing else does.
@@ -189,7 +192,7 @@ func receive_hit(attacker: Fighter, damage: int) -> bool:
 	if health == 0:
 		velocity = Vector2.ZERO
 		_set_state("ko")
-		knocked_out.emit(self)
+		ko_pending = true
 	else:
 		stun = HITSTUN
 		velocity = Vector2(away * HIT_PUSH, 0.0)
@@ -198,6 +201,12 @@ func receive_hit(attacker: Fighter, damage: int) -> bool:
 		_face_opponent()
 	_update_sprite()                    # show hurt/KO at once, even during hitstop
 	return false
+
+
+func flush_ko() -> void:
+	if ko_pending:
+		ko_pending = false
+		knocked_out.emit(self)
 
 
 func win() -> void:

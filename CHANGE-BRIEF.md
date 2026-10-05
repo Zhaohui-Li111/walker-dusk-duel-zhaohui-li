@@ -87,3 +87,14 @@ while the fighter is not already attacking.
   flow capture (`evidence/flow/05_player_hurt.png`), fixed, and covered by `test_punch_hits_once`.
 - **Design consequence noted:** each blocked hit pushes the defender back ~6 px, so repeated attacks
   on a blocker need the attacker to step in. Intentional (no infinite pressure), but to playtest.
+
+## Revision 3 · 2026-10-05 · during slice step 3 (no audio generated yet)
+
+- Music starts on the **title screen** (storyboard P1) and keeps playing into round 1; it restarts
+  from 0 only when a round starts after it was stopped (the rematch, P7). Pause, K.O. and result
+  behave as in the table above.
+- On the final hit the K.O. is now emitted **after** the hit result, so the order is SFX-HIT then
+  SFX-KO (P8). Before this change the K.O. signal fired first.
+- Sound requests are counted even when the audio file does not exist yet, so the event-to-sound map
+  is tested before any audio is generated. Real playback, loop seams and loudness still need
+  listening once the files exist.

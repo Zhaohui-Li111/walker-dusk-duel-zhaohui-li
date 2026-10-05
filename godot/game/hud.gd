@@ -9,6 +9,7 @@ var p2: Fighter
 var message := ""
 var sub_message := ""
 var hint := ""
+var audio: Node                 # AudioDirector, for the mute indicator
 
 
 func _process(_delta: float) -> void:
@@ -27,6 +28,14 @@ func _draw() -> void:
 		draw_string(font, Vector2(0, 160), message, HORIZONTAL_ALIGNMENT_CENTER, 640, 30, TEXT)
 		if sub_message != "":
 			draw_string(font, Vector2(0, 178), sub_message, HORIZONTAL_ALIGNMENT_CENTER, 640, 11, TEXT)
+	if audio:
+		var off := []
+		if audio.is_muted("Music"):
+			off.append("music off (M)")
+		if audio.is_muted("SFX"):
+			off.append("effects off (N)")
+		if off:
+			draw_string(font, Vector2(0, 40), "  ·  ".join(PackedStringArray(off)), HORIZONTAL_ALIGNMENT_CENTER, 640, 10, Color(TEXT, 0.85))
 	if hint != "":
 		draw_string(font, Vector2(6, 354), hint, HORIZONTAL_ALIGNMENT_LEFT, 628, 9, Color(TEXT, 0.7))
 

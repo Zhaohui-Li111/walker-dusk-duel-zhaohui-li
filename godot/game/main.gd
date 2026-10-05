@@ -3,7 +3,8 @@ extends Node2D
 ## have moved, keeps grounded fighters apart, and runs the phases from the storyboard:
 ##   title (P1) -> intro "ROUND n - FIGHT" (P2) -> fight (P3-P5) -> ko (P6) -> result (P8)
 ##   -> confirm = rematch (P7), Esc on the result screen = quit.
-## Pause (Esc/P) freezes the fight. Everything is stepped by step(), so tests can drive it.
+## Pause (Esc/P) freezes the fight; M / N mute music / effects. Everything is stepped by step(),
+## so tests can drive it. Sound is handled by AudioDirector, which only listens to these signals.
 
 signal round_started(round_number: int)
 signal round_over(winner: Fighter)       # null on a double K.O.
@@ -18,6 +19,7 @@ const HITSTOP_FRAMES := 4       # both fighters freeze briefly on a clean hit
 @onready var p2: Fighter = $P2
 @onready var effects: Node2D = $Effects
 @onready var hud: Control = $HUD/Overlay
+@onready var audio: Node = $AudioDirector
 
 var phase := "title"
 var phase_frame := 0
@@ -35,12 +37,15 @@ func _ready() -> void:
 	p2.controller = CpuController.new()
 	hud.p1 = p1
 	hud.p2 = p2
+	hud.audio = audio
+	audio.connect_game(self, [p1, p2])
 	for f in [p1, p2]:
 		f.attack_resolved.connect(_on_attack_resolved)
 		f.knocked_out.connect(_on_knocked_out)
 	p1.reset(220.0, 1)
 	p2.reset(420.0, -1)
 	_show_title()
+	audio.start_music()             # storyboard P1: the loop starts on the title screen
 
 
 func _physics_process(delta: float) -> void:
@@ -167,6 +172,10 @@ func _unhandled_input(event: InputEvent) -> void:
 			get_tree().quit()
 		else:
 			set_paused(not paused)
+	elif event.is_action_pressed("mute_music"):
+		audio.toggle_mute("Music")
+	elif event.is_action_pressed("mute_sfx"):
+		audio.toggle_mute("SFX")
 	elif event.is_action_pressed("debug_boxes"):
 		for f in [p1, p2]:
 			f.show_boxes = not f.show_boxes
