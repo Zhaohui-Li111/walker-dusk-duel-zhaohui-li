@@ -51,7 +51,7 @@ FIGHTERS = {
             "07_high_kick": (196, (-60, -35), (40, 160), (-6, 0), (118, 112), 0),
             "08_block": (184, (78, 176), (68, 178), (-22, -8), (20, 6), 0),
             "09_hurt": (206, (-125, -150), (-60, -100), (-30, -18), (14, 0), 0),
-            "10_ko_down": (-90, (80, 95), (100, 70), (110, 65), (125, 55), 0),
+            "10_ko_down": (-90, (80, 95), (100, 70), (130, 40), (140, 30), 0),
             "11_victory": (180, (172, 180), (30, -40), (-12, -4), (12, 4), 0),
         },
     },
@@ -68,7 +68,7 @@ FIGHTERS = {
             "02_front_kick": (192, (-50, -20), (35, 165), (-4, 0), (100, 92), 0),
             "03_block": (182, (75, 176), (65, 178), (-18, -6), (20, 6), 0),
             "04_hurt": (204, (-120, -150), (-55, -100), (-28, -16), (14, 0), 0),
-            "05_ko_down": (-90, (80, 95), (100, 70), (120, 45), (135, 35), 0),
+            "05_ko_down": (-90, (80, 95), (100, 70), (135, 30), (145, 25), 0),
         },
     },
 }
@@ -125,6 +125,9 @@ def solve(b, pose):
     # Lowest point of the solid body (feet, head, fists) rests on the ground line.
     pts = [p for p in k if p] + [add(head_c, (0, hr)), add(head_c, (0, -hr))]
     xs, ys = [p[0] for p in pts], [p[1] for p in pts]
+    # Topknot / hat tip sticks out ~1.6 head radii along the torso axis. It counts for horizontal
+    # centring (it was clipped in the lying KO poses) but not for grounding.
+    xs.append(add(head_c, mul(t, hr * 1.6))[0])
     dx = W / 2 - (min(xs) + max(xs)) / 2
     dy = GROUND_Y - max(ys) - air
     sh = lambda p: (p[0] + dx, p[1] + dy) if p else None

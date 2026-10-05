@@ -41,3 +41,18 @@ contributions, and generative-model outputs. Retrospective notes are labeled.
 - **Still unresolved:** whether the red gi at 2.82:1 is enough in motion; whether ControlNet
   OpenPose respects 5-head skeletons (it is trained mostly on realistic proportions); which GPU I
   will actually get.
+
+## 2026-10-05 — KO poses clipped, found in-engine (before any generation)
+
+- **Wanted:** every state image to fit the shared 832×1216 canvas, because the same canvas is the
+  ControlNet input and the in-game sprite frame (CHANGE-BRIEF failure case 6, art vs collision).
+- **Observed:** Claude's Godot state capture (`evidence/states_contact.png`, F1 boxes on) showed both
+  KO poses cut at the canvas edge: Akaken's topknot and Aotake's hat tip were missing. Cause: the pose
+  centring in `tools/make_poses.py` ignored the topknot/hat, and the legs lying flat made the pose
+  wider than the canvas.
+- **Changed:** knees folded further in both KO poses, and the head tip now counts for horizontal
+  centring (not for grounding). Only the two KO skeletons changed; the other 14 are byte-identical.
+  Re-checked in `evidence/ko_check.png`; 39 automated checks still pass.
+- **Human / Claude / model:** I asked for the fix before generation; Claude found the clipping in the
+  capture and changed the script. No generative model involved.
+- **Still unresolved:** whether the model will draw a hat that is "beside the head" as the KO prompt says.
