@@ -69,3 +69,21 @@ while the fighter is not already attacking.
 
 - Extend the hurtbox along an attacking limb so whiffs can be punished (CHARACTER-SHEET collision note).
 - A separate SFX-HURT for the player being hit, if playtesting shows SFX-HIT is ambiguous about who was hit.
+
+---
+
+## Revision 2 · 2026-10-05 · during slice step 2 (no generation yet)
+
+- **Signals renamed and unified.** The three planned signals (`attack_finished`, `hit_landed`,
+  `hit_blocked`) became one: `attack_resolved(fighter, kind, result, point)`, emitted **exactly once
+  per attack** with `result` = `hit` / `blocked` / `whiff` / `interrupted`. SFX-HIT, SFX-BLOCK and
+  SFX-WHIFF map to the first three; `interrupted` (attacker hit during startup) plays nothing.
+  Whiff now fires when the active window ends, not after recovery, so the swish lines up with the
+  swing. `knocked_out(fighter)` is unchanged and drives SFX-KO and the music stop.
+- **Hitboxes cover the striking limb** (elbow→fist, knee→foot) instead of only the tip. Found by the
+  automated block test: at touching distance a tip-only kick box passed beyond the opponent's hurtbox
+  and whiffed. Regression test: `test_point_blank_attacks_connect`.
+- **Hurt image appears on the hit frame.** The 4-frame hitstop delayed the hurt image; found in the
+  flow capture (`evidence/flow/05_player_hurt.png`), fixed, and covered by `test_punch_hits_once`.
+- **Design consequence noted:** each blocked hit pushes the defender back ~6 px, so repeated attacks
+  on a blocker need the attacker to step in. Intentional (no infinite pressure), but to playtest.

@@ -56,3 +56,22 @@ contributions, and generative-model outputs. Retrospective notes are labeled.
 - **Human / Claude / model:** I asked for the fix before generation; Claude found the clipping in the
   capture and changed the script. No generative model involved.
 - **Still unresolved:** whether the model will draw a hat that is "beside the head" as the KO prompt says.
+
+## 2026-10-05 — slice step 2: what the tests and captures caught
+
+- **Wanted:** every attack to produce exactly one readable result (CHANGE-BRIEF failure case 2) and
+  the slice to read without sound (pillar *Every hit is felt*).
+- **Observed (automated test):** `test_block_takes_no_damage` failed: 5 kicks at a blocker gave
+  `blocked, whiff, whiff, whiff, whiff`. Claude's first reading was the block push moving the
+  defender out of range, so the test was changed to step in before each kick; it still failed
+  (`blocked ×3, whiff ×2`). A debug print of the gaps showed the real cause: at touching distance the
+  kick's tip-only hitbox was past the opponent's body. The test was right; the collision design was
+  wrong. Hitboxes now cover the whole striking limb.
+- **Observed (screenshot):** in the flow capture the player still showed the idle image during the
+  4-frame hitstop after being kicked, so the hit read late. Fixed; a test now checks the hurt image
+  is on screen on the hit frame.
+- **Human / Claude / model:** I asked for step 2; Claude wrote the combat, CPU, round flow, tests and
+  captures, and diagnosed both failures. No generative model involved. I have not playtested step 2
+  myself yet.
+- **Still unresolved:** whether the CPU (block chance 0.55, kick chance 0.5, 10-frame reaction) is
+  fun or just annoying; whether the 6 px block push feels right.

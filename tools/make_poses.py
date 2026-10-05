@@ -220,12 +220,16 @@ def boxes(fighter, name, k, head_c):
     half_w = hr * 1.05
     cx = (hipx + k[1][0]) / 2
     hurt = (cx - half_w, min(top, min(core_y)), cx + half_w, feet)
+    # Hitbox covers the striking limb from elbow/knee to the fist/foot, not just the tip:
+    # with a tip-only box, a point-blank kick passed beyond the opponent's hurtbox and whiffed
+    # (found by tests/test_runner.gd, test_block_takes_no_damage).
     hit = None
     r = fighter["widths"]["fist_r"] * 1.2
-    if "punch" in name:
-        p = k[7]; hit = (p[0] - r, p[1] - r, p[0] + r * 1.2, p[1] + r)
-    if "kick" in name:
-        p = k[13]; hit = (p[0] - r * 1.2, p[1] - r * 1.2, p[0] + r * 1.6, p[1] + r * 1.2)
+    limb = (k[6], k[7]) if "punch" in name else (k[12], k[13]) if "kick" in name else None
+    if limb:
+        (x0, y0), (x1, y1) = limb
+        tip = r * (1.2 if "punch" in name else 1.6)
+        hit = (min(x0, x1) - r * 0.5, min(y0, y1) - r, max(x0, x1) + tip, max(y0, y1) + r)
     return hurt, hit
 
 

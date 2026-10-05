@@ -99,3 +99,12 @@ orientation (drawn facing right, flipped to face left at runtime).
   outline `#1E1B22`.
 - **Must differ from Akaken:** hat brim wider than the shoulders; no topknot; cool body color; legs
   visibly longer.
+
+---
+
+## Revision 2 · 2026-10-05 · collision
+
+Hitbox in `PUNCH` now spans the lead forearm from elbow to fist, and in `KICK` the lead shin from
+knee to foot (see the updated `akaken/collision.png`, `aotake/collision.png`). Reason: with the
+original tip-only boxes a point-blank kick whiffed through a touching opponent (CHANGE-BRIEF
+revision 2). Hurtboxes and all OpenPose skeletons are unchanged.
