@@ -12,6 +12,7 @@
 |---|---|---|
 | `tools/make_poses.py` | Claude Code (Opus 5.5), reviewed by Zhaohui | OpenPose conditioning skeletons, pose blocking, collision overlays, silhouette test, `poses.json` |
 | `tools/make_storyboard.py` | Claude Code (Opus 5.5), reviewed by Zhaohui | Blocking thumbnails for gameplay storyboard panels |
+| `notebooks/generate_images.ipynb` (built by `tools/build_colab_notebook.py`) | Claude Code (Opus 5.5), reviewed by Zhaohui | Colab/diffusers image generation; writes `ASSET-LOG.md` one row per generation |
 
 These outputs are design specifications and ControlNet inputs. They are not generated assets and not game art.
 
