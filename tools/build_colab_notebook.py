@@ -2,12 +2,12 @@
 
 Run from the project root:  python tools/build_colab_notebook.py notebooks/generate_images.ipynb
 """
-import json, sys
-from pathlib import Path
+import sys
 
-cells = []
-def md(s): cells.append(("markdown", s.strip("\n")))
-def code(s): cells.append(("code", s.strip("\n")))
+import notebook_common as common
+
+nb = common.Notebook()
+md, code = nb.md, nb.code
 
 md(r'''
 # walker-dusk-duel — image generation (Google Colab, free T4)
@@ -204,87 +204,7 @@ print("pipeline ready, scheduler:", SCHEDULER)
 ''')
 
 md("## 5 · Asset log helpers (one row per generation)")
-code(r'''
-import csv, json, datetime
-
-COLUMNS = ["gen_id", "asset_id", "timestamp_utc", "file", "thumb", "model", "where_run", "license",
-           "prompt", "negative_prompt", "seed", "size", "steps", "cfg", "scheduler",
-           "control_image", "controlnet_scale", "ip_reference", "ip_scale", "seconds",
-           "outcome", "reason", "edits", "where_used"]
-OUTCOMES = {"pending", "accepted", "edited", "rejected"}
-
-def _read_log():
-    if not LOG_CSV.exists():
-        return []
-    with open(LOG_CSV, newline="", encoding="utf-8") as f:
-        return list(csv.DictReader(f))
-
-def _write_log(rows):
-    tmp = LOG_CSV.with_suffix(".tmp")
-    with open(tmp, "w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=COLUMNS)
-        w.writeheader(); w.writerows(rows)
-    tmp.replace(LOG_CSV)
-    _write_md(rows)
-
-def _cell(s):
-    return str(s).replace("|", "\\|").replace("\n", " ")
-
-def _write_md(rows):
-    lines = ["# ASSET-LOG — walker-dusk-duel", "",
-             "Generated automatically by `notebooks/generate_images.ipynb`; one row per generation.",
-             "Outcome and reason are written by Zhaohui with `review()`. Settings are sufficient to reproduce",
-             "an image on the same model commits (small GPU-to-GPU differences are possible).", "",
-             "| Gen ID | Asset ID | Model and version · where run · license | Prompt and settings | Outcome | Edits | Where used |",
-             "|---|---|---|---|---|---|---|"]
-    for r in rows:
-        settings = (f"**prompt:** {r['prompt']}<br>**negative:** {r['negative_prompt']}<br>"
-                    f"seed {r['seed']} · {r['size']} · {r['steps']} steps · cfg {r['cfg']} · {r['scheduler']}"
-                    f" · control `{r['control_image'] or 'none'}` @ {r['controlnet_scale']}"
-                    f" · IP ref `{r['ip_reference'] or 'none'}` @ {r['ip_scale']} · {r['seconds']} s")
-        outcome = r["outcome"] + (f": {r['reason']}" if r["reason"] else "")
-        lines.append("| " + " | ".join(_cell(x) for x in (
-            f"`{r['gen_id']}`<br>![]({r['thumb']})", r["asset_id"],
-            f"{r['model']} · {r['where_run']} · {r['license']}", settings, outcome,
-            r["edits"] or "—", r["where_used"] or "—")) + " |")
-    LOG_MD.write_text("\n".join(lines) + "\n", encoding="utf-8")
-
-def log_generation(row):
-    rows = [r for r in _read_log() if r["gen_id"] != row["gen_id"]]
-    rows.append({c: row.get(c, "") for c in COLUMNS})
-    _write_log(rows)
-
-def review(gen_id, outcome, reason, where_used=None):
-    """Record YOUR judgment. Example: review("CHAR-AK-REF_s103", "accepted", "matches rules 1-7; fists read at 112 px")"""
-    assert outcome in OUTCOMES, f"outcome must be one of {OUTCOMES}"
-    assert reason.strip() or outcome == "pending", "write the reason, judged against the sheet/storyboard/pillars"
-    rows = _read_log()
-    for r in rows:
-        if r["gen_id"] == gen_id:
-            r["outcome"], r["reason"] = outcome, reason
-            if where_used is not None:
-                r["where_used"] = where_used
-            _write_log(rows); print("logged:", gen_id, outcome); return
-    raise KeyError(gen_id)
-
-def add_edit(gen_id, edit, where_used=None):
-    rows = _read_log()
-    for r in rows:
-        if r["gen_id"] == gen_id:
-            r["edits"] = (r["edits"] + "; " if r["edits"] else "") + edit
-            if r["outcome"] == "accepted":
-                r["outcome"] = "edited"
-            if where_used:
-                r["where_used"] = where_used
-            _write_log(rows); return
-    raise KeyError(gen_id)
-
-def show_log(asset_prefix=""):
-    for r in _read_log():
-        if r["asset_id"].startswith(asset_prefix):
-            print(f"{r['gen_id']:28s} {r['outcome']:9s} {r['reason'][:70]}")
-print("log:", LOG_CSV)
-''')
+code(common.LOG_CELL)
 
 md("## 6 · Generate, contact sheet, skeleton overlay check")
 code(r'''
@@ -517,19 +437,4 @@ The Drive folder mirrors the repo layout, so copy these to the **same paths** in
 Keep `raw/` (full-size) on Drive only; the log's `file` column points there. Then commit, e.g. *"Add Akaken reference and poses; log 26 generations"*.
 ''')
 
-nb = {"cells": [], "metadata": {
-        "accelerator": "GPU", "colab": {"gpuType": "T4", "provenance": []},
-        "kernelspec": {"display_name": "Python 3", "name": "python3"},
-        "language_info": {"name": "python"}},
-      "nbformat": 4, "nbformat_minor": 0}
-for kind, src in cells:
-    lines = src.split("\n")
-    source = [l + "\n" for l in lines[:-1]] + [lines[-1]]
-    c = {"cell_type": kind, "metadata": {}, "source": source}
-    if kind == "code":
-        c.update(execution_count=None, outputs=[])
-    nb["cells"].append(c)
-out = Path(sys.argv[1])
-out.parent.mkdir(parents=True, exist_ok=True)
-out.write_text(json.dumps(nb, indent=1, ensure_ascii=False), encoding="utf-8")
-print("cells:", len(cells), "->", out)
+nb.save(sys.argv[1])
