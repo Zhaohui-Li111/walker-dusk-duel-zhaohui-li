@@ -96,6 +96,102 @@ def main():
         label(d, font, cap + "   [Claude blocking thumbnail, not art]")
         img.save(OUT / f"{name}.png")
     print("wrote", len(panels), "gameplay blocking panels")
+    design_panels(font)
+
+
+CREAM, INK = (0xF2, 0xE6, 0xD0, 255), (0x1E, 0x1B, 0x22, 255)
+
+
+def draw_details(d, fid, k, head_c, t, f, eyes_closed):
+    """Close-up details from the character sheet: wrapped fists, headband, eye."""
+    fighter = mp.FIGHTERS[fid]
+    hr, fr = fighter["bones"]["head_r"], fighter["widths"]["fist_r"]
+    if fid == "akaken":
+        for wr in (7, 4):
+            x, y = k[wr]
+            d.ellipse((x - fr, y - fr, x + fr, y + fr), fill=CREAM, outline=INK, width=4)
+        a, b = mp.add(head_c, mp.mul(f, -hr), mp.mul(t, hr * 0.3)), mp.add(head_c, mp.mul(f, hr), mp.mul(t, hr * 0.3))
+        mp.thick(d, a, b, 22, CREAM)
+    eye = mp.add(head_c, mp.mul(f, hr * 0.5), mp.mul(t, hr * 0.05))
+    if eyes_closed:
+        d.line((eye[0] - 14, eye[1] - 6, eye[0] + 14, eye[1] + 6), fill=INK, width=6)
+    else:
+        d.ellipse((eye[0] - 9, eye[1] - 12, eye[0] + 9, eye[1] + 12), fill=INK)
+
+
+def big_sprite(fid, pose_name, height_px, face_left=False, detail=False):
+    """Mannequin rendered so its full canvas is height_px tall (for design-view panels)."""
+    fighter = mp.FIGHTERS[fid]
+    k, head_c, t, f = mp.solve(fighter["bones"], fighter["poses"][pose_name])
+    img = Image.new("RGBA", (mp.W, mp.H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    mp.draw_body(d, fighter, k, head_c, t, f, FILL[fid] + (255,))
+    if detail:
+        draw_details(d, fid, k, head_c, t, f, eyes_closed="ko" in pose_name)
+    img = img.crop(img.getbbox())
+    s = height_px / img.height
+    img = img.resize((round(img.width * s), height_px), Image.LANCZOS)
+    return ImageOps.mirror(img) if face_left else img
+
+
+def design_panels(font):
+    """Design views (not the gameplay camera): P1 high angle, P2 low angle, P6 Dutch close-up."""
+    big = ImageFont.load_default(size=64)
+
+    # P1 - wide, high angle: looking down into the courtyard from the temple roof.
+    img = Image.new("RGB", (PW, PH), SKY)
+    d = ImageDraw.Draw(img)
+    d.rectangle((0, 0, PW, 120), fill=WALL)                       # far wall, seen from above: a thin strip
+    d.polygon([(0, 120), (PW, 120), (PW, PH), (0, PH)], fill=FLOOR)
+    for i in range(1, 7):                                          # paving lines converge toward the far wall
+        y = 120 + (PH - 120) * (i / 7) ** 1.4
+        d.line((0, y, PW, y), fill=(0x3A, 0x35, 0x44), width=2)
+    for x in range(-600, PW + 600, 160):
+        d.line((PW / 2 + (x - PW / 2) * 0.35, 120, x, PH), fill=(0x3A, 0x35, 0x44), width=2)
+    for x, y in ((150, 230), (1130, 230), (150, 560), (1130, 560)):  # lanterns on posts, seen from above
+        d.ellipse((x - 34, y - 34, x + 34, y + 34), fill=(0xF2, 0xA5, 0x41))
+    for fid, pose, x, left in (("akaken", "01_idle_stance", 520, False), ("aotake", "01_idle_stance", 760, True)):
+        s = big_sprite(fid, pose, 150, left)
+        s = s.resize((s.width, round(s.height * 0.62)))            # foreshortened from above
+        d.ellipse((x - 50, 455, x + 50, 485), fill=(0x22, 0x1F, 0x29))
+        img.paste(s, (x - s.width // 2, 470 - s.height), s)
+    d.text((PW / 2, 220), "DUSK DUEL", fill=(240, 236, 228), font=big, anchor="mm")
+    d.text((PW / 2, 290), "press Enter", fill=(240, 236, 228), font=font, anchor="mm")
+    label(d, font, "P1 wide - high angle (from the temple roof) - design view: title   [Claude drawing, not art]")
+    img.save(OUT / "01-title.png")
+
+    # P2 - medium, low angle: camera at knee height looking up at Akaken.
+    img = Image.new("RGB", (PW, PH), SKY)
+    d = ImageDraw.Draw(img)
+    d.rectangle((0, 470, PW, PH), fill=WALL)                        # wall top is low in frame: camera is low
+    d.rectangle((0, 640, PW, PH), fill=FLOOR)
+    for x in (220, 1060):
+        d.line((x, 0, x, 300), fill=(20, 20, 20), width=6)
+        d.ellipse((x - 46, 300, x + 46, 400), fill=(0xF2, 0xA5, 0x41))
+    s = big_sprite("akaken", "01_idle_stance", 980, detail=True)
+    w, h = s.size
+    a = w * 0.10                                                    # head farther from a low camera -> narrower top
+    s = s.transform((w, h), Image.QUAD, (-a, 0, 0, h, w, h, w + a, 0), Image.BICUBIC)
+    img.paste(s, (PW // 2 - w // 2, 40), s)                         # medium shot: cropped at the thighs by the frame
+    d.text((1000, 560), "FIGHT", fill=(240, 236, 228), font=big, anchor="mm")
+    label(d, font, "P2 medium - low angle (knee height, looking up) - design view: fighter intro   [Claude drawing, not art]")
+    img.save(OUT / "02-intro.png")
+
+    # P6 - close-up, Dutch tilt: Akaken's head on the stone floor at KO.
+    tilt = Image.new("RGB", (PW * 2, PH * 2), FLOOR)
+    td = ImageDraw.Draw(tilt)
+    td.rectangle((0, 0, PW * 2, PH * 2 - 760), fill=WALL)
+    for x in range(0, PW * 2, 260):                                 # floor slab joints
+        td.line((x, PH * 2 - 760, x - 120, PH * 2), fill=(0x3A, 0x35, 0x44), width=6)
+    s = big_sprite("akaken", "10_ko_down", 430, detail=True)
+    tilt.paste(s, (PW - 330, PH * 2 - 760 - s.height + 215), s)
+    tilt = tilt.rotate(15, resample=Image.BICUBIC, center=(PW, PH))
+    img = tilt.crop((PW // 2, PH // 2, PW // 2 + PW, PH // 2 + PH))
+    d = ImageDraw.Draw(img)
+    d.text((PW - 260, 150), "K.O.", fill=(240, 236, 228), font=ImageFont.load_default(size=110), anchor="mm")
+    label(d, font, "P6 close-up - Dutch tilt 15 deg - design view: KO transition (held frame)   [Claude drawing, not art]")
+    img.save(OUT / "06-ko-closeup.png")
+    print("wrote 3 design-view panels")
 
 
 if __name__ == "__main__":

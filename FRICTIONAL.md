@@ -31,6 +31,10 @@ contributions, and generative-model outputs. Retrospective notes are labeled.
 - **Observed:** Claude's contrast script showed the red gi at 1.27:1 and teal robe at 1.80:1 against
   the first proposed mid-tone stone `#6E6680`. The fighters would have blended in, so the wall band
   behind them was darkened to `#3A3347` (red 2.82:1, teal 4.01:1). See CHARACTER-SHEET palette table.
+- **Decided:** I asked Claude to draw the three design-view storyboard panels (01 high angle, 02 low
+  angle, 06 Dutch close-up) instead of hand-sketching them. Claude's first P2 and P6 were plain
+  silhouettes too large to read as a close-up; Claude added the eye, headband and wrapped fists and
+  re-framed them. Panel images are Claude code drawings, not generated assets.
 - **Human / Claude / model:** decisions on genre, cartoon style, two fighters and accepting the
   proposal were mine. Theme options, template search, the pose and storyboard scripts, the contrast
   numbers and the draft documents were Claude's. No generative model has been used yet.

@@ -2,15 +2,17 @@
 
 > Version 1 · 2026-10-05 · written before any generation. Frame shape: **16:9** throughout.
 > The gameplay camera is one fixed side view at eye level showing the whole arena.
-> Gameplay panels 03, 04, 05, 07, 08 have blocking thumbnails made by `tools/make_storyboard.py`
-> (Claude-written, mannequins, not art). Design-view panels 01, 02, 06 are **to be hand-sketched by
-> Zhaohui** and photographed into `design/storyboard/`.
+> All 8 panel images are drawn by `tools/make_storyboard.py` (Claude-written code, mannequins from
+> `tools/make_poses.py`, not art and not generated assets). Gameplay panels 03, 04, 05, 07, 08 use the
+> fixed side camera; design-view panels 01, 02, 06 fake their camera angle in 2D (foreshortening for
+> the high angle, a perspective squeeze for the low angle, a 15° rotation for the Dutch tilt).
+> Zhaohui chose to have Claude draw panels 01, 02, 06 instead of hand-sketching them (2026-10-05).
 
 Coverage: views = wide (01, 03–05, 07, 08), medium (02), close-up (06).
 Angles = high/bird's-eye (01), low (02), eye level (03–05, 07, 08), Dutch tilt (06).
 
 ## Panel 1 — Title: the courtyard at dusk
-![sketch](design/storyboard/01-title.png) *(to sketch)*
+![sketch](design/storyboard/01-title.png)
 - Shot: wide · high angle (looking down into the courtyard from the temple roof) · design view (title screen)
 - Player action: presses Enter to start; the game fades from the title card to the fight
 - See: whole courtyard, lanterns on both sides, the two fighters small, facing each other; title text
@@ -19,7 +21,7 @@ Angles = high/bird's-eye (01), low (02), eye level (03–05, 07, 08), Dutch tilt
 - Design reason (pillar *Dusk ritual*): the duel is a calm ceremony in one place, before anything happens
 
 ## Panel 2 — Fighter intro
-![sketch](design/storyboard/02-intro.png) *(to sketch)*
+![sketch](design/storyboard/02-intro.png)
 - Shot: medium · low angle (camera at knee height looking up at Akaken) · design view (pre-round intro)
 - Player action: none; the game holds for one second and shows "FIGHT"
 - See: Akaken in idle stance, big wrapped fists toward camera, headband tails moving behind
@@ -55,7 +57,7 @@ Angles = high/bird's-eye (01), low (02), eye level (03–05, 07, 08), Dutch tilt
 - Design reason (*Read the opponent*): the player should see why: they stayed in range of the long leg
 
 ## Panel 6 — KO (loss)
-![sketch](design/storyboard/06-ko-closeup.png) *(to sketch)*
+![sketch](design/storyboard/06-ko-closeup.png)
 - Shot: close-up · Dutch tilt (about 15°) · design view (KO transition, held frame)
 - Player action: health reaches 0; input is ignored for 1.5 s
 - See: Akaken's face and fist on the stone floor (CHAR-AK-KO), "K.O." text
