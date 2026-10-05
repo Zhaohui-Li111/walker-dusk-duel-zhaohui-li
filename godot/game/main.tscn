@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://game/main.gd" id="1_main"]
+[ext_resource type="Script" path="res://game/stage.gd" id="2_stage"]
+[ext_resource type="PackedScene" path="res://fighter/fighter.tscn" id="3_fighter"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_main")
+
+[node name="Stage" type="Node2D" parent="."]
+script = ExtResource("2_stage")
+
+[node name="P1" parent="." instance=ExtResource("3_fighter")]
+position = Vector2(220, 305)
+fighter_id = "akaken"
+display_name = "AKAKEN"
+
+[node name="P2" parent="." instance=ExtResource("3_fighter")]
+position = Vector2(420, 305)
+fighter_id = "aotake"
+display_name = "AOTAKE"
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Help" type="Label" parent="HUD"]
+offset_left = 6.0
+offset_top = 340.0
+offset_right = 634.0
+offset_bottom = 358.0
+theme_override_font_sizes/font_size = 10
+text = "A/D move  W jump  S crouch  J punch  K kick  L block  F1 boxes   (step 1: movement + state images)"
