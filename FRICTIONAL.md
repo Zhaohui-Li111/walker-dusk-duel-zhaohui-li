@@ -1,0 +1,39 @@
+# FRICTIONAL — walker-dusk-duel
+
+Dated log of the design as it happened. Each entry separates Zhaohui's decisions, Claude Code's
+contributions, and generative-model outputs. Retrospective notes are labeled.
+
+## 2026-10-05 — choosing the game and locking the design (no generation yet)
+
+> Drafted by Claude Code from the chat transcript of this session; Zhaohui to edit into their own words
+> and add what they actually thought.
+
+- **Wanted:** a game I actually want to build this semester. Claude first suggested four themes
+  (candle-spirit platformer, rain-delivery robot, mushroom jumper, paper-crane courier). I chose a
+  **one-on-one fighting game in the spirit of classic arcade tournament fighters** instead.
+- **Asked / got:** Claude searched for Godot 4 fighting-game starting points (GDQuest and CodingQuests
+  hitbox demos, Fray, Castagne, Quiver beat-'em-up) and recommended a small own-code slice rather than
+  a full framework. Claude also pointed out the rights rule: no franchise or character names in any
+  prompt or reference.
+- **Decided:** I said I did **not** want the realistic "digitized actor" look, only a **cartoon
+  character with fighting moves**, and **two martial artists**. That removed the photo-a-real-person
+  pose pipeline Claude had proposed.
+- **Asked / got:** Claude checked my machine: Intel UHD integrated graphics, 16 GB RAM, no NVIDIA
+  GPU. Local Stable Diffusion with ControlNet is not practical here, so image generation will run on
+  Northeastern HPC or free Google Colab (to be confirmed).
+- **Asked / got:** instead of photographing poses, Claude wrote `tools/make_poses.py`, which builds
+  every pose from one fixed set of bone lengths and writes OpenPose skeletons, mannequin blocking,
+  collision overlays and a silhouette test. I accepted Claude's proposal of Akaken (stocky, red,
+  topknot, big fists) vs Aotake (tall, teal, straw hat, long legs), **5-head proportions**, and a dusk
+  temple courtyard.
+- **Observed:** the first silhouette pass cropped both KO poses at the canvas edge (legs too long when
+  lying flat). Claude bent the knees and laid the arms along the body; re-checked in `blocking.png`.
+- **Observed:** Claude's contrast script showed the red gi at 1.27:1 and teal robe at 1.80:1 against
+  the first proposed mid-tone stone `#6E6680`. The fighters would have blended in, so the wall band
+  behind them was darkened to `#3A3347` (red 2.82:1, teal 4.01:1). See CHARACTER-SHEET palette table.
+- **Human / Claude / model:** decisions on genre, cartoon style, two fighters and accepting the
+  proposal were mine. Theme options, template search, the pose and storyboard scripts, the contrast
+  numbers and the draft documents were Claude's. No generative model has been used yet.
+- **Still unresolved:** whether the red gi at 2.82:1 is enough in motion; whether ControlNet
+  OpenPose respects 5-head skeletons (it is trained mostly on realistic proportions); which GPU I
+  will actually get.

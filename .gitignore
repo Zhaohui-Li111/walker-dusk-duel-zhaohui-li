@@ -1,0 +1,29 @@
+# Engine caches and local editor state
+.godot/
+*.import.tmp
+.DS_Store
+.idea/
+.vscode/
+.claude/settings.local.json
+__pycache__/
+
+# Video and MP3 stay out of GitHub (course media storage instead)
+*.[mM][pP]3
+*.[mM][pP]4
+*.avi
+*.mov
+exports/
+builds/
+
+# Full-size raw generations stay local; keep thumbnails/contact sheets in design/rejected/
+raw/
+
+# Credentials
+.env
+.env.*
+!.env.example
+credentials/
+*.p12
+*.pfx
+
+# Git cannot ignore by size: inspect staged files before committing (>25 MB).
