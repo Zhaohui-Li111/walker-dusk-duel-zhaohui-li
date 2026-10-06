@@ -66,6 +66,9 @@ print("project root:", ROOT)
 md("## 2 · Install libraries")
 code(r'''
 %pip install -q -U diffusers transformers accelerate soundfile torchsde huggingface_hub
+# Colab's preinstalled torchao is too old for diffusers >= 0.41 (missing FqnToConfig) and breaks the
+# Stable Audio import; diffusers only needs it for quantization, so remove it.
+%pip uninstall -y -q torchao
 ''')
 
 md("## 3 · Prompts and the rights check")
@@ -252,6 +255,43 @@ code(r'''
 sfx_ids = {a: generate_sfx(a) for a in SFX}
 ''')
 code(r'''
+# Objective checks on the SFX takes (Claude cannot listen; Zhaohui re-judges by ear).
+# onset_ms: lead-in before the sound reaches -20 dB of its peak (pillar: starts immediately)
+# dur_ms: onset to the last moment above -30 dB of peak (short and dry; KO should ring out)
+# in_keep_%: share of the energy inside the kept window from cell 3 (does the trim lose the sound?)
+# events: onsets detected inside the kept window (one hit wanted; KO = thud + gong)
+# low_%: energy below 250 Hz (weight of a hit), centroid_hz: brightness (block clack > hit thud)
+import librosa, librosa.display, pandas as pd
+rows = []
+fig, axes = plt.subplots(len(SFX), 4, figsize=(14, 2.0 * len(SFX)), dpi=70)
+for r, (asset, ids) in enumerate(sfx_ids.items()):
+    keep_s = SFX[asset][2]
+    for c, gid in enumerate(ids):
+        x, sr = sf.read(RAW / asset / f"{gid}.wav", dtype="float32"); x = to_mono(x)
+        a = np.abs(x); peak = a.max()
+        on = int(np.argmax(a > peak * 10 ** (-20 / 20)))
+        above = np.where(a > peak * 10 ** (-30 / 20))[0]
+        k = x[on:on + int(keep_s * sr)]
+        S = np.abs(librosa.stft(k, n_fft=1024)) ** 2
+        f = librosa.fft_frequencies(sr=sr, n_fft=1024)
+        ev = librosa.onset.onset_detect(y=k, sr=sr, units="time", backtrack=False)
+        rows.append({"gen_id": gid, "onset_ms": round(on / sr * 1000), "dur_ms": round((above[-1] - on) / sr * 1000),
+                     "in_keep_%": round(100 * float((k ** 2).sum() / (x ** 2).sum()), 1), "events": len(ev),
+                     "low_%": round(100 * float(S[f < 250].sum() / S.sum()), 1),
+                     "centroid_hz": int(librosa.feature.spectral_centroid(y=k, sr=sr).mean()),
+                     "peak_db": round(20 * np.log10(peak), 1)})
+        ax = axes[r, c]
+        librosa.display.specshow(librosa.amplitude_to_db(np.abs(librosa.stft(x, n_fft=1024)), ref=np.max),
+                                 sr=sr, x_axis="time", y_axis="log", ax=ax)
+        ax.axvline(on / sr, color="w", lw=0.8); ax.axvline(on / sr + keep_s, color="r", lw=0.8)
+        ax.set_title(gid, fontsize=9); ax.set_xlabel(""); ax.set_ylabel("")
+fig.tight_layout(); fig.savefig(CHECKS / "SFX_candidates_spectrograms.png"); plt.close(fig)
+SFX_TABLE = pd.DataFrame(rows)
+print(SFX_TABLE.to_string())
+from IPython.display import Image as IPImage
+display(IPImage(filename=str(CHECKS / "SFX_candidates_spectrograms.png")))
+''')
+code(r'''
 # YOUR decisions, one line per candidate, e.g.:
 # review("SFX-HIT_s12", "accepted", "dry thud, instant attack; clearly heavier than the block clack")
 # review("SFX-HIT_s11", "rejected", "200 ms of silence before the hit and a long room tail")
@@ -348,6 +388,38 @@ nothing that fights the impact sounds.
 ''')
 code(r'''
 music_ids = generate_music()
+''')
+code(r'''
+# Objective checks on the music takes (Claude cannot listen; Zhaohui re-judges by ear).
+# Steadiness = spread of beat-to-beat intervals (lower = steadier); loudness drift = spread of
+# 1 s RMS levels; low share = energy below 250 Hz, where the hit thud lives.
+import librosa, librosa.display
+rows = []
+for gid in music_ids:
+    x, sr = sf.read(RAW / "MUS-RAW" / f"{gid}.wav", dtype="float32"); x = to_mono(x)
+    tempo, beats = librosa.beat.beat_track(y=x, sr=sr, units="time")
+    ibi = np.diff(beats[beats > 2.0])
+    win = sr
+    rms = np.array([np.sqrt(np.mean(x[i:i + win] ** 2)) + 1e-9 for i in range(0, len(x) - win, win)])
+    rms_db = 20 * np.log10(rms)
+    S = np.abs(librosa.stft(x, n_fft=2048)) ** 2
+    f = librosa.fft_frequencies(sr=sr, n_fft=2048)
+    rows.append({"gen_id": gid, "tempo": round(float(np.atleast_1d(tempo)[0]), 1), "beats": len(beats),
+                 "ibi_cv_%": round(100 * float(np.std(ibi) / np.mean(ibi)), 1),
+                 "rms_db_mean": round(float(rms_db.mean()), 1), "rms_db_std": round(float(rms_db.std()), 1),
+                 "quiet_s": int((rms_db < rms_db.max() - 30).sum()),
+                 "low_share_%": round(100 * float(S[f < 250].sum() / S.sum()), 1),
+                 "centroid_hz": int(librosa.feature.spectral_centroid(y=x, sr=sr).mean())})
+    fig, ax = plt.subplots(figsize=(8, 2.2), dpi=80)
+    librosa.display.specshow(librosa.power_to_db(librosa.feature.melspectrogram(y=x, sr=sr), ref=np.max),
+                             sr=sr, x_axis="time", y_axis="mel", ax=ax)
+    for b in beats: ax.axvline(b, color="w", linewidth=0.3)
+    ax.set_title(f"{gid} mel spectrogram, tracked beats"); fig.tight_layout()
+    fig.savefig(CHECKS / f"{gid}_mel.png"); plt.close(fig)
+import pandas as pd
+print(pd.DataFrame(rows).to_string())
+from IPython.display import Image as IPImage
+for gid in music_ids: display(IPImage(filename=str(CHECKS / f"{gid}_mel.png")))
 ''')
 code(r'''
 # review("MUS-RAW_s22", "accepted", "steady pulse, flute stays out of the hit/block frequency range")

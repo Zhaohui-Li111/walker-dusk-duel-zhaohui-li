@@ -184,3 +184,31 @@ contributions, and generative-model outputs. Retrospective notes are labeled.
   operation by Claude; Zhaohui re-signed in to Google so the run could continue.
 - **Still unresolved:** whether s22 actually sounds right for "Dusk ritual"; the SFX stage (needs
   the Stable Audio Open licence accepted and `HF_TOKEN` in Colab Secrets).
+
+## 2026-10-06 — sound effects (decisions delegated to Claude)
+
+> Written by Claude Code from the Colab run. Claude cannot listen; every pick is labelled
+> "Decided by Claude" in ASSET-LOG and Zhaohui must re-judge them by ear.
+
+- **Run trouble:**
+  - Stable Audio Open would not import. diffusers 0.41 imports `FqnToConfig` from torchao, and
+    Colab's preinstalled torchao is too old to have it. The install cell now uninstalls torchao,
+    which diffusers only needs for quantization, and then the session is restarted.
+  - The first download was refused with HTTP 403 (gated model) until Zhaohui accepted the licence
+    on Hugging Face.
+- **Takes:** 4 events x seeds 11-14, about 29 s each on T4. Claude measured each take instead of
+  listening: lead-in before the sound reaches -20 dB of peak, length above -30 dB, share of energy
+  inside the kept window, energy below 250 Hz, spectral centroid, and spectrograms
+  (`design/generations/audio/checks/SFX_candidates_spectrograms.png`). The onset counter was too
+  noisy in near-silent tails to be useful.
+- **Picks:**
+  - whiff s12: brightest, at 5792 Hz.
+  - hit s12: 0 ms lead-in and the most low end, 92.7 % below 250 Hz.
+  - block s14: a bright clack at 2780 Hz. It was picked mainly because it differs most from the
+    hit, for the pillar *Read the opponent*.
+  - K.O. s13: the ring ends at 2.36 s, inside the 2.5 s kept window, so the fade-out does not cut it.
+  - Two hit and two block takes were rejected for a lead-in of more than 100 ms.
+- **Human / Claude / model:** sounds by Stable Audio Open; measurements, picks, trims and the Colab
+  operation by Claude; Zhaohui accepted the model licence and added `HF_TOKEN` to Colab Secrets.
+- **Still unresolved:** whether the picks sound right in play, especially whether the block clack
+  reads as a forearm block and whether the K.O. tone sounds like a gong.

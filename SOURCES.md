@@ -30,7 +30,7 @@ These outputs are design specifications and ControlNet inputs. They are not gene
 | IP-Adapter Plus SDXL ViT-H (`h94/IP-Adapter`) | commit `018e402774` | same | Apache-2.0 | keeps the character consistent across poses (Stage 2-3) |
 | rembg `isnet-anime` | rembg (pip, latest at run time) | same | MIT | background removal on export |
 | MusicGen medium (`facebook/musicgen-medium`) | commit `d3bd7b0076`, via transformers 5.19 | Colab T4 | CC-BY-NC 4.0 (weights) | music loop |
-| Stable Audio Open 1.0 | *(filled in when the SFX stage runs; needs the gated licence and `HF_TOKEN`)* | Colab T4 | Stability AI Community License | SFX |
+| Stable Audio Open 1.0 (`stabilityai/stable-audio-open-1.0`, gated) | commit `f21265c1e2`, via diffusers 0.41 | Colab T4 | Stability AI Community License (card field: other) | whiff, hit, block, K.O. |
 
 Licence fields were read from the Hugging Face Hub by the notebook and are repeated in every
 ASSET-LOG row. Non-commercial / attribution terms (MusicGen weights, Stable Audio Open) are
