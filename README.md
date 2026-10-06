@@ -63,6 +63,12 @@ split between Claude, the models and me.
 - Aotake has 5 poses, so its walk / jump / win reuse other images (see CHARACTER-SHEET appendix).
 - The accepted Akaken reference has a blank face (no eyes); it barely reads at 112 px.
 - The CPU opponent is simple and was tuned by automated tests, not yet by playtesting.
+- Akaken's top is drawn lighter than the sheet's orange; the RISE image has lost the belt and the
+  FALL belt is green.
+- All audio picks were made by measurement (Claude cannot listen) and still need a human ear; see
+  TEST-REPORT.
+- Music is MusicGen (CC-BY-NC 4.0) and SFX are Stable Audio Open (Stability AI Community License):
+  fine for coursework, not for commercial release.
 
 ## Final film
 
