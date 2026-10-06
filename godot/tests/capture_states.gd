@@ -18,11 +18,13 @@ func _run() -> void:
 	root.add_child(main)
 	await process_frame
 	main.set_physics_process(false)
+	main.start_fight_now()            # no title overlay over the fighters
 	var p1: Fighter = main.p1
 	var p2: Fighter = main.p2
 	p1.position = Vector2(250, Fighter.GROUND_Y)
 	p2.position = Vector2(400, Fighter.GROUND_Y)
 	for f in [p1, p2]:
+		f.controller = null
 		f.show_boxes = true
 	for s in STATES:
 		for f in [p1, p2]:

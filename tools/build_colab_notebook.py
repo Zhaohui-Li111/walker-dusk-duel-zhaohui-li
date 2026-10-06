@@ -501,19 +501,35 @@ code(r'''
 %pip install -q rembg onnxruntime
 ''')
 code(r'''
+import numpy as _np
 from rembg import remove, new_session
 REMBG = new_session("isnet-anime")
 
-def export_character(gen_id, fighter, name, where_used):
+def chroma_key(img, margin=40):
+    """Key out the plain green background the prompts ask for. rembg (isnet-anime) erased Aotake's
+    whole K.O. pose (2 opaque pixels left), so lying poses are keyed by colour instead: a pixel is
+    background when green beats both red and blue by `margin`; edges get a soft ramp and the green
+    spill on them is pulled down to the red/blue average."""
+    a = _np.asarray(img.convert("RGB")).astype(_np.float32)
+    r, g, b = a[..., 0], a[..., 1], a[..., 2]
+    lead = g - _np.maximum(r, b)
+    alpha = _np.clip(1.0 - (lead - margin * 0.5) / (margin * 0.5), 0.0, 1.0)
+    spill = _np.minimum(g, (r + b) / 2 + 20)
+    a[..., 1] = _np.where(alpha < 1.0, spill, g)
+    out = _np.dstack([a, alpha * 255]).astype(_np.uint8)
+    return Image.fromarray(out, "RGBA")
+
+def export_character(gen_id, fighter, name, where_used, method="rembg"):
     asset = gen_id.rsplit("_s", 1)[0]
     img = Image.open(RAW / asset / f"{gen_id}.png").convert("RGB")
-    cut = remove(img, session=REMBG)
+    cut = remove(img, session=REMBG) if method == "rembg" else chroma_key(img)
     s = POSES_JSON["fighters"][fighter]["canvas_to_screen_scale"]
     size = (round(img.width * s), round(img.height * s))
     out = EXPORT / fighter / f"{name}.png"
     out.parent.mkdir(parents=True, exist_ok=True)
     cut.resize(size, Image.LANCZOS).save(out)
-    add_edit(gen_id, f"rembg isnet-anime background removal; full canvas scaled x{s} to {size[0]}x{size[1]} (LANCZOS) -> {rel(out)}",
+    how = "rembg isnet-anime background removal" if method == "rembg" else "green chroma key (margin 40, spill suppressed)"
+    add_edit(gen_id, f"{how}; full canvas scaled x{s} to {size[0]}x{size[1]} (LANCZOS) -> {rel(out)}",
              where_used=where_used)
     return out
 

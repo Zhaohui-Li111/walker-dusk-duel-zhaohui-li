@@ -146,6 +146,16 @@ func test_every_state_has_art(main: Node) -> void:
 			expect(f.art.textures.has(r) and f.art.textures[r] != null, "%s has an image for %s" % [f.display_name, s])
 		var hb: Rect2 = f.art.hurtboxes["idle"]
 		expect(absf(hb.end.y) < 2.0, "%s idle hurtbox reaches the feet (end.y=%.1f)" % [f.display_name, hb.end.y])
+		# Every own image must actually show a fighter: background removal once erased Aotake's whole
+		# K.O. pose (2 opaque pixels left), which only showed up as a missing body in the flow capture.
+		for s in f.art.textures:
+			var img: Image = f.art.textures[s].get_image()
+			var opaque := 0
+			for y in range(0, img.get_height(), 2):
+				for x in range(0, img.get_width(), 2):
+					if img.get_pixel(x, y).a > 0.5:
+						opaque += 1
+			expect(opaque >= 300, "%s %s image (%s) shows a body: %d sampled opaque px" % [f.display_name, s, f.art.sources[s], opaque])
 
 
 # --- step 2 ------------------------------------------------------------------

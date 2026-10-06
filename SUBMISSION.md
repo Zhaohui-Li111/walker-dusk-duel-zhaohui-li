@@ -18,8 +18,8 @@
   - xinsir ControlNet OpenPose SDXL 1.0, commit `23f966cd5c`, Colab T4, Apache-2.0
   - SDXL VAE fp16 fix, commit `207b116dae`, Colab T4, MIT
   - h94 IP-Adapter Plus SDXL ViT-H, commit `018e402774`, Colab T4, Apache-2.0
-  - Stable Audio Open 1.0 and MusicGen medium *(versions to fill after the audio run)*, Colab T4,
-    Stability AI Community License / CC-BY-NC 4.0
+  - MusicGen medium, commit `d3bd7b0076`, Colab T4, CC-BY-NC 4.0
+  - Stable Audio Open 1.0 *(version to fill after the SFX run)*, Colab T4, Stability AI Community License
 - **Final film URL and filename:** *(to fill)*
 - **Final film SHA-256:** *(to fill)*
 - **Summary of my work:** *(to fill in my own words)*

@@ -135,3 +135,52 @@ contributions, and generative-model outputs. Retrospective notes are labeled.
 - **Still unresolved:** whether the strength-0.75 images are "generated enough" for the rubric
   (the colour block is a Claude drawing; the final pixels are the model's). The log records the
   starting image and strength for every row so a grader can judge.
+
+## 2026-10-06 — poses, opponent, background and export (decisions delegated to Claude)
+
+> Written by Claude Code from the Colab run. Every choice below is labelled "Decided by Claude
+> (Zhaohui delegated the choice)" in ASSET-LOG; Zhaohui has not yet re-judged them.
+
+- **Akaken poses (Stage 2):** 11 poses x 2 seeds, img2img from each pose's colour block (strength
+  0.75) with the round-5 reference through IP-Adapter. All 22 kept the headband, topknot and wraps.
+  To choose between seeds Claude added a **palette fidelity check** (mean RGB distance to the sheet
+  colours on the colour-block masks) and picked the lower score after a visual check for broken
+  anatomy. Known flaws accepted: the top is always drawn lighter orange than `#D9482B`; RISE lost the
+  yellow belt in both seeds; FALL's belt picked up green from the background.
+- **Aotake (Stage 3):** the colour-block method worked first time for the reference (4 seeds, best
+  palette score 43.9 for s303). Poses picked by palette score; anatomy only spot-checked.
+- **Background (Stage 4):** 4 seeds. Measured the band the fighters stand in: s501 was darkest and
+  least busy, but its red-gi contrast was only 1.83 against the sheet's planned 2.82 (CHANGE-BRIEF
+  failure case 4). Edit on export: brightness x0.7 so the band matches the planned wall.
+- **Export bug found in the engine:** in the Godot flow capture Aotake vanished at K.O. The exported
+  `aotake/ko.png` had 2 opaque pixels: rembg's `isnet-anime` model treated the lying figure as
+  background. Claude added a test that every state image shows a body (it failed on exactly that
+  image) and re-exported the pose with a green chroma key, which the plain-green prompts allow.
+- **Human / Claude / model:** images by SDXL + ControlNet OpenPose + IP-Adapter; colour blocks,
+  scores, selections, edits and the Colab operation by Claude; Zhaohui approved downloading the
+  results and the Drive authorisation, and clicked the Drive consent popup.
+- **Still unresolved:** whether a human eye agrees with the score-based picks; the green FALL belt.
+
+## 2026-10-06 — music loop (decision delegated to Claude)
+
+> Written by Claude Code from the Colab run. Claude cannot listen; the pick is labelled
+> "Decided by Claude" in ASSET-LOG and Zhaohui must re-judge it by ear.
+
+- **Run trouble:** the first audio run stopped with `NameError: MUSIC_PROMPT`. The pip cell had
+  broken Colab's run queue, so the prompts and helper cells never ran. Fixed by re-running cells one
+  at a time and waiting for pip to finish first.
+- **Takes (seeds 21-23, 30 s each, about 2 min each on T4):** Claude replaced listening with
+  measurements (tracked tempo, spread of beat spacing, spread of 1 s loudness, quiet seconds, mel
+  spectrograms in `design/generations/audio/checks/`). s21 stops at about 20 s. s23 tracks at 163
+  bpm (double time) and is the loudest. **s22 accepted:** 79.8 bpm against the 80 asked, beat
+  spacing spread 1.0 %, loudness spread 0.9 dB.
+- **Loop:** 8 bars, 2.017-26.017 s (24.0 s), zero-crossing cuts, 40 ms crossfade, decoded peak
+  -1.32 dBFS. The notebook's seam score went *up* from 8.8 to 15.8, past the "> 10 likely click"
+  rule of thumb written into the notebook. Checked on the decoded OGG: the seam jump (0.013) is
+  smaller than the 99th percentile of ordinary sample steps in the loop (0.014) and smaller than the
+  steps in the first 5 ms after the cut (max 0.034). The cut lands on a drum attack, where steep
+  steps are normal. So the score is misleading here rather than showing a click. Still needs a listen.
+- **Human / Claude / model:** music by MusicGen medium; measurements, pick, loop cut and Colab
+  operation by Claude; Zhaohui re-signed in to Google so the run could continue.
+- **Still unresolved:** whether s22 actually sounds right for "Dusk ritual"; the SFX stage (needs
+  the Stable Audio Open licence accepted and `HF_TOKEN` in Colab Secrets).
