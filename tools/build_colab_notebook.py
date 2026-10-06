@@ -417,6 +417,38 @@ code(r'''
 show_log("CHAR-AK")
 ''')
 
+md(r"""
+## Stage 2b · Palette fidelity check
+
+A reproducible check of each image against CHARACTER-SHEET colours: the colour block says which
+pixels should be top / pants / belt / cloth / hat / skin / hair; the score is the mean RGB distance
+(0-441) between the generated image and the sheet colour on those pixels (eroded masks, so outlines
+and edges do not count). Lower is closer. Used to pick between seeds after a visual check.
+""")
+code(r"""
+import numpy as _np
+from PIL import ImageFilter as _F
+
+def palette_score(fighter, aid, stem, seed):
+    P = PALETTE[fighter]
+    cb = _np.array(Image.open(colorblock_file(fighter, stem)).convert("RGB")).astype(int)
+    out = _np.array(Image.open(RAW / aid / f"{aid}_s{seed}.png").convert("RGB").resize((cb.shape[1], cb.shape[0]))).astype(int)
+    res = {}
+    for part, col in P.items():
+        m = _np.all(cb == _np.array(col), axis=2)
+        m = _np.array(Image.fromarray((m * 255).astype("uint8")).filter(_F.MinFilter(7))) > 0
+        if m.sum() >= 50:
+            res[part] = float(_np.sqrt(((out[m] - _np.array(col)) ** 2).sum(axis=1)).mean())
+    return round(sum(res.values()) / len(res), 1), {k: round(v) for k, v in res.items()}
+
+def score_table(fighter, jobs):
+    for aid, stem, seed in jobs:
+        tot, parts = palette_score(fighter, aid, stem, seed)
+        print(f"{aid:15s} s{seed}  mean {tot:6.1f}  {parts}")
+
+score_table("akaken", [(aid, stem, s) for stem, (aid, _a) in AK_POSES.items() for s in (201, 202)])
+""")
+
 md("## Stage 3 · Aotake reference and poses")
 code(r'''
 ao_ref_ids = generate("CHAR-AO-REF", char_prompt(AOTAKE, AO_POSES["01_idle_stance"][1]),
