@@ -92,3 +92,46 @@ contributions, and generative-model outputs. Retrospective notes are labeled.
   been generated, so nothing has been listened to yet.
 - **Still unresolved:** everything that needs ears: loudness balance, whether the loop seam clicks,
   whether the -12 dB pause duck is noticeable enough.
+
+## 2026-10-05 / 06 — Akaken reference: five rounds to get one usable image
+
+> Retrospective entry written by Claude Code the same evening from the Colab session. From round 4
+> on, Zhaohui delegated the accept/reject decisions to Claude ("你后面就自己判断吧"); every review
+> from then on is labelled "Decided by Claude" in ASSET-LOG. Zhaohui should re-judge them.
+
+- **Setup friction (no images yet):** free Colab T4. (1) Model CPU offload crashed the session by
+  running out of system RAM; (2) without offload, diffusers 0.40 / transformers 5.18 left some
+  components in fp32 and the pipeline needed 14 GB of VRAM (OOM) until everything was cast to fp16 on
+  the CPU (8.8 GB); (3) `pipe.enable_vae_tiling()` no longer exists in diffusers 0.40
+  (`pipe.vae.enable_tiling()`); (4) later `StableDiffusionXLControlNetImg2ImgPipeline.from_pipe()`
+  ran out of memory again, so the img2img pipeline is now built from the same component objects.
+- **Prompt truncation:** the first Stage 1 run warned that CLIP keeps only 77 tokens. The prompts
+  were ~110, so the entire style half (cel shading, outline, green background) was silently cut.
+  Claude stopped the run, shortened the prompts with style first, and `check_prompt()` now refuses
+  anything over 77 tokens.
+- **Round 1 (seeds 101-104, prompt only):** cartoon style worked, but no red-orange gi on any image,
+  bearded/bald older men, realistic proportions. Zhaohui agreed with Claude's assessment; all rejected.
+- **Round 2 (111-114):** colour moved to the front, "beard, old man, bald, boxing gloves" added to the
+  negative. Age and topknot fixed; still no headband; pants/belt colours random. All rejected
+  (Zhaohui agreed).
+- **Round 3 (121-124):** headband phrase moved first and made concrete. The headband became a turban
+  once and was missing otherwise; colours landed on the wrong parts. All rejected (Zhaohui agreed).
+  Conclusion: SDXL does not bind several colours to several garments from text alone.
+- **Decision (Zhaohui chose plan B):** paint the CHARACTER-SHEET palette onto each pose as a
+  colour-block mannequin (`tools/colorblock.py`, Claude-written) and start img2img from it, with the
+  OpenPose skeleton still controlling the pose.
+- **Round 4 (131-134, strength 0.6):** first time every image had the headband, topknot, red-orange
+  top, dark pants, yellow belt and cream wraps. But Claude judged them too close to its own
+  mannequin (tube limbs, little drawing by the model), which matters because Claude-drawn art does not
+  count as a generated asset. All rejected (decided by Claude).
+- **Round 5 (141-144, strength 0.75):** the model redraws limbs, folds and shading while the colours
+  stay anchored. Accepted **s143** (decided by Claude): topknot, headband with tails, colours right,
+  follows the skeleton. Known flaw: a blank face with no eyes; at the 112 px game size the face is
+  ~12 px, so it barely reads. s142 had the best face but spiky hair instead of the topknot, and the
+  topknot is what separates Akaken's silhouette from Aotake's hat.
+- **Human / Claude / model:** generation by SDXL + xinsir OpenPose ControlNet (+ IP-Adapter from
+  Stage 2). Prompts, the colour-block tool, the debugging and every Colab action were Claude's.
+  Zhaohui chose the theme, agreed with rounds 1-3 and chose plan B; rounds 4-5 were Claude's call.
+- **Still unresolved:** whether the strength-0.75 images are "generated enough" for the rubric
+  (the colour block is a Claude drawing; the final pixels are the model's). The log records the
+  starting image and strength for every row so a grader can judge.

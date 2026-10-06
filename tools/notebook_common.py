@@ -44,7 +44,7 @@ import csv, json, datetime
 
 COLUMNS = ["gen_id", "asset_id", "timestamp_utc", "file", "thumb", "model", "where_run", "license",
            "prompt", "negative_prompt", "seed", "size", "steps", "cfg", "scheduler",
-           "control_image", "controlnet_scale", "ip_reference", "ip_scale", "seconds",
+           "control_image", "controlnet_scale", "ip_reference", "ip_scale", "init_image", "strength", "seconds",
            "outcome", "reason", "edits", "where_used"]
 OUTCOMES = {"pending", "accepted", "edited", "rejected"}
 
@@ -52,7 +52,7 @@ def _read_log():
     if not LOG_CSV.exists():
         return []
     with open(LOG_CSV, newline="", encoding="utf-8") as f:
-        return list(csv.DictReader(f))
+        return [{c: r.get(c) or "" for c in COLUMNS} for r in csv.DictReader(f)]   # old rows lack new columns
 
 def _write_log(rows):
     tmp = LOG_CSV.with_suffix(".tmp")
@@ -72,6 +72,7 @@ def _settings(r):
     if r["scheduler"]: parts.append(r["scheduler"])
     if r["control_image"]: parts.append(f"control `{r['control_image']}` @ {r['controlnet_scale']}")
     if r["ip_reference"]: parts.append(f"IP ref `{r['ip_reference']}` @ {r['ip_scale']}")
+    if r.get("init_image"): parts.append(f"img2img from `{r['init_image']}` @ strength {r.get('strength', '')}")
     parts.append(f"{r['seconds']} s to generate")
     neg = f"<br>**negative:** {r['negative_prompt']}" if r["negative_prompt"] else ""
     return f"**prompt:** {r['prompt']}{neg}<br>" + " · ".join(p for p in parts if p)

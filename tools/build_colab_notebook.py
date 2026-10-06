@@ -3,10 +3,15 @@
 Run from the project root:  python tools/build_colab_notebook.py notebooks/generate_images.ipynb
 """
 import sys
+from pathlib import Path
 
 import notebook_common as common
 
 nb = common.Notebook()
+
+# tools/colorblock.py is pasted into the notebook (minus its local main()) so Colab needs no extra upload
+_cb = (Path(__file__).parent / "colorblock.py").read_text(encoding="utf-8").replace("\r\n", "\n")
+COLORBLOCK_SRC = _cb[_cb.index("import math"):_cb.index("def main():")].rstrip() + "\n"
 md, code = nb.md, nb.code
 
 md(r'''
@@ -74,52 +79,65 @@ BANNED = [
     r"\bin the style of\b", r"\bstyle of\b", r"\bby [A-Z][a-z]+", r"artstation", r"trending on",
 ]
 
+# SDXL's text encoders read at most 77 CLIP tokens and silently drop the rest. The first prompts
+# were ~110 tokens, so the whole style part (cel shading, outline, green background) was cut off.
+# Prompts are now short, style first, and check_prompt() refuses anything over the limit.
+MAX_TOKENS = 77
+
+def token_count(text):
+    p = globals().get("pipe")
+    tok = getattr(p, "tokenizer", None) if p is not None else None
+    return len(tok(text).input_ids) if tok is not None else None   # None until the model is loaded
+
 def check_prompt(text):
     hits = [p for p in BANNED if re.search(p, text, flags=re.IGNORECASE if not p.startswith(r"\bby") else 0)]
     if hits:
         raise ValueError(f"Prompt blocked by rights check, matched: {hits}")
+    n = token_count(text)
+    if n is not None and n > MAX_TOKENS:
+        raise ValueError(f"Prompt is {n} CLIP tokens; SDXL keeps only {MAX_TOKENS} and drops the rest. Shorten it.")
     return text
 
-STYLE = ("2D fighting game character sprite, flat cel shading, thick dark outline, simple shapes, "
-         "flat colors, clean lineart, full body, three-quarter side view facing right, "
-         "plain solid bright green background")
+STYLE = ("flat cel-shaded 2D fighting game sprite, thick dark outline, full body, "
+         "side view facing right, plain solid green background")
 
-AKAKEN = ("cartoon martial artist, short stocky young fighter, big round head, about five heads tall, "
-          "oversized fists wrapped in cream cloth bandages, black hair in a topknot bun on top of the head, "
-          "cream headband with two tails flowing behind the head, sleeveless red-orange gi top, "
-          "yellow belt, dark charcoal pants, bare feet")
+# Round 1 (seeds 101-104) ignored "red-orange gi" and drew bearded / bald older men, so the colour
+# moved to the front and those traits went into the negative prompt. Round 2 (111-114) fixed age
+# and topknot but no image had a headband, so round 3 leads with a more concrete headband phrase.
+AKAKEN = ("white headband tied around forehead, red-orange sleeveless gi, dark pants, "
+          "young chibi martial artist, big head, black topknot, huge cream-wrapped fists, yellow belt, barefoot")
 
-AOTAKE = ("cartoon martial artist, tall lean fighter with long legs, wide conical straw hat, "
-          "long black braid hanging down the back, teal robe, dark navy sash, dark pants, bare feet")
+AOTAKE = ("tall lean cartoon martial artist, long legs, wide conical straw hat, long black braid, "
+          "teal robe, navy sash, dark pants, barefoot")
 
-NEGATIVE = ("realistic, photo, 3d render, gradient background, scenery, floor shadow, text, watermark, "
-            "signature, logo, extra limbs, extra arms, extra fingers, missing limbs, multiple characters, "
-            "cropped, out of frame, blood, gore, weapon, checkerboard, transparent background, blurry")
+NEGATIVE = ("photo, realistic, 3d render, gradient background, scenery, text, watermark, extra limbs, "
+            "extra fingers, multiple characters, cropped, blood, weapon, checkerboard, blurry, "
+            "beard, old man, bald, boxing gloves")
 
 # pose file stem -> (asset id, action words appended to the prompt)
 AK_POSES = {
-    "01_idle_stance": ("CHAR-AK-IDLE", "standing in a fighting stance, fists raised"),
-    "02_walk_forward": ("CHAR-AK-WALK", "stepping forward in a fighting stance"),
+    "01_idle_stance": ("CHAR-AK-IDLE", "fighting stance, fists raised"),
+    "02_walk_forward": ("CHAR-AK-WALK", "stepping forward, guard up"),
     "03_crouch": ("CHAR-AK-CROUCH", "crouching low, guard up"),
-    "04_jump_rising": ("CHAR-AK-RISE", "jumping upward, knees tucked"),
-    "05_jump_falling": ("CHAR-AK-FALL", "falling from a jump, arms out for balance"),
-    "06_punch_jab": ("CHAR-AK-PUNCH", "throwing a straight punch forward, arm fully extended"),
-    "07_high_kick": ("CHAR-AK-KICK", "high kick forward, leg extended"),
-    "08_block": ("CHAR-AK-BLOCK", "blocking with both forearms raised in front of the face"),
-    "09_hurt": ("CHAR-AK-HURT", "recoiling backward after being hit, wincing"),
-    "10_ko_down": ("CHAR-AK-KO", "knocked out lying on the back, eyes closed"),
-    "11_victory": ("CHAR-AK-WIN", "victory pose, one fist raised high, smiling"),
+    "04_jump_rising": ("CHAR-AK-RISE", "jumping up, knees tucked"),
+    "05_jump_falling": ("CHAR-AK-FALL", "falling, arms out"),
+    "06_punch_jab": ("CHAR-AK-PUNCH", "straight punch, arm extended"),
+    "07_high_kick": ("CHAR-AK-KICK", "high kick, leg extended"),
+    "08_block": ("CHAR-AK-BLOCK", "blocking, forearms up"),
+    "09_hurt": ("CHAR-AK-HURT", "recoiling from a hit, wincing"),
+    "10_ko_down": ("CHAR-AK-KO", "knocked out, lying on back"),
+    "11_victory": ("CHAR-AK-WIN", "victory pose, fist raised, smiling"),
 }
 AO_POSES = {
-    "01_idle_stance": ("CHAR-AO-IDLE", "standing in a calm fighting stance"),
-    "02_front_kick": ("CHAR-AO-KICK", "front kick forward, leg extended"),
-    "03_block": ("CHAR-AO-BLOCK", "blocking with both forearms raised in front of the face"),
-    "04_hurt": ("CHAR-AO-HURT", "recoiling backward after being hit, wincing"),
-    "05_ko_down": ("CHAR-AO-KO", "knocked out lying on the back, hat beside the head"),
+    "01_idle_stance": ("CHAR-AO-IDLE", "calm fighting stance"),
+    "02_front_kick": ("CHAR-AO-KICK", "front kick, leg extended"),
+    "03_block": ("CHAR-AO-BLOCK", "blocking, forearms up"),
+    "04_hurt": ("CHAR-AO-HURT", "recoiling from a hit, wincing"),
+    "05_ko_down": ("CHAR-AO-KO", "knocked out, lying on back, hat beside head"),
 }
 
 def char_prompt(character, action):
-    return check_prompt(f"{character}, {action}, {STYLE}")
+    return check_prompt(f"{STYLE}, {character}, {action}")
 
 for t in (STYLE, AKAKEN, AOTAKE, NEGATIVE):
     check_prompt(t)
@@ -141,6 +159,8 @@ written into each log row. **Open each model card once and confirm the license y
 copying it into SOURCES.md. First run downloads about 12 GB (a few minutes on Colab).
 ''')
 code(r'''
+import os
+os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
 import torch, diffusers, transformers
 from huggingface_hub import model_info
 
@@ -149,7 +169,10 @@ CN_REPO = "xinsir/controlnet-openpose-sdxl-1.0"
 VAE_REPO = "madebyollin/sdxl-vae-fp16-fix"
 IP_REPO, IP_SUB, IP_WEIGHT, IP_ENCODER = ("h94/IP-Adapter", "sdxl_models",
                                           "ip-adapter-plus_sdxl_vit-h.safetensors", "models/image_encoder")
-OFFLOAD = True   # model CPU offload: slower, but keeps peak VRAM safely under the T4's 15 GB
+# Keep the models on the GPU. Model CPU offload parks ~10 GB of weights in system RAM, which is
+# more than free Colab's ~12.7 GB allows once generation starts: the session crashed in Stage 1.
+# The T4's 15 GB VRAM holds them; VAE tiling keeps the 832x1216 decode under the limit.
+OFFLOAD = False
 
 MODELS = {}
 for role, repo in (("base", BASE_REPO), ("controlnet", CN_REPO), ("vae", VAE_REPO), ("ip_adapter", IP_REPO)):
@@ -178,11 +201,24 @@ else:
     pipe = StableDiffusionXLControlNetPipeline.from_pretrained(
         BASE_REPO, controlnet=controlnet, vae=vae, torch_dtype=torch.float16,
         variant="fp16", use_safetensors=True)
+    # With transformers 5 / diffusers 0.40 some components still arrived in fp32 (14 GB on the T4,
+    # out of memory), and xinsir's ControlNet is stored in fp32. Cast everything to fp16 on the CPU
+    # first, then move it, and print what each component ended up as.
+    pipe.to(dtype=torch.float16)
+    for name, comp in pipe.components.items():
+        if isinstance(comp, torch.nn.Module):
+            params = list(comp.parameters())
+            gb = sum(t.numel() * t.element_size() for t in params) / 2**30
+            print(f"  {name:15s} {params[0].dtype}  {gb:.2f} GB")
     if OFFLOAD:
         pipe.enable_model_cpu_offload()
     else:
         pipe.to("cuda")
+    # diffusers 0.40 removed pipe.enable_vae_tiling(); tiling now lives on the VAE itself
+    (pipe.vae.enable_tiling if hasattr(pipe.vae, "enable_tiling") else pipe.enable_vae_tiling)()
     pipe.set_progress_bar_config(disable=True)
+    del controlnet, vae
+    import gc; gc.collect()
 SCHEDULER = type(pipe.scheduler).__name__
 IP_LOADED = False
 
@@ -200,7 +236,15 @@ def set_ip_adapter(on, scale=0.6):
         IP_LOADED = False
     if on:
         pipe.set_ip_adapter_scale(scale)
+def memory_report():
+    import psutil
+    ram = psutil.virtual_memory()
+    vram = torch.cuda.memory_allocated() / 2**30 if torch.cuda.is_available() else 0.0
+    total = torch.cuda.get_device_properties(0).total_memory / 2**30 if torch.cuda.is_available() else 0.0
+    print(f"RAM used {(ram.total - ram.available) / 2**30:.1f} / {ram.total / 2**30:.1f} GB · "
+          f"VRAM allocated {vram:.1f} / {total:.1f} GB")
 print("pipeline ready, scheduler:", SCHEDULER)
+memory_report()
 ''')
 
 md("## 5 · Asset log helpers (one row per generation)")
@@ -220,25 +264,37 @@ def rel(p):
     return Path(p).relative_to(ROOT).as_posix() if p else ""
 
 def generate(asset_id, prompt, *, control=None, seeds=(1,), negative=NEGATIVE, steps=30, cfg=6.0,
-             cn_scale=0.9, ip_image=None, ip_scale=0.6, size=CANVAS):
-    """Generate one image per seed, save to Drive, log a 'pending' row for each. Returns gen_ids."""
+             cn_scale=0.9, ip_image=None, ip_scale=0.6, size=CANVAS, init=None, strength=0.6):
+    """Generate one image per seed, save to Drive, log a 'pending' row for each. Returns gen_ids.
+    init: a colour-block image to start from (img2img); strength 0 keeps it, 1 ignores it."""
     check_prompt(prompt)
     w, h = size
     ctrl = Image.open(control).convert("RGB") if control else Image.new("RGB", (w, h), "black")
     scale = cn_scale if control else 0.0       # no skeleton: ControlNet contributes nothing
     set_ip_adapter(ip_image is not None, ip_scale)
     ref = Image.open(ip_image).convert("RGB") if ip_image else None
+    init_img = Image.open(init).convert("RGB").resize((w, h)) if init else None
+    runner = pipe
+    if init_img is not None:   # same weights, img2img entry point
+        from diffusers import StableDiffusionXLControlNetImg2ImgPipeline
+        # pass the SAME component objects; from_pipe() made extra copies here (CUDA out of memory)
+        runner = StableDiffusionXLControlNetImg2ImgPipeline(**{k: v for k, v in pipe.components.items()})
+        runner.set_progress_bar_config(disable=True)
     (RAW / asset_id).mkdir(exist_ok=True); (THUMBS / asset_id).mkdir(exist_ok=True)
     gen_ids, tiles = [], []
     for seed in seeds:
         gen_id = f"{asset_id}_s{seed}"
-        kwargs = dict(prompt=prompt, negative_prompt=negative, image=ctrl, controlnet_conditioning_scale=scale,
-                      num_inference_steps=steps, guidance_scale=cfg, width=w, height=h,
+        kwargs = dict(prompt=prompt, negative_prompt=negative, controlnet_conditioning_scale=scale,
+                      num_inference_steps=steps, guidance_scale=cfg,
                       generator=torch.Generator("cpu").manual_seed(seed))
+        if init_img is not None:
+            kwargs.update(image=init_img, control_image=ctrl, strength=strength)
+        else:
+            kwargs.update(image=ctrl, width=w, height=h)
         if ref is not None:
             kwargs["ip_adapter_image"] = ref
         t0 = time.time()
-        img = pipe(**kwargs).images[0]
+        img = runner(**kwargs).images[0]
         secs = round(time.time() - t0, 1)
         out = RAW / asset_id / f"{gen_id}.png"
         img.save(out)
@@ -259,6 +315,7 @@ def generate(asset_id, prompt, *, control=None, seeds=(1,), negative=NEGATIVE, s
             "size": f"{w}x{h}", "steps": steps, "cfg": cfg, "scheduler": SCHEDULER,
             "control_image": rel(control) if control else "", "controlnet_scale": scale,
             "ip_reference": rel(ip_image) if ip_image else "", "ip_scale": ip_scale if ip_image else "",
+            "init_image": rel(init) if init else "", "strength": strength if init else "",
             "seconds": secs, "outcome": "pending"})
         gen_ids.append(gen_id); tiles.append((gen_id, img))
         print(f"{gen_id}: {secs} s")
@@ -287,6 +344,16 @@ def contact_sheet(asset_id, tiles, skeleton=None, tile_h=420):
 
 def pose_file(fighter, stem):
     return CHAR / fighter / "openpose" / f"{stem}.png"
+''' + "\n\n# --- colour-block starting images (tools/colorblock.py) ---\n" + COLORBLOCK_SRC + r'''
+
+def colorblock_file(fighter, stem):
+    """Draw (once) the CHARACTER-SHEET colours onto this pose and return the PNG path on Drive."""
+    out = CHAR / fighter / "colorblock" / f"{stem}.png"
+    if not out.exists():
+        out.parent.mkdir(parents=True, exist_ok=True)
+        fd = POSES_JSON["fighters"][fighter]
+        draw_colorblock(fighter, fd["poses"][stem], fd["bones"], fd["widths"], CANVAS).save(out)
+    return out
 ''')
 
 md(r'''
@@ -296,8 +363,14 @@ Idle skeleton, no reference image. Four seeds. Judge each against CHARACTER-SHEE
 1–8 **at game size** (cell below the sheet shows them at 112 px tall) before choosing.
 ''')
 code(r'''
+# Round 5: img2img from the colour-block mannequin. Rounds 1-3 (prompt only, seeds 101-104,
+# 111-114, 121-124) never put the sheet's colours on the right parts and never drew the headband.
+# Round 4 (131-134, strength 0.6) fixed colours and headband but stayed too close to the code-drawn
+# mannequin, so round 5 raises strength to 0.75 to let the model redraw more.
 ref_ids = generate("CHAR-AK-REF", char_prompt(AKAKEN, AK_POSES["01_idle_stance"][1]),
-                   control=pose_file("akaken", "01_idle_stance"), seeds=[101, 102, 103, 104])
+                   control=pose_file("akaken", "01_idle_stance"),
+                   init=colorblock_file("akaken", "01_idle_stance"), strength=0.75,
+                   seeds=[141, 142, 143, 144])
 ''')
 code(r'''
 # Preview every candidate at real on-screen size (112 px standing height), 1x and 3x nearest.
@@ -329,13 +402,14 @@ Set `AK_REF` to the accepted reference. Start with two seeds per pose; regenerat
 reject, ideally after changing **one** setting and noting why in FRICTIONAL.md.
 ''')
 code(r'''
-AK_REF = RAW / "CHAR-AK-REF" / "CHAR-AK-REF_s103.png"     # <- the one you accepted
+AK_REF = RAW / "CHAR-AK-REF" / "CHAR-AK-REF_s143.png"     # accepted in round 5 (see review cell)
 assert AK_REF.exists(), AK_REF
 
 AK_TODO = list(AK_POSES)          # or e.g. ["06_punch_jab", "09_hurt"] to redo only some
 for stem in AK_TODO:
     asset_id, action = AK_POSES[stem]
     generate(asset_id, char_prompt(AKAKEN, action), control=pose_file("akaken", stem),
+             init=colorblock_file("akaken", stem), strength=0.75,
              seeds=[201, 202], ip_image=AK_REF, ip_scale=0.6, cn_scale=0.9)
 ''')
 code(r'''
@@ -346,7 +420,9 @@ show_log("CHAR-AK")
 md("## Stage 3 · Aotake reference and poses")
 code(r'''
 ao_ref_ids = generate("CHAR-AO-REF", char_prompt(AOTAKE, AO_POSES["01_idle_stance"][1]),
-                      control=pose_file("aotake", "01_idle_stance"), seeds=[301, 302, 303, 304])
+                      control=pose_file("aotake", "01_idle_stance"),
+                      init=colorblock_file("aotake", "01_idle_stance"), strength=0.75,
+                      seeds=[301, 302, 303, 304])
 ''')
 code(r'''
 # review("CHAR-AO-REF_s30x", "accepted", "...")
@@ -354,6 +430,7 @@ AO_REF = RAW / "CHAR-AO-REF" / "CHAR-AO-REF_s301.png"     # <- the one you accep
 assert AO_REF.exists(), AO_REF
 for stem, (asset_id, action) in AO_POSES.items():
     generate(asset_id, char_prompt(AOTAKE, action), control=pose_file("aotake", stem),
+             init=colorblock_file("aotake", stem), strength=0.75,
              seeds=[401, 402], ip_image=AO_REF, ip_scale=0.6, cn_scale=0.9)
 ''')
 
@@ -366,10 +443,9 @@ dark (CHARACTER-SHEET palette check: wall ≈ `#3A3347`).
 ''')
 code(r'''
 ENV_PROMPT = check_prompt(
-    "2D fighting game stage background, side view, empty stone temple courtyard at dusk, "
-    "dark purple-grey stone wall across the middle of the image, paper lanterns glowing warm orange "
-    "hanging on the left and right, soft purple dusk sky above the wall, dark stone floor along the bottom, "
-    "flat cel-shaded cartoon style, simple shapes, low detail, calm, no people")
+    "flat cel-shaded 2D fighting game stage background, side view, empty stone temple courtyard at dusk, "
+    "dark purple-grey wall across the middle, glowing orange paper lanterns left and right, "
+    "purple dusk sky, dark stone floor, no people")
 ENV_NEG = ("people, person, character, animal, text, watermark, logo, photo, realistic, busy details, "
            "high contrast, bright wall, perspective floor grid")
 env_ids = generate("ENV-BG", ENV_PROMPT, negative=ENV_NEG, seeds=[501, 502, 503, 504], size=(1344, 768))
