@@ -492,10 +492,31 @@ def export_background(gen_id, where_used="godot/art/env/bg.png (all panels)"):
     add_edit(gen_id, f"resized 1344x768 -> 640x360 (LANCZOS) -> {rel(out)}", where_used=where_used)
     return out
 
-# Example, after review() marked them accepted:
-# export_character("CHAR-AK-IDLE_s201", "akaken", "idle", "godot/art/akaken/idle.png (panels 2, 7)")
-# export_character("CHAR-AO-KO_s401", "aotake", "ko", "godot/art/aotake/ko.png (panel 8)")
-# export_background("ENV-BG_s502")
+# asset id -> (fighter, Godot state file). Matches tools/export_placeholders.py STATES.
+EXPORT_MAP = {aid: ("akaken", st) for aid, st in [
+    ("CHAR-AK-IDLE", "idle"), ("CHAR-AK-WALK", "walk"), ("CHAR-AK-CROUCH", "crouch"),
+    ("CHAR-AK-RISE", "rise"), ("CHAR-AK-FALL", "fall"), ("CHAR-AK-PUNCH", "punch"),
+    ("CHAR-AK-KICK", "kick"), ("CHAR-AK-BLOCK", "block"), ("CHAR-AK-HURT", "hurt"),
+    ("CHAR-AK-KO", "ko"), ("CHAR-AK-WIN", "win")]}
+EXPORT_MAP.update({aid: ("aotake", st) for aid, st in [
+    ("CHAR-AO-IDLE", "idle"), ("CHAR-AO-KICK", "kick"), ("CHAR-AO-BLOCK", "block"),
+    ("CHAR-AO-HURT", "hurt"), ("CHAR-AO-KO", "ko")]})
+
+def export_accepted():
+    """Export every accepted (not yet exported) state image and the accepted background."""
+    done = []
+    for r in _read_log():
+        if r["outcome"] != "accepted":
+            continue
+        if r["asset_id"] in EXPORT_MAP:
+            fighter, state = EXPORT_MAP[r["asset_id"]]
+            done.append(export_character(r["gen_id"], fighter, state, f"godot/art/{fighter}/{state}.png"))
+        elif r["asset_id"] == "ENV-BG":
+            done.append(export_background(r["gen_id"]))
+    print("exported:", [rel(p) for p in done])
+    return done
+
+# export_accepted()      # run after review() has marked the chosen images "accepted"
 ''')
 
 md(r'''
