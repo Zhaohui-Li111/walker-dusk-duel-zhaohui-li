@@ -1,0 +1,1009 @@
+{
+ "schema_version": 1,
+ "game": "godot",
+ "source_revision": "4e0cf14",
+ "teaching_contract": "code-then-result-v1",
+ "files": [
+  {
+   "path": "art/akaken/block.png",
+   "sha256": "5c0adec25b9ee400eb0ccf336432fcda7f7c61e2e0286873bc51d2ae621ce95a",
+   "role": "image asset",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/akaken/block.png.import",
+   "sha256": "62e9179eef61cd759ce6f55b9834adcc633bcce20526597e096131ad6fd13918",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/akaken/crouch.png",
+   "sha256": "6436ca9f313a992deec9465876a5a731f0859ac2143231b465c7382835a58237",
+   "role": "image asset",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/akaken/crouch.png.import",
+   "sha256": "5444d87bcee78b94fd007f2efcc9a1fb1ceb03abc713eb1175c8a9eba8b9d786",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/akaken/fall.png",
+   "sha256": "8bcf93c438c32a17f8ba9d879e29cf8bd89fca90a80e02c703c5f216bd2fd039",
+   "role": "image asset",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/akaken/fall.png.import",
+   "sha256": "33d24384ae1663ed2f0fcf93ed5147d1c39828bf3a3b5fb33ab52805be81876c",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/akaken/hurt.png",
+   "sha256": "9d88708cdf829353787d1e4a684aa7d25afe29c0ec30af539cad0459ca1fa3f6",
+   "role": "image asset",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/akaken/hurt.png.import",
+   "sha256": "f404dcb8ce7b63d0c672949a2b2a67694f6313aa225593d60f7a6c1f94c18a61",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/akaken/idle.png",
+   "sha256": "389da14bede319d0b11ffcb6b7c63a838f534bd25a67efeca27b368719c8be09",
+   "role": "image asset",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/akaken/idle.png.import",
+   "sha256": "e8a992882f5f6ab09a51e6d0eb39705a650816a11390a4b82356628d2bf76edd",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/akaken/kick.png",
+   "sha256": "c882807426b848ecdac147987ccbf967ccd783b3ad29d334fa68a6c5723eb1e8",
+   "role": "image asset",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/akaken/kick.png.import",
+   "sha256": "3de860747dc57ab44da20d8dfaf76719649ae4fe8f9ad0c777e43b1a7be3de3d",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/akaken/ko.png",
+   "sha256": "b7c39a1ced321df1338b9d7d98351074f06ef9fcd7a546db262f3d67aca54e13",
+   "role": "image asset",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/akaken/ko.png.import",
+   "sha256": "1f6125183bb4b3b0954ca331fd4038c1f46284db6e63cabab88d44e25555b961",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/akaken/punch.png",
+   "sha256": "4454a9ef77ea49a9c359ed070c4635f3286122d303fa658be5d32c32e5bb37bc",
+   "role": "image asset",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/akaken/punch.png.import",
+   "sha256": "b4de2e021dd38a926c2356c006c759be6de55c8bbf39299ea0bdfa49ad32a343",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/akaken/rise.png",
+   "sha256": "d48c4df78c0150c68e9b1b4204bf37e43935715e8fff5f5d01b20fab7f1cab82",
+   "role": "image asset",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/akaken/rise.png.import",
+   "sha256": "c47af505f68eccc88639b917a914ca1b17b12a0c76a4524d2030fcca1cd66408",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/akaken/walk.png",
+   "sha256": "944e7b3e861433b75ecc5390ecffdcffeb954b661a888cf305f3c661f56302a7",
+   "role": "image asset",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/akaken/walk.png.import",
+   "sha256": "14e5930be9497971ed2a36a017bcce49f733cbc999c8f0d3c34f1e3ca5b2b4fc",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/akaken/win.png",
+   "sha256": "01792bac0d076b65662a1f2a5e35ce50f5420bdc15e40b118d89c6c1ad3f1eb6",
+   "role": "image asset",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/akaken/win.png.import",
+   "sha256": "4934b15a5e1eff9aec157af38af35b222deb5b904c1aa4117ff5cf27a5abbf1a",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/aotake/block.png",
+   "sha256": "1a63dafbc6d8ece6dccd16e6e992063b9a75186563bcec9c4d9e1c9e0adea95e",
+   "role": "image asset",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/aotake/block.png.import",
+   "sha256": "f3b916d6a7001ca9240026b8cbebaa3093ebf9104f504f05fe63f2365c47f4b7",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/aotake/hurt.png",
+   "sha256": "3a896427297a2c355e90cd79d10ca3ae4ab8a7ec05b27ba71514ee6b35ebeb74",
+   "role": "image asset",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/aotake/hurt.png.import",
+   "sha256": "b20ad7d7b898ae99b3031b4eb11acf18e50c93daed223241f24d078dbef60541",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/aotake/idle.png",
+   "sha256": "70803d61f671046a102e3185b1779b41ed4423f5a3c30bb09a1ac17396bbf5fe",
+   "role": "image asset",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/aotake/idle.png.import",
+   "sha256": "d32cf102e0ce3bbe48fb634d6d11511e31214022d54793c1ea0ae84bc85d1531",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/aotake/kick.png",
+   "sha256": "a3e58cefcc9c1b141476ad2380ea68e660d17d83aa0e7776fd4e62350bd81758",
+   "role": "image asset",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/aotake/kick.png.import",
+   "sha256": "13c73a10b9c1f05875d4cb9e91be8a1c85d761d500d50567d6a982a7b7a033dd",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/aotake/ko.png",
+   "sha256": "b1cd2522c13f023f22b79b41abe3f86c14bbe57bbfb44ded3de18785e6a14e35",
+   "role": "image asset",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/aotake/ko.png.import",
+   "sha256": "5c17273e306f3223f557c68442f3c9aa6bbfed9f2e4e56ee2bdaf000f82296a4",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/env/bg.png",
+   "sha256": "c14eefa7422068d995b16e4ec3e44c3ee19c58f591efe47f11ede2609c711d87",
+   "role": "image asset",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/env/bg.png.import",
+   "sha256": "5fb076a3eea6118fcd867912c7def2531ac508963194a6b8039e0da9f5ebfefb",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "generated-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/akaken/block.png",
+   "sha256": "8819d60501d279650a46239069eb6fe98abdd25c5da254f949bee3178990407f",
+   "role": "image asset",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/akaken/block.png.import",
+   "sha256": "b93f249e9e7a9b7564fc74862a062c75da9f187f1a1370f461cff05682468338",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/akaken/crouch.png",
+   "sha256": "8656b4eb72417b117df50be36b17af5e4cc7b4babb5dc1cb3b78de523cfdd12f",
+   "role": "image asset",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/akaken/crouch.png.import",
+   "sha256": "44a7d6008679d6fa295dabaeb973821307203867655cce5e2d74106816560f18",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/akaken/fall.png",
+   "sha256": "e7240d58edac444aaf327996a0c5be884a90a1b454b793fb7a50fd96313177a8",
+   "role": "image asset",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/akaken/fall.png.import",
+   "sha256": "005397b1bbdea1f9463ce279d61155dd32fdeb454e7fcbf24657fd9cb48e906c",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/akaken/hurt.png",
+   "sha256": "e1e5b5802b09183425dc4cedfa61291fc1dfd9611c7a819c47568e77bd69ca9f",
+   "role": "image asset",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/akaken/hurt.png.import",
+   "sha256": "a9b345d2ee6a1c8d2c6b4b47328e049d1b5b733396cb9e46151f85a11babf58e",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/akaken/idle.png",
+   "sha256": "e3f5640de1c6bbedf9aa230510d42423a35465f6eef06a7945da5fb5a2ad3a55",
+   "role": "image asset",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/akaken/idle.png.import",
+   "sha256": "bf0ee36f559e9673c488e15573c0f0b430f95047967efc812bf7e88dca4c2dd4",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/akaken/kick.png",
+   "sha256": "f67e1cbd5e96991c81b2809d9397be5594d14ca5ef787505691168d0b6d7b94e",
+   "role": "image asset",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/akaken/kick.png.import",
+   "sha256": "b3338f3493ceb453e95f87d1a3b789c782c24a53ea629342008aacf584490ae4",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/akaken/ko.png",
+   "sha256": "c6b5ed0e0fdb70f82d1c9454b7ca776c3d547a3f9177588c3a7b9b65e6f4c374",
+   "role": "image asset",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/akaken/ko.png.import",
+   "sha256": "da17dd2ef3a533f7c50b363584476abce1ad8d7d9cda3d5e3e252811dedd2fa4",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/akaken/punch.png",
+   "sha256": "464b3a5fb2dad88fd11dd649bad7e1c72564a7be45abf0e7df0b2009b755aef0",
+   "role": "image asset",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/akaken/punch.png.import",
+   "sha256": "329b6bdd20800a6607bc7f74cac933bb4fdcc1e43011425239350a7cd58a95b9",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/akaken/rise.png",
+   "sha256": "6638fe54f6184727b780761d94c6d1b6c78e7a463cd3c1aab00d5f4a641c22aa",
+   "role": "image asset",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/akaken/rise.png.import",
+   "sha256": "3fef00b47ec405f79ab688a3944cf568fb2cea5ede771c366dc91c6d8534b550",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/akaken/walk.png",
+   "sha256": "42bdb79d86ad83363e33cce48312bedb743cffff2202b185ea6f898a6a0ca714",
+   "role": "image asset",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/akaken/walk.png.import",
+   "sha256": "49038f15605f983af7d8c6aa36b466beb27b5e638ca281fac93a5f3289f0234e",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/akaken/win.png",
+   "sha256": "246a1a54400987824a05d3d69014555c89db237e5513149b8c7440ffee3b0983",
+   "role": "image asset",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/akaken/win.png.import",
+   "sha256": "fa14904d218d43cc18f8481b1f6ca9744e6a61d4f853878e3f04a338e4bd4c6a",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/aotake/block.png",
+   "sha256": "ddd611dd874fd81dae319c661e8bd2fd2112d2617b791047f0fd3afee38fce59",
+   "role": "image asset",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/aotake/block.png.import",
+   "sha256": "00597f5d9560cccab702801b3c8b19639f570d0b18f49712d407704703dd31f7",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/aotake/hurt.png",
+   "sha256": "4dcea4d81c7c32fb81cb9057eee47904c088bb20cfce9545ed72ffa385f3068f",
+   "role": "image asset",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/aotake/hurt.png.import",
+   "sha256": "8492bf155b20e894a733242cba78f330ba5588c081e63a9a49f8b0be28e57806",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/aotake/idle.png",
+   "sha256": "22ea14411b9d1b7f95b65a890e0912a73d3b56466a279634b2ee7d0e77972d1e",
+   "role": "image asset",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/aotake/idle.png.import",
+   "sha256": "5990b60417568d25b5c972a75060dfb38cb2c3c79d6cdfd5780a5863b822f8a0",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/aotake/kick.png",
+   "sha256": "771f4cd515688ff89cc53665df341511e9840e43fcbf848f79db13f86565ce76",
+   "role": "image asset",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/aotake/kick.png.import",
+   "sha256": "73b0e88053ce771bfa38714c1f81c92b5d74b33a3bf65a12e2aa671da058c57d",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/aotake/ko.png",
+   "sha256": "f6079bdef8831aa1f465fa47a2c15a5e6ee02f14047234541901f8a2c5e79070",
+   "role": "image asset",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "art/placeholder/aotake/ko.png.import",
+   "sha256": "5af49b1939929d1f9a0c5c619d06e22f171da3839a8a572d660d5e8c907b92fb",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "placeholder-art"
+   ]
+  },
+  {
+   "path": "audio/music/loop.ogg",
+   "sha256": "3991c6b6bbaba493b320512c5285b851765c543270d0e68eafb9128107f7c216",
+   "role": "audio asset",
+   "component_ids": [
+    "audio-wiring"
+   ]
+  },
+  {
+   "path": "audio/music/loop.ogg.import",
+   "sha256": "d9ea09b4e06376c24e1d32533be57175382a27f6fc84f8816be98c26b074d2b7",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "audio-wiring"
+   ]
+  },
+  {
+   "path": "audio/sfx/block.ogg",
+   "sha256": "a7f7427e81db907e7a5a0baec870e297b54b3b2b41429886abbb014bfaedb3de",
+   "role": "audio asset",
+   "component_ids": [
+    "audio-wiring"
+   ]
+  },
+  {
+   "path": "audio/sfx/block.ogg.import",
+   "sha256": "370c036ffa224a86be24dea908b0f79c07e87fbd0acf5bcddee89509dd81d7b7",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "audio-wiring"
+   ]
+  },
+  {
+   "path": "audio/sfx/hit.ogg",
+   "sha256": "840ce5831ebd3d43c95c1f9d5d6eb508f29b06025cb5dbb9e8a97db84b6de597",
+   "role": "audio asset",
+   "component_ids": [
+    "audio-wiring"
+   ]
+  },
+  {
+   "path": "audio/sfx/hit.ogg.import",
+   "sha256": "0469d468008df238a1c492638a710cb901d619c28fc1db0b59379601742f4382",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "audio-wiring"
+   ]
+  },
+  {
+   "path": "audio/sfx/ko.ogg",
+   "sha256": "89b125e90de0e555666e7ad91a53390ece66e24cfe160e5c67416880708fff96",
+   "role": "audio asset",
+   "component_ids": [
+    "audio-wiring"
+   ]
+  },
+  {
+   "path": "audio/sfx/ko.ogg.import",
+   "sha256": "0e50f855abda37cd57ce954bd827f23959b45478140f0cc4bde9f53585aa3dac",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "audio-wiring"
+   ]
+  },
+  {
+   "path": "audio/sfx/whiff.ogg",
+   "sha256": "3d80e55c6b50d469db1c7008a5c467e4c766aeb0f308b7994ea1a2ac3a51c98a",
+   "role": "audio asset",
+   "component_ids": [
+    "audio-wiring"
+   ]
+  },
+  {
+   "path": "audio/sfx/whiff.ogg.import",
+   "sha256": "722b3f9e92a3a4811969ff09e38c22657349b9ec235edf992fe43bf7e3a3b152",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "audio-wiring"
+   ]
+  },
+  {
+   "path": "data/poses.json",
+   "sha256": "5a7fad950ea0c6363e7cd6e41d9fcb3c3ac7499c7b7fff94a0390388c51a507d",
+   "role": "data",
+   "component_ids": [
+    "pose-data-and-art-loader"
+   ]
+  },
+  {
+   "path": "fighter/cpu_controller.gd",
+   "sha256": "966afa30a11c4788a6ece49bb742ab4363f1e12443fc3b53e8c773dba770c91b",
+   "role": "GDScript source",
+   "component_ids": [
+    "fighter-combat"
+   ]
+  },
+  {
+   "path": "fighter/fighter.gd",
+   "sha256": "e310e5e094fb99f6c9467366a98f6bdfef30dc27c40beeb5540b0288bcb9f165",
+   "role": "GDScript source",
+   "component_ids": [
+    "fighter-combat"
+   ]
+  },
+  {
+   "path": "fighter/fighter.tscn",
+   "sha256": "c14d45e93a7e5880f90954db83cb573d6d563084cd4d07898478d7f2575db321",
+   "role": "scene",
+   "component_ids": [
+    "fighter-combat"
+   ]
+  },
+  {
+   "path": "fighter/fighter_art.gd",
+   "sha256": "dba4323506ea0f5cbfd392cef0714794f96a2b3e84822c4c1041965a9da6191f",
+   "role": "GDScript source",
+   "component_ids": [
+    "pose-data-and-art-loader"
+   ]
+  },
+  {
+   "path": "fighter/intent.gd",
+   "sha256": "19e34d91c532c19119be9b400d122e9fcaf953c6dd485892bc0f3998b58edb04",
+   "role": "GDScript source",
+   "component_ids": [
+    "fighter-combat"
+   ]
+  },
+  {
+   "path": "fighter/player_controller.gd",
+   "sha256": "b17a8aa3a2bff484615b4fe237bcfaaead5b95702f4ea88613174a94e4c2c1a5",
+   "role": "GDScript source",
+   "component_ids": [
+    "fighter-combat"
+   ]
+  },
+  {
+   "path": "fighter/scripted_controller.gd",
+   "sha256": "aa7166e34bed69adc849e0f869550bf59ada4f795f06ff1d15969a3f71ccdc95",
+   "role": "GDScript source",
+   "component_ids": [
+    "fighter-combat"
+   ]
+  },
+  {
+   "path": "game/audio_director.gd",
+   "sha256": "62c0737910d4b3b50260d4f4f2873f5dd2f1d51280aa0043ba34a099f1cbcb67",
+   "role": "GDScript source",
+   "component_ids": [
+    "audio-wiring"
+   ]
+  },
+  {
+   "path": "game/controls.gd",
+   "sha256": "67689d61b345df697ea23818fa4a36cb2790094e66ce2de6f4bcf2ca32bb8485",
+   "role": "GDScript source",
+   "component_ids": [
+    "round-flow-and-stage"
+   ]
+  },
+  {
+   "path": "game/effects.gd",
+   "sha256": "99dc3239ca6cca112fe005441a18a1768afd677f5f0991f45bf9a725b38c53c2",
+   "role": "GDScript source",
+   "component_ids": [
+    "round-flow-and-stage"
+   ]
+  },
+  {
+   "path": "game/hud.gd",
+   "sha256": "08f335009766271573ab3f35a523dd6a926282cc9f53a5911b082f1b70200bc0",
+   "role": "GDScript source",
+   "component_ids": [
+    "round-flow-and-stage"
+   ]
+  },
+  {
+   "path": "game/main.gd",
+   "sha256": "f1769c503933bd0bacaea84d42a1dc98f84b0f7af932a13ce992a4c290cb8390",
+   "role": "GDScript source",
+   "component_ids": [
+    "round-flow-and-stage"
+   ]
+  },
+  {
+   "path": "game/main.tscn",
+   "sha256": "8457cbd4b68c6cff2ab3358cd03994c5f946e8268e8f66ef44e9d0446e3b17ac",
+   "role": "scene",
+   "component_ids": [
+    "round-flow-and-stage"
+   ]
+  },
+  {
+   "path": "game/stage.gd",
+   "sha256": "7e864a7f94007bdac3288290826a488cc2432aecd9d312d95cd5aacb1842a872",
+   "role": "GDScript source",
+   "component_ids": [
+    "round-flow-and-stage"
+   ]
+  },
+  {
+   "path": "project.godot",
+   "sha256": "cb4d34e3fa62803f12e610e2edd4ae5ff7ec4241f4b5878a194eeb7f8e1c7f32",
+   "role": "project configuration",
+   "component_ids": [
+    "round-flow-and-stage"
+   ]
+  },
+  {
+   "path": "tests/capture_flow.gd",
+   "sha256": "5ce0ca7c2a224a70c8cd4ceca845f43467a67cae50ac76b215919ba06441eaa8",
+   "role": "GDScript source",
+   "component_ids": [
+    "tests-and-captures"
+   ]
+  },
+  {
+   "path": "tests/capture_states.gd",
+   "sha256": "07d73ca187c4a698a2ee6082fc38511ed40868628e483d1a326531dcff062750",
+   "role": "GDScript source",
+   "component_ids": [
+    "tests-and-captures"
+   ]
+  },
+  {
+   "path": "tests/test_runner.gd",
+   "sha256": "7d205843a976f654321abc5a3cd6eaf51f2098d96879823c1a8de90923096baf",
+   "role": "GDScript source",
+   "component_ids": [
+    "tests-and-captures"
+   ]
+  }
+ ],
+ "components": [
+  {
+   "id": "generated-art",
+   "explanation": "Generated state images and background: each fighter state is one PNG on a shared canvas, exported from the Colab SDXL pipeline at canvas_to_screen_scale; .import sidecars keep Godot's default 2D texture import.",
+   "beat_ids": [
+    "B02",
+    "B03",
+    "B05",
+    "B07"
+   ],
+   "files": [
+    "art/akaken/block.png",
+    "art/akaken/block.png.import",
+    "art/akaken/crouch.png",
+    "art/akaken/crouch.png.import",
+    "art/akaken/fall.png",
+    "art/akaken/fall.png.import",
+    "art/akaken/hurt.png",
+    "art/akaken/hurt.png.import",
+    "art/akaken/idle.png",
+    "art/akaken/idle.png.import",
+    "art/akaken/kick.png",
+    "art/akaken/kick.png.import",
+    "art/akaken/ko.png",
+    "art/akaken/ko.png.import",
+    "art/akaken/punch.png",
+    "art/akaken/punch.png.import",
+    "art/akaken/rise.png",
+    "art/akaken/rise.png.import",
+    "art/akaken/walk.png",
+    "art/akaken/walk.png.import",
+    "art/akaken/win.png",
+    "art/akaken/win.png.import",
+    "art/aotake/block.png",
+    "art/aotake/block.png.import",
+    "art/aotake/hurt.png",
+    "art/aotake/hurt.png.import",
+    "art/aotake/idle.png",
+    "art/aotake/idle.png.import",
+    "art/aotake/kick.png",
+    "art/aotake/kick.png.import",
+    "art/aotake/ko.png",
+    "art/aotake/ko.png.import",
+    "art/env/bg.png",
+    "art/env/bg.png.import"
+   ]
+  },
+  {
+   "id": "placeholder-art",
+   "explanation": "Code-drawn placeholder images (tools/export_placeholders.py) that FighterArt falls back to when no generated image exists for a state.",
+   "beat_ids": [
+    "B06"
+   ],
+   "files": [
+    "art/placeholder/akaken/block.png",
+    "art/placeholder/akaken/block.png.import",
+    "art/placeholder/akaken/crouch.png",
+    "art/placeholder/akaken/crouch.png.import",
+    "art/placeholder/akaken/fall.png",
+    "art/placeholder/akaken/fall.png.import",
+    "art/placeholder/akaken/hurt.png",
+    "art/placeholder/akaken/hurt.png.import",
+    "art/placeholder/akaken/idle.png",
+    "art/placeholder/akaken/idle.png.import",
+    "art/placeholder/akaken/kick.png",
+    "art/placeholder/akaken/kick.png.import",
+    "art/placeholder/akaken/ko.png",
+    "art/placeholder/akaken/ko.png.import",
+    "art/placeholder/akaken/punch.png",
+    "art/placeholder/akaken/punch.png.import",
+    "art/placeholder/akaken/rise.png",
+    "art/placeholder/akaken/rise.png.import",
+    "art/placeholder/akaken/walk.png",
+    "art/placeholder/akaken/walk.png.import",
+    "art/placeholder/akaken/win.png",
+    "art/placeholder/akaken/win.png.import",
+    "art/placeholder/aotake/block.png",
+    "art/placeholder/aotake/block.png.import",
+    "art/placeholder/aotake/hurt.png",
+    "art/placeholder/aotake/hurt.png.import",
+    "art/placeholder/aotake/idle.png",
+    "art/placeholder/aotake/idle.png.import",
+    "art/placeholder/aotake/kick.png",
+    "art/placeholder/aotake/kick.png.import",
+    "art/placeholder/aotake/ko.png",
+    "art/placeholder/aotake/ko.png.import"
+   ]
+  },
+  {
+   "id": "pose-data-and-art-loader",
+   "explanation": "poses.json (written by tools/make_poses.py) is the single source for anchors and boxes; FighterArt loads images, anchors them by hip and ground line, and builds hurtboxes and hitboxes from the same pose.",
+   "beat_ids": [
+    "B06",
+    "B07"
+   ],
+   "files": [
+    "data/poses.json",
+    "fighter/fighter_art.gd"
+   ]
+  },
+  {
+   "id": "fighter-combat",
+   "explanation": "Fighter steps movement and frame data each tick; check_hit resolves every attack exactly once (hit/blocked/whiff/interrupted) and emits attack_resolved. Input comes from PlayerController, the seeded CpuController, or ScriptedController in tests.",
+   "beat_ids": [
+    "B08",
+    "B09",
+    "B02"
+   ],
+   "files": [
+    "fighter/cpu_controller.gd",
+    "fighter/fighter.gd",
+    "fighter/fighter.tscn",
+    "fighter/intent.gd",
+    "fighter/player_controller.gd",
+    "fighter/scripted_controller.gd"
+   ]
+  },
+  {
+   "id": "round-flow-and-stage",
+   "explanation": "main.gd runs title -> intro -> fight -> ko -> result and steps both fighters; HUD, hit/block sparks, the background stage and the input bindings (including M/N mute) live beside it; project.godot sets the 640x360 canvas and 60 Hz ticks.",
+   "beat_ids": [
+    "B02",
+    "B09",
+    "B12"
+   ],
+   "files": [
+    "game/controls.gd",
+    "game/effects.gd",
+    "game/hud.gd",
+    "game/main.gd",
+    "game/main.tscn",
+    "game/stage.gd",
+    "project.godot"
+   ]
+  },
+  {
+   "id": "audio-wiring",
+   "explanation": "AudioDirector listens to attack_resolved, knocked_out, round_started and paused_changed and plays the generated SFX and MusicGen loop on the SFX and Music buses; it never changes game state.",
+   "beat_ids": [
+    "B10",
+    "B11",
+    "B12"
+   ],
+   "files": [
+    "audio/music/loop.ogg",
+    "audio/music/loop.ogg.import",
+    "audio/sfx/block.ogg",
+    "audio/sfx/block.ogg.import",
+    "audio/sfx/hit.ogg",
+    "audio/sfx/hit.ogg.import",
+    "audio/sfx/ko.ogg",
+    "audio/sfx/ko.ogg.import",
+    "audio/sfx/whiff.ogg",
+    "audio/sfx/whiff.ogg.import",
+    "game/audio_director.gd"
+   ]
+  },
+  {
+   "id": "tests-and-captures",
+   "explanation": "test_runner.gd steps the fight headless with scripted controllers (94 checks); capture_states.gd and capture_flow.gd render the engine evidence images.",
+   "beat_ids": [
+    "B14",
+    "B15",
+    "B07"
+   ],
+   "files": [
+    "tests/capture_flow.gd",
+    "tests/capture_states.gd",
+    "tests/test_runner.gd"
+   ]
+  }
+ ],
+ "excerpts": [
+  {
+   "beat_id": "B06",
+   "path": "fighter/fighter_art.gd",
+   "start_line": 32,
+   "end_line": 44,
+   "text": "\tfor state in states:\n\t\tvar pose: Dictionary = f[\"poses\"][states[state]]\n\t\tvar kp: Array = pose[\"keypoints\"]\n\t\tvar hip_x: float = (kp[8][0] + kp[11][0]) / 2.0\n\t\tvar ground_eff: float = ground - float(pose[\"angles\"][\"airborne_px\"])\n\t\tart.anchor[state] = Vector2(hip_x, ground_eff)\n\t\tif pose[\"hurtbox\"] != null:\n\t\t\tart.hurtboxes[state] = art._to_local(pose[\"hurtbox\"], hip_x, ground_eff)\n\t\tif pose[\"hitbox\"] != null:\n\t\t\tart.hitboxes[state] = art._to_local(pose[\"hitbox\"], hip_x, ground_eff)\n\t\tvar generated := \"res://art/%s/%s.png\" % [id, state]\n\t\tvar placeholder := \"res://art/placeholder/%s/%s.png\" % [id, state]\n\t\tif ResourceLoader.exists(generated):"
+  },
+  {
+   "beat_id": "B08",
+   "path": "fighter/fighter.gd",
+   "start_line": 160,
+   "end_line": 172,
+   "text": "func check_hit() -> void:\n\tif attack_kind == \"\" or attack_done or state != attack_kind:\n\t\treturn\n\tvar a: Dictionary = ATTACKS[attack_kind]\n\tif frame <= a[\"startup\"] or frame > a[\"startup\"] + a[\"active\"]:\n\t\treturn\n\tvar hb: Variant = hitbox()\n\tvar hurt: Variant = opponent.hurtbox()\n\tif hb == null or hurt == null or not (hb as Rect2).intersects(hurt):\n\t\treturn\n\tvar point: Vector2 = (hb as Rect2).intersection(hurt).get_center()\n\tvar blocked := opponent.receive_hit(self, a[\"damage\"])\n\t_resolve(\"blocked\" if blocked else \"hit\", point)"
+  },
+  {
+   "beat_id": "B11",
+   "path": "game/audio_director.gd",
+   "start_line": 100,
+   "end_line": 108,
+   "text": "\nfunc _on_attack_resolved(_f, _kind: String, result: String, _point: Vector2) -> void:\n\tif RESULT_SOUND.has(result):\n\t\tplay(RESULT_SOUND[result])\n\n\nfunc _on_knocked_out(_f) -> void:\n\tplay(\"SFX-KO\")\n\tstop_music()"
+  },
+  {
+   "beat_id": "B14",
+   "path": "tests/test_runner.gd",
+   "start_line": 349,
+   "end_line": 358,
+   "text": "\t# E: two attacks far out of range -> two whiffs\n\tp2.controller = null\n\tp2.position.x = p1.position.x + 220.0\n\tp1.controller = ScriptedController.new([{\"frames\": 40, \"attack\": \"kick\"}, {\"frames\": 40, \"attack\": \"punch\"}])\n\trun_frames(main, 80)\n\tvar want := expected_sounds(log)\n\tvar starts := log.count([\"start\", \"punch\"]) + log.count([\"start\", \"kick\"])\n\tprint(\"    attacks %d -> sounds %s\" % [starts, audio.requests])\n\texpect(audio.events == want, \"sound requests match attack results one-to-one\")\n\texpect(want.size() == starts, \"every attack produced exactly one sound (%d attacks, %d sounds)\" % [starts, want.size()])"
+  }
+ ],
+ "exclusions": [],
+ "code_result_pairs": [
+  {
+   "code_beat": "B06",
+   "result_beat": "B07",
+   "observation": "In the running engine with F1 boxes on, the generated punch image stands on the ground line, the hurtbox covers its body and the red hitbox sits on the wrapped fist.",
+   "media": {
+    "path": "media/B07.mp4",
+    "sha256": "c06959688317f7731b790c0d742d04464a8bba25083489ac7fff60dfa442e947"
+   }
+  },
+  {
+   "code_beat": "B08",
+   "result_beat": "B09",
+   "observation": "Akaken's jab meets Aotake's hurtbox during its active frames: one hit spark at the overlap, Aotake's health bar drops and he is pushed back.",
+   "media": {
+    "path": "media/B09.mp4",
+    "sha256": "879fe2a065ee14d7246197f307eda2e57f09c4ed3317ba44d73df107bfb6b429"
+   }
+  },
+  {
+   "code_beat": "B11",
+   "result_beat": "B12",
+   "observation": "The opening jab whiffs, a later strike is blocked (block spark, no health lost) and a clean hit lands (hit spark, bar drops): three attack_resolved results, each with its sound in the capture.",
+   "media": {
+    "path": "media/B12.mp4",
+    "sha256": "381a346b53abdadcc4d1d246c8852a864faa4ae38f298ce1021615583dbf2d5f"
+   }
+  },
+  {
+   "code_beat": "B14",
+   "result_beat": "B15",
+   "observation": "The recorded run prints 94 checks, 0 failed; 13 attacks produce 13 sound requests; the muted and unmuted seeded fights end identically.",
+   "media": {
+    "path": "media/B15.mp4",
+    "sha256": "97bf0e68b1624562bcd0db75e36b56e3c9a73c31825b89034cea2e6a94519471"
+   }
+  }
+ ]
+}

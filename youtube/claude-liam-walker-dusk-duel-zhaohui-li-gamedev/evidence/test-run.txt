@@ -1,0 +1,28 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+- test_walk_and_facing
+- test_held_attack_starts_once
+- test_jump_arc_and_states
+- test_cross_over_flips_facing
+- test_every_state_has_art
+- test_punch_hits_once
+- test_point_blank_attacks_connect
+- test_out_of_range_whiffs
+- test_block_takes_no_damage
+- test_hurt_pushes_away_from_attacker
+- test_ko_once_then_result_and_rematch
+- test_every_attack_resolves_exactly_once
+    results: hit 17, blocked 5, whiff 2, interrupted 9, phase result
+- test_cpu_is_deterministic_and_attacks
+- test_pause_freezes_the_fight
+- test_one_sound_per_event
+    attacks 13 -> sounds { "SFX-WHIFF": 6, "SFX-HIT": 5, "SFX-BLOCK": 2, "SFX-KO": 0 }
+- test_final_hit_sounds_hit_then_ko
+- test_music_follows_the_round
+- test_mute_never_changes_the_fight
+    with sound [0, 42, "result", 344.42, 408.25, 18] / muted [0, 42, "result", 344.42, 408.25, 18]
+94 checks, 0 failed
+WARNING: 52 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 10 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

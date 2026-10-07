@@ -1,0 +1,20 @@
+{
+  "all_passed": true,
+  "checks": {
+    "a_block_happened": true,
+    "akaken_hit_aotake": true,
+    "akaken_was_hurt": true,
+    "aotake_knocked_out": true,
+    "opened_with_whiff": true,
+    "paused_once": true,
+    "rematch_started": true
+  },
+  "events": {
+    "blocked": 19,
+    "hit": 14,
+    "ko": 1,
+    "whiff": 2
+  },
+  "p1_health_changes": 7,
+  "ticks": 1882
+}

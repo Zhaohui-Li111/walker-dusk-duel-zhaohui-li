@@ -27,3 +27,17 @@ credentials/
 *.pfx
 
 # Git cannot ignore by size: inspect staged files before committing (>25 MB).
+
+# Film reel: engine captures, the isolated game copies, rendered clips and audio stay local
+youtube/*/capture/game/
+youtube/*/capture/game-states/
+youtube/*/capture/*.avi
+youtube/*/media/
+youtube/*/clips/
+youtube/*/audio/
+youtube/*/mp3/
+youtube/*/_qc/frames/
+youtube/*/_qc/capture/
+youtube/*/_qc/stills/
+youtube/*/_qc/clips/
+*.wav
