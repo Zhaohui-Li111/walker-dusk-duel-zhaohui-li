@@ -8,8 +8,8 @@ Kokoro `am_onyx` (local, free).
 
 The toolkit environment (ffmpeg, Kokoro model files, Remotion node modules, and the one-line
 `npx` fix in `runtime/scripts/remotion_scenes.py`) was already installed on this machine from
-Zhaohui's Assignment 1 reel. Its BUILD-LOG covers those. **No toolkit file was changed for this
-reel.**
+Zhaohui's Assignment 1 reel. Its BUILD-LOG covers those. **One toolkit file was changed for this
+reel** (§9).
 
 ## 1. The slice's own audio: how it gets into the film
 
@@ -36,7 +36,11 @@ the course-provided method rather than dubbing sounds in afterwards.
 - No sound was added, replaced, re-timed or mixed. B13 has no narration, and it is labelled
   "SLICE AUDIO · no narration" on screen.
 
-**Still open:** whether this matches the course-provided method. Zhaohui is asking the course.
+**Outcome, 2026-10-07:** Zhaohui checked the assignment text, the course email and the
+syllabus. None of them names the course-provided method; the assignment only says to ask for it.
+With the deadline that day, Zhaohui delegated the decision to Claude ("原声的问题你自己看着做吧").
+The route above was kept. It adds no sound after the fact: the audio is the capture's own,
+recorded with its frames. If the course names a different method, only B13 changes.
 
 ## 2. Silences the skill requires but the toolkit does not implement
 
@@ -134,6 +138,19 @@ pixel checks, because their content is diegetic. So:
 `./art` calls `python3`, which on this Windows host is the Microsoft Store alias. The toolkit
 was not edited. For this session only, a two-line `python3` shim that runs `python` was
 prepended to `PATH`.
+
+## 9. One toolkit change: GodotDesignFigure handle position
+
+- **What GATE V found:** an edge-bleed BLOCKER on every GodotDesignFigure beat (B03, B04, B05, B10).
+- **Cause:** the component draws its hardcoded "@NikBearBrown" at `bottom: height*.04`, so the
+  '@' descender reaches y 1035 at 1080 p. The 5 % title-safe line is at 1026.
+- **Fix:** `GodotDevWorkbench` draws the same handle at `.048` and passes, so
+  `runtime/remotion/src/scenes/GodotDesignFigure.tsx` was changed to `.048`, with a dated comment.
+  Zhaohui approved the change (option A, 2026-10-07).
+- **Line endings:** the edit converted that file's line endings from CRLF to LF. Restoring CRLF
+  needs a permission the session did not have, so the file is left with LF endings. Rendering is
+  unaffected.
+- **What was not changed:** no checker was edited.
 
 ## 8. Contributions
 

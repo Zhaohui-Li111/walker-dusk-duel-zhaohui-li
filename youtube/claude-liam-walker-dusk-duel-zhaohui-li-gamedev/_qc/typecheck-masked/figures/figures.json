@@ -1,0 +1,20 @@
+{
+  "figures": {
+    "fig_design_punch.png": "926994d5fd4c85848ae120d13315baf1c184c86936c3b9878e6f1649733ea7c3",
+    "fig_pipeline_punch.png": "488a6514181d566ed8aed81c17616309151f04e958b58c71d2e019579ca14243",
+    "fig_rounds_reference.png": "d2a9833e2414f346f22b2da151ac5268aa245dfac3fa4cee883380f4a9293f23",
+    "fig_sfx_candidates.png": "0161f837fb3886a79f5d37ae1c4ccbde8b4aad933cca6551f80e3308afc9da4c"
+  },
+  "sources": {
+    "design/character/akaken/collision.png": "33a3270c22986fd055a6c8f988a528977768243f103a7ca280838288c3e8c468",
+    "design/character/akaken/colorblock/06_punch_jab.png": "cb6574a1ce64dc24c63e472f944bb7f02a969b43bb5f9a6c880c37b58db619c2",
+    "design/character/akaken/openpose/06_punch_jab.png": "90f4440958b626af8e901cd7ed112aa85a661ad63900ae8a90f72f3630fa6bcf",
+    "design/generations/sheets/CHAR-AK-PUNCH_20261006-004722.png": "ef52f841e0f24959d9b51889532331287deba566e0ea7b457370fb201e50551c",
+    "godot/art/akaken/punch.png": "4454a9ef77ea49a9c359ed070c4635f3286122d303fa658be5d32c32e5bb37bc",
+    "design/generations/sheets/CHAR-AK-REF_20261006-000759.png": "e658fa9db8607e9fbb46840d4fa06764e7763ac729f2200ca6e1ccb09989fc31",
+    "design/generations/sheets/CHAR-AK-REF_20261006-002100.png": "99c0fc382e84a99a11ccaac374516b9765cc549a2adba0bf25087af900729100",
+    "design/generations/sheets/CHAR-AK-REF_20261006-003212.png": "d6c2242b171e2e5c073f4e46e0430e989c9eba2b200b1d5a979ff9284dc0cd93",
+    "design/generations/sheets/CHAR-AK-REF_20261006-003634.png": "3b38699ab796e28306a649d8ddfe5a6f00839f02015c51d1d6b942f3c6fde565",
+    "design/generations/audio/checks/SFX_candidates_spectrograms.png": "9959191ce85af474b0a45b22311032c805c3caa15727db25ee7de90cead51852"
+  }
+}

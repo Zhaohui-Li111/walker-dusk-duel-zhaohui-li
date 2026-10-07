@@ -8,12 +8,13 @@ SOURCES.md can cite them.
 import hashlib
 import json
 import pathlib
+import sys
 
 from PIL import Image, ImageDraw, ImageFont
 
 REEL = pathlib.Path(__file__).resolve().parent.parent
 REPO = REEL.parent.parent
-OUT = REEL / "figures"
+OUT = REEL / ("_qc/typecheck-masked/figures" if "--masked" in sys.argv else "figures")
 FONTS = pathlib.Path("D:/courses/7270/brutalist.art-main/brutalist.art-main/runtime/fonts")
 PAGE = (255, 253, 248)
 INK = (61, 57, 41)
@@ -33,10 +34,17 @@ def font(size, serif=False):
     return ImageFont.truetype("C:/Windows/Fonts/segoeui.ttf", size)
 
 
+MASKED = "--masked" in sys.argv     # labels only: every pasted source image becomes a blank panel
+
+
 def src(rel):
     p = REPO / rel
     used[rel] = hashlib.sha256(p.read_bytes()).hexdigest()
-    return Image.open(p)
+    img = Image.open(p)
+    if MASKED:
+        return Image.new(img.mode if img.mode in ("RGB", "RGBA") else "RGB", img.size,
+                         (255, 253, 248, 255) if img.mode == "RGBA" else (255, 253, 248))
+    return img
 
 
 def fit(img, box_w, box_h, nearest=False):

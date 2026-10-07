@@ -10,6 +10,7 @@ before render (see SOURCES.md, Corrections).
 | B00 | The Walker prompt is a reconstruction | labelled on screen ("reconstructed ask") | ✓ |
 | B01 | The design sheet fixed poses, colours and events first; tests checked the fit | CHARACTER-SHEET.md and CHANGE-BRIEF.md predate generation (git log b8f1815 → 1b8e5c8) | ✓ |
 | B02 | Akaken is scripted keyboard input; Aotake is the game's seeded CPU | tools/capture_driver.gd; main.gd `CpuController.new(7270 + round_number)` | ✓ |
+| B02 | Three pillars: every hit is felt, read the opponent, dusk ritual | CONCEPT.md design pillars table | ✓ |
 | B02 | The sparks and health bars are drawn by code | game/effects.gd and game/hud.gd `_draw()` | ✎ |
 | B03 | Green box = hurtbox, red box = hitbox from elbow to fist; five colours | design/character/akaken/collision.png legend; CHARACTER-SHEET.md revision 2; palette table | ✓ |
 | B04 | Rounds 1–3 prompt only: no red gi, beards, a turban for the headband | FRICTIONAL.md rounds 1–3; the round-1 and round-3 sheets on screen | ✓ |
@@ -31,6 +32,8 @@ before render (see SOURCES.md, Corrections).
 | B15 | The "image shows a body" check came from the rembg bug | FRICTIONAL.md 2026-10-06 export bug; test_runner.gd 149–158 | ✓ |
 | B16 | Zhaohui: theme, design, plan B, the playtest. Claude: docs, code, prompts, colour blocks, picks after round 3 | FRICTIONAL.md "Human / Claude / model" lines; TEST-REPORT (playtest) | ✓ |
 | B16 | Limits: lighter top, blank face, five Aotake poses, non-commercial licences | FRICTIONAL.md; README Known limitations | ✓ |
+| B16 | Tested: 94 checks at 4e0cf14 and the author's playtest; uncertain: sounds judged by measurement, not ear | evidence/test-run.txt; TEST-REPORT ("还可以"); ASSET-LOG SFX/MUS reasons | ✓ |
+| B16 | Next step: Aotake's walk, jump and win poses from the same reference | CHARACTER-SHEET appendix (5 Aotake poses; walk/jump/win fall back) | ✓ |
 | B18 | Exact title, @NikBearBrown, spoken, no jingle | OUTRO-LOCK.md | ✓ |
 
 ## Dating check

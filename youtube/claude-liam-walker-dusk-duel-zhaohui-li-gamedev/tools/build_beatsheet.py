@@ -159,9 +159,9 @@ def build():
                   "the art' -> they drew it to a spec the design fixed. BrutalistHesitantWriter matches single tokens only, so the one word carrying the misconception ('designed') is the trigger."))
 
     beats.append(footage_beat("B02", "OPEN", "open",
-        "Here's the slice. Ah-kah-ken in red is played by a scripted keyboard driver; Ow-tah-keh in teal is the "
-        "game's own seeded opponent. Both fighters and the courtyard behind them are generated images; "
-        "the sparks and the health bars are drawn by code.", 11,
+        "Here's the slice: Ah-kah-ken in red, a scripted keyboard driver, against Ow-tah-keh, the game's "
+        "seeded opponent. Three pillars: every hit is felt, read the opponent, a quiet dusk ritual. The "
+        "fighters and courtyard are generated; the sparks and health bars are code.", 13,
         [{"at": "0.05", "event": "round 1 fight underway in the dusk courtyard"},
          {"at": "0.5", "event": "Akaken closes in and trades strikes with Aotake"}], LABEL_FOOT,
         role_note="Real engine capture (Movie Maker), silent under narration; the slice's own audio is "
@@ -347,22 +347,24 @@ def build():
         role_note="Result of B14: the actual recorded test output, shown verbatim (no invented lines)."))
 
     beats.append(beat("B16", "VERDICT",
-        "Verdict. The models drew every pixel and made every sound, on a free T4. Jow-hway chose the theme, "
-        "the design and the switch to colour blocks, and played the slice. Claude wrote the docs, code and "
-        "prompts, drew the colour blocks, and made every pick after round three, by measurement, because "
-        "it can't listen. The flaws stay on the record: a lighter top, a blank face, five poses for "
-        "Ow-tah-keh, and licences that rule out commercial use.", 30,
+        "Verdict. The models drew the pixels and made the sounds on a free T4: SDXL for the art, Stable "
+        "Audio Open for the effects, MusicGen for the loop. Jow-hway chose the theme, the design and the "
+        "switch to colour blocks, and played it. Claude wrote the code and prompts and made every pick "
+        "after round three, by measurement. Tested: ninety-four checks at this revision, and the author's "
+        "playtest. Not settled: whether the sounds are right by ear. Next step: give Ow-tah-keh his "
+        "missing walk, jump and win poses from the same reference.", 30,
         {"type": "GRAPHIC", "class": "SHOW", "source": "remotion", "motion": "artifact-lines",
          "show": [{"at": "0.05", "event": "verdict page opens"}, {"at": "0.15", "event": "line 1: models"},
                   {"at": "0.3", "event": "line 2: Zhaohui"}, {"at": "0.48", "event": "line 3: Claude"},
-                  {"at": "0.75", "event": "line 4: limits"}],
+                  {"at": "0.62", "event": "line 4: limits"}, {"at": "0.8", "event": "line 5: next step"}],
          "remotion": {"pattern": "ClaudeVerdictArtifact", "props": {
              "artifactTitle": "Verdict", "artifactHeading": "Dusk Duel asset slice", "brandLabel": "@NikBearBrown",
              "artifactLines": [
-                 "Models: SDXL + ControlNet + IP-Adapter, Stable Audio Open, MusicGen. Free Colab T4.",
-                 "Zhaohui: theme, design, plan B (colour blocks), the playtest.",
-                 "Claude: docs, code, prompts, colour blocks; every pick after round 3, by measurement.",
-                 "Limits: lighter top, blank face, 5 Aotake poses, non-commercial licences."]}}}))
+                 "Models: SDXL + ControlNet + IP-Adapter (art), Stable Audio Open (SFX), MusicGen (loop). Free Colab T4.",
+                 "Zhaohui: theme, design, plan B, playtest. Claude: docs, code, prompts, picks after round 3.",
+                 "Tested: 94 checks at 4e0cf14 + author playtest. Uncertain: sounds judged by measurement.",
+                 "Limits: lighter top, blank face, 5 Aotake poses, non-commercial licences.",
+                 "Next step: Aotake's walk, jump and win poses from the same reference."]}}}))
 
     beats.append(beat("B17", "HANDOFF",
         "Your turn. Paste this: Please use Walker to add one new state image to my Godot fighter. Write "

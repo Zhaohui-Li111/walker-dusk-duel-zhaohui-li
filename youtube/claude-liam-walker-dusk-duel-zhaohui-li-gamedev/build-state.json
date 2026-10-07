@@ -1,0 +1,5 @@
+{
+  "status": "failed",
+  "error": "[art] command failed:\nC:\\Users\\rockefeller\\AppData\\Local\\Programs\\Python\\Python312\\python.exe D:\\courses\\7270\\brutalist.art-main\\brutalist.art-main\\runtime\\qc\\final_frame_check.py D:\\courses\\7270\\walker-dusk-duel-zhaohui-li\\youtube\\claude-liam-walker-dusk-duel-zhaohui-li-gamedev --mp4 D:\\courses\\7270\\walker-dusk-duel-zhaohui-li\\youtube\\claude-liam-walker-dusk-duel-zhaohui-li-gamedev\\exports\\landscape\\.claude-liam-walker-dusk-duel-zhaohui-li-gamedev-candidate-sclm0ydp\\candidate.mp4 --sheet D:\\courses\\7270\\walker-dusk-duel-zhaohui-li\\youtube\\claude-liam-walker-dusk-duel-zhaohui-li-gamedev\\clips\\_work\\resolved-sheet.json\n",
+  "at": "2026-10-07T14:06:13.489978-04:00"
+}

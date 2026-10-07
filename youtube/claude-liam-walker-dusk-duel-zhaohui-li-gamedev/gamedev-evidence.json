@@ -975,7 +975,7 @@
    "observation": "In the running engine with F1 boxes on, the generated punch image stands on the ground line, the hurtbox covers its body and the red hitbox sits on the wrapped fist.",
    "media": {
     "path": "media/B07.mp4",
-    "sha256": "c06959688317f7731b790c0d742d04464a8bba25083489ac7fff60dfa442e947"
+    "sha256": "f06bb0d807a0ca743ca5b5aaa370547ed968447691a1e4a4e9fff1535cad6214"
    }
   },
   {
@@ -984,7 +984,7 @@
    "observation": "Akaken's jab meets Aotake's hurtbox during its active frames: one hit spark at the overlap, Aotake's health bar drops and he is pushed back.",
    "media": {
     "path": "media/B09.mp4",
-    "sha256": "879fe2a065ee14d7246197f307eda2e57f09c4ed3317ba44d73df107bfb6b429"
+    "sha256": "3dd7604f3fa177da2a6d86e911c44c2e5c25e63e050394713aa00c41a9d3acc1"
    }
   },
   {
@@ -993,7 +993,7 @@
    "observation": "The opening jab whiffs, a later strike is blocked (block spark, no health lost) and a clean hit lands (hit spark, bar drops): three attack_resolved results, each with its sound in the capture.",
    "media": {
     "path": "media/B12.mp4",
-    "sha256": "381a346b53abdadcc4d1d246c8852a864faa4ae38f298ce1021615583dbf2d5f"
+    "sha256": "b3fb84a8b256009c153cf133e4152f6d32cb8fe5c47cc1910a50b507518a1bd9"
    }
   },
   {
