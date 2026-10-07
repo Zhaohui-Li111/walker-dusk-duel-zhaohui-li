@@ -32,6 +32,11 @@ assertion was weakened.
 Fresh clone of the submitted revision → open `godot/project.godot` → F5. Record: runs without errors?
 every control in README works?
 
+- 2026-10-07, automated part: `git clone https://github.com/Zhaohui-Li111/walker-dusk-duel-zhaohui-li`
+  at `9b0c696` into an empty folder, then `godot --headless --path godot --import` and the test run.
+  Result: **94 checks, 0 failed**, and no "no file yet" warning, so every used art and audio file is
+  present in the clone. This does not replace opening it with F5 and playing it.
+
 - 2026-10-06: Zhaohui played the slice at `431f03f` and said in chat that it was fine overall
   ("还可以"). Details per control: *(to fill in Zhaohui's words)*
 

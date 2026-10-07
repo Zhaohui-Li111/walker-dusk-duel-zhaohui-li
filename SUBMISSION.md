@@ -8,10 +8,10 @@
 - **Project name:** walker-dusk-duel
 - **Game concept in one sentence:** A one-on-one cartoon martial-arts duel at dusk where you read a
   long-legged opponent and choose each moment to strike, block or back off.
-- **GitHub repository/folder URL:** *(to fill)*
+- **GitHub repository/folder URL:** https://github.com/Zhaohui-Li111/walker-dusk-duel-zhaohui-li
 - **Started from:** an empty Godot 4.7 project (settings matched to my walker-jumpman checkout; no code copied)
 - **Submitted commit SHA:** *(to fill)*
-- **Source revision shown in the film:** *(to fill)*
+- **Source revision shown in the film:** `4e0cf14` (game source; later commits add only film files and documentation, `godot/` unchanged)
 - **Godot version and operating system:** Godot 4.7.2 stable (GL Compatibility), Windows 11 Home
 - **Generative models used (name, version, where run, license):**
   - Stable Diffusion XL base 1.0, commit `4621659840`, Google Colab free T4, CreativeML Open RAIL++-M
@@ -20,7 +20,7 @@
   - h94 IP-Adapter Plus SDXL ViT-H, commit `018e402774`, Colab T4, Apache-2.0
   - MusicGen medium, commit `d3bd7b0076`, Colab T4, CC-BY-NC 4.0
   - Stable Audio Open 1.0, commit `f21265c1e2`, Colab T4, Stability AI Community License
-- **Final film URL and filename:** *(to fill)*
-- **Final film SHA-256:** *(to fill)*
+- **Final film URL and filename:** *(Google Drive link: FILM_LINK)* · `claude-liam-walker-dusk-duel-zhaohui-li-gamedev.mp4`
+- **Final film SHA-256:** `544bc91d9aeef43274419d6768ce84d1c7b81f412c091a2c9092511423928e39`
 - **Summary of my work:** *(to fill in my own words)*
-- **Known limitations:** see README "Known limitations" and TEST-REPORT *(to finalise after playtest)*
+- **Known limitations:** see README "Known limitations" and TEST-REPORT "Honest limitations"

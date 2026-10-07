@@ -72,4 +72,16 @@ split between Claude, the models and me.
 
 ## Final film
 
-*(link, filename and SHA-256 added when the Brutalist explainer is rendered)*
+**"Dusk Duel, Generated"**: a Brutalist explainer made with the `godot-gamedev` skill in walker
+mode. It is 5:13 long, 3840 × 2160, 30 fps.
+
+- **Link:** *(Google Drive link: FILM_LINK)*
+- **File name:** `claude-liam-walker-dusk-duel-zhaohui-li-gamedev.mp4`
+- **SHA-256:** `544bc91d9aeef43274419d6768ce84d1c7b81f412c091a2c9092511423928e39`
+- **Source revision shown:** `4e0cf14`. Later commits add only film files and documentation;
+  `godot/` is unchanged.
+- **Film source and evidence:** the beat sheet, narration, prompts, captures, fact check and QC
+  reports are in [youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev/](youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev/).
+  Start with BUILD-LOG.md and CAPTURE.md.
+- **Slice audio segment:** 3:24–3:42 (B13). It plays the game's own recorded sound, with no
+  narration over it.

@@ -161,3 +161,25 @@ prepended to `PATH`.
 | **Local models** | Kokoro voiced the narration. faster-whisper checked it. |
 
 The game assets shown are the generated ones documented in the repo's ASSET-LOG.
+
+## 10. Final master
+
+- **Command:** `./art final <reel> --height 2160 --fps 30 --out <reel>/exports/landscape`
+- **Gates:**
+  - GATE T: PASS on the real reel, and on the masked copy with every pixel check on.
+  - GATE V: 38 frames, 0 BLOCKER, 0 MAJOR (`_qc/REPORT.md`).
+  - Gamedev checker: PASS.
+- **Output:** `claude-liam-walker-dusk-duel-zhaohui-li-gamedev.mp4`
+  - 3840 × 2160, 30 fps, AAC, 312.93 s.
+  - SHA-256 `544bc91d9aeef43274419d6768ce84d1c7b81f412c091a2c9092511423928e39`
+  - The receipt is in `exports/landscape/*.verified.json`.
+- **Audio check on the master:**
+  - B13 (204.7–221.9 s) measures mean −15.3 dB and peak 0.0 dBFS, the same as the capture's own
+    audio. The slice's sound survived the compile untouched.
+  - The narrated beats around it measure about −27 dB mean.
+- **Not done by Claude:** watching and listening with human eyes and ears. Zhaohui should play the
+  master once before submitting.
+- **Render stall:** on 2026-10-07 a render queue stalled for about three hours, apparently because
+  the computer went to sleep and resumed. A second queued render then started at the same time
+  and failed B10. All render processes were stopped and the beats were re-rendered one at a time.
+  No output from the stalled run was used.
