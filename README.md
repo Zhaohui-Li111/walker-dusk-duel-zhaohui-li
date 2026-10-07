@@ -75,7 +75,7 @@ split between Claude, the models and me.
 **"Dusk Duel, Generated"**: a Brutalist explainer made with the `godot-gamedev` skill in walker
 mode. It is 5:13 long, 3840 × 2160, 30 fps.
 
-- **Link:** *(Google Drive link: FILM_LINK)*
+- **Link:** https://drive.google.com/file/d/1p-VSLTgdrnx0TcIbniZmUvhgoe0bU3iV/view?usp=drive_link
 - **File name:** `claude-liam-walker-dusk-duel-zhaohui-li-gamedev.mp4`
 - **SHA-256:** `544bc91d9aeef43274419d6768ce84d1c7b81f412c091a2c9092511423928e39`
 - **Source revision shown:** `4e0cf14`. Later commits add only film files and documentation;
