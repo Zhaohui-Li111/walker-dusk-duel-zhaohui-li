@@ -27,7 +27,7 @@ Assertions that were wrong and how they were handled are in FRICTIONAL.md (2026-
 step 3 entries): two test *scenarios* were corrected after the failure was understood; no
 assertion was weakened.
 
-## Startup and controls — TO DO (human)
+## Startup and controls
 
 Fresh clone of the submitted revision → open `godot/project.godot` → F5. Record: runs without errors?
 every control in README works?
@@ -38,7 +38,8 @@ every control in README works?
   present in the clone. This does not replace opening it with F5 and playing it.
 
 - 2026-10-06: Zhaohui played the slice at `431f03f` and said in chat that it was fine overall
-  ("还可以"). Details per control: *(to fill in Zhaohui's words)*
+  ("还可以"). Details per control: see the next line.
+- 2026-10-07, Zhaohui's playtest answer (in chat, translated from Chinese): asked whether move, jump, crouch, punch, kick, block, pause and the M/N mutes, Zhaohui answered "没问题，都正常着" ("no problems, everything works normally"). This is one overall confirmation, not a per-item log.
 
 ## Character against the sheet
 
@@ -77,16 +78,16 @@ contact sheet `evidence/flow_contact.png`), compared with the panels by Claude.
 
 Extra captures: `06_paused` (pause overlay) and `06b_muted_indicator` (both buses muted, shown in the HUD).
 
-## Sound events — TO DO (human listening)
+## Sound events
 
 Play normally, then mash punch and hold punch: each whiff / hit / block / K.O. should be heard once.
 
 - Automated: the one-sound-per-event tests pass with the real files loaded (no "no file yet" warning).
 - Files: whiff 0.35 s, hit 0.40 s, block 0.40 s, K.O. 2.50 s; decoded peaks −1.0 to −1.5 dBFS.
   Picks were made by measurement, not by ear (FRICTIONAL 2026-10-06, sound effects).
-- Zhaohui's listening: *(to fill)*
+- 2026-10-07, Zhaohui's playtest answer (in chat, translated from Chinese): asked whether hit, block, whiff and K.O. can be told apart, and each sounds once, Zhaohui answered "没问题，都正常着" ("no problems, everything works normally"). This is one overall confirmation, not a per-item log.
 
-## Music — TO DO (human listening)
+## Music
 
 Loop heard at least three times round without a click or gap; pause muffles it; K.O. stops it;
 rematch restarts it.
@@ -95,15 +96,15 @@ rematch restarts it.
 - Seam, measured on the decoded OGG: the jump across the loop point (0.013) is below the 99th
   percentile of ordinary sample steps in the loop (0.014). A three-repeat check file is at
   `design/generations/audio/checks/MUS-RAW_s22_loop_x3.ogg`.
-- Zhaohui's listening: *(to fill)*
+- 2026-10-07, Zhaohui's playtest answer (in chat, translated from Chinese): asked whether no click at the loop seam, music quieter and muffled on pause, music stops at K.O., Zhaohui answered "没问题，都正常着" ("no problems, everything works normally"). This is one overall confirmation, not a per-item log.
 
-## Muted play — TO DO (human)
+## Muted play
 
 Full round with M and N both on; can whiff, hit, block and K.O. be told apart by sight alone?
 
 - Automated: a seeded fight ends identically with both buses muted. Visually, hit and block have
   different sparks and only a hit moves the health bar (`03_block` against `04_hit`).
-- Zhaohui's muted round: *(to fill)*
+- 2026-10-07, Zhaohui's playtest answer (in chat, translated from Chinese): asked whether with M and N muted, the play is still understandable from the picture, Zhaohui answered "没问题，都正常着" ("no problems, everything works normally"). This is one overall confirmation, not a per-item log.
 
 ## Inspect-and-revise cycles (so far)
 
