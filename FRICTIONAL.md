@@ -552,3 +552,23 @@ contributions, and generative-model outputs. Retrospective notes are labeled.
   The renders in `evidence/props3d/` were re-made. `project.godot` is unchanged.
 - **What this showed (Claude's observation):** the numbers would have passed the broken drumhead
   (0.53 m depth, within ±0.02; 0 non-manifold edges). Only the oblique `look` caught it.
+
+## 2026-10-16 — Zhaohui's own Blender screenshots (recorded by Claude Code)
+
+- Zhaohui took three full-screen screenshots of their own Blender session with Win + PrtScn, at
+  16:40–16:41. Copied unchanged into `evidence/blender/`:
+  - `zhaohui_object_mode_taiko_selected.png` (SHA-256 `f118a50d…`): Object Mode, PROP-TAIKO
+    selected, Properties → Object → Transform showing location 0, rotation 0°, scale 1.000.
+    The add-on's N-panel tab shows "Connected on port 9876" and "Addon 1.8 · up to date", with Poly
+    Haven, Sketchfab, Poly Pizza, Hyper3D Rodin and Tencent Hunyuan 3D unticked. Tripo is not
+    listed in this panel.
+  - `zhaohui_bottom_view_taiko.png` (`d9867a4e…`): Bottom Orthographic view.
+  - `zhaohui_back_view_taiko.png` (`067a362e…`): Back Orthographic view.
+- **Label difference recorded:** connected, the add-on's button reads **"Disconnect"**, beside
+  "Connected on port 9876". The README's "Start MCP Server" / "Connect to Claude" and the course's
+  "Connect to MCP server" describe the button before connecting.
+- The title bar shows `* prop_taiko` (unsaved). Claude checked the live mesh: fingerprint
+  `d560d3f57073`, the same as the saved file, so the asterisk comes from view or mode changes, not
+  geometry. Nothing was saved.
+- There is no screenshot of the hand edit itself (it was not recorded while it happened), and none
+  of Edit Mode.
