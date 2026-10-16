@@ -8,6 +8,8 @@ temple courtyard.
 - **Started from:** an empty Godot 4.7 project. Project settings (640×360 viewport shown at 2×) match
   my earlier `walker-jumpman` checkout; no code was copied from it. See [SOURCES.md](SOURCES.md).
 - **Engine:** Godot 4.7.2 stable (GL Compatibility renderer), tested on Windows 11.
+- **Assignment 3 tools:** Blender 5.2.2 LTS · mcp-for-blender 2.1.9 (Blender add-on 1.8) · see
+  [Assignment 3](#assignment-3-three-3d-props) below.
 - **Design:** [CONCEPT.md](CONCEPT.md) · [STORYBOARD.md](STORYBOARD.md) ·
   [CHARACTER-SHEET.md](CHARACTER-SHEET.md) · [CHANGE-BRIEF.md](CHANGE-BRIEF.md)
 - **Process:** [FRICTIONAL.md](FRICTIONAL.md) · [ASSET-LOG.md](ASSET-LOG.md) (one row per generation) ·
@@ -84,15 +86,35 @@ in a small separate Godot 3D scene. The 2D game does not use them yet.
 
 - **Spec and results:** [CHANGE-BRIEF.md](CHANGE-BRIEF.md), Assignment 3 (spec, predicted failure
   cases, build result). **Process log:** [FRICTIONAL.md](FRICTIONAL.md), Assignment 3.
+  **Results:** [TEST-REPORT.md](TEST-REPORT.md), Assignment 3. **Interface notes:**
+  [BLENDER-NOTES.md](BLENDER-NOTES.md).
+- **Code Claude ran in Blender:** `tools/blender/build_<asset>.py` (verbatim), plus
+  `export_glb.py`, `check_blend.py`, and `reproduce.py` (re-runs the builds into a scratch folder).
 - **Files:** `blender/*.blend` (sources) → `godot/props3d/models/*.glb` →
   `godot/props3d/prop_room.tscn` (floor, one light, a camera and a 1.70 m reference box).
   Renders: [evidence/props3d/](evidence/props3d/).
-- **Check against the brief** (size ±0.02 m, origin on the floor, transforms applied, tallest axis,
-  triangle budget, colours):
+- **Open the scene:** open `godot/project.godot` in the Godot editor and double-click
+  `props3d/prop_room.tscn` in the FileSystem dock, or:
 
 ```bash
-godot --headless --path godot --script res://tests/check_props3d.gd
+godot --editor --path godot res://props3d/prop_room.tscn
 ```
+
+- **Check against the brief** (size ±0.02 m, transforms applied, tallest axis, gap to the floor,
+  triangle budget, colours; 46 checks). Run `--import` once after cloning:
+
+```bash
+godot --headless --path godot --import
+```
+
+```bash
+timeout 120 godot --headless --path godot --script res://tests/check_props3d.gd --fixed-fps 60
+```
+
+- **A3 known limitations:** the checks prove numbers, not looks; the look check is the human
+  one in TEST-REPORT. The makiwara rope bands are chamfered rings rather than the round cylinders
+  the brief first said. The taiko stand is shallow (0.12 m) and looks tippy from the side. The
+  prop room is not connected to the 2D game. The A3 film is not made yet.
 
 - Opening the project in the Godot editor re-saves `godot/project.godot` and drops the
   `[physics]` lines (60 is the default value). Run `git status` after an editor session.

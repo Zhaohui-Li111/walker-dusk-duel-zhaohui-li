@@ -130,3 +130,120 @@ Full round with M and N both on; can whiff, hit, block and K.O. be told apart by
 - Storyboard panel 6 (losing K.O.) has no capture.
 - Licences are non-commercial or limited: MusicGen weights are CC-BY-NC 4.0, and Stable Audio Open
   uses the Stability AI Community License.
+
+---
+
+# Assignment 3 — three 3D props
+
+> Draft by Claude Code, 2026-10-16. Rows marked **TO DO (human)** need Zhaohui's own check or own
+> words; Claude has only recorded what Zhaohui said in chat.
+
+- **Versions:** Blender 5.2.2 LTS · mcp-for-blender 2.1.9 (add-on 1.8, protocol 13) · Godot 4.7.2
+  stable (GL Compatibility) · Windows 11 Home. The chapter used Blender 5.1.2.
+- **Route:** the MCP route for all three assets. No script-route fallback was needed.
+- **Brief:** CHANGE-BRIEF.md, Assignment 3, committed before building (`30513a4` on `main`).
+- **Code Claude ran:** `tools/blender/build_lantern.py`, `build_makiwara.py`, `build_taiko.py`
+  (every `execute_blender_code` body, verbatim), plus `export_glb.py` and `check_blend.py`.
+- **Commands on Windows:** Git Bash, with Godot run from
+  `Downloads\Godot_v4.7.2-stable_win64.exe\Godot_v4.7.2-stable_win64_console.exe` (shortened to
+  `godot` below). Git Bash provides `timeout`, so Homebrew coreutils is not needed.
+
+## Automated checks
+
+```bash
+timeout 120 godot --headless --path godot --script res://tests/check_props3d.gd --fixed-fps 60
+```
+
+Result: **46 checks, 0 failed**, exit 0. For each prop the script prints the AABB size, the scale
+and rotation of every node, the tallest axis, the triangle count, the albedo hex of each surface,
+and the gap between the prop's lowest point and the `Floor` node's top face.
+
+**Proving the check can fail.** As a test, the taiko was raised by 0.05 m in `prop_room.tscn` and
+the check was run again. Result: **46 checks, 1 failed** (`sits on the floor (gap 0.0500)`), exit 1.
+The scene was then restored. The older "min y" assertion **still passed** with the taiko floating,
+because it measures the lowest point relative to the prop's own node, not to the floor. That is
+the same mistake as Module 3's floor check. The floor-gap assertion was added for that reason.
+
+Blender-side check, headless, for each `.blend`:
+
+```bash
+/d/blender/blender.exe -b blender/prop_taiko.blend --factory-startup --python-exit-code 1 --python tools/blender/check_blend.py
+```
+
+**Reproducibility.** `tools/blender/reproduce.py` re-runs the three build files headless into a
+scratch folder. The vertex fingerprints match the committed `.blend` files: lantern `7c537d4f8f3c`,
+makiwara `a1091179bdeb`, taiko `dc819786cf3b`. The re-run also reproduces the taiko origin error
+before call 2 fixes it.
+
+The 2D game's suite is unchanged: `test_runner.gd` gives 94 checks, 0 failed.
+
+## Results against the brief
+
+| Check | PROP-LANTERN | PROP-MAKIWARA | PROP-TAIKO |
+|---|---|---|---|
+| Brief W × D × H (m) | 0.60 × 0.60 × 1.40 | 0.30 × 0.30 × 1.50 | 0.70 × 0.55 × 0.95 |
+| Blender dimensions X × Y × Z (from `get_scene_info` and `check_blend.py`) | 0.60 × 0.60 × 1.40 | 0.30 × 0.30 × 1.50 | 0.70 × 0.55 × 0.95 |
+| Godot AABB x × y × z (headless) | 0.600 × 1.400 × 0.600 | 0.300 × 1.500 × 0.300 | 0.700 × 0.950 × 0.550 |
+| Upright: tallest axis is Godot Y | yes | yes | yes |
+| Node scale after export | 1, 1, 1 | 1, 1, 1 | 1, 1, 1 |
+| Node rotation after export | 0, 0, 0 | 0, 0, 0 | 0, 0, 0 (the drum's 90° turn was applied in Blender) |
+| Origin: gap to the floor top in Godot | 0.0000 | 0.0000 | 0.0000 |
+| Triangles (budget; course limit 500) | 100 (150) | 92 (120) | 168 (200) |
+| Basic shapes (limit 6) | 6 | 5 | 6 |
+| Albedo hex in Godot vs brief | 6e6680 f5c542 4e475c, exact | 8a5a3b d8b676 f2e6d0 6e6680, exact | d9482b f2e6d0 1e1b22, exact |
+| Imports and appears | yes, `--import` printed no errors; visible in `evidence/props3d/prop_room_front.png` | yes | yes |
+
+- **TO DO (human):** the triangle counts as shown in Blender's own Scene Statistics (right-click
+  the status bar). The numbers above come from Blender's `loop_triangles` in a script.
+- **TO DO (human):** the dimensions as read in the N-panel sidebar, if they differ from the above.
+
+## HUMAN CHECK: look
+
+- 2026-10-16, Zhaohui (in chat, after opening `prop_room.tscn` in the Godot editor and walking
+  around): "我看了一一下，没问题" ("I had a look, no problems"). This is one overall
+  confirmation, not a per-asset log.
+- **TO DO (human):** per asset, in your own words. Does it read as what it is at game size beside
+  the 1.70 m reference box? Did you look from behind and below? Any missing faces or wrong colours?
+- Claude's own observations from two still renders (not a substitute for the walk-around): no
+  missing faces seen from front or back. The taiko stand is only 0.12 m deep, so from the side the
+  drum looks as if it could tip; Zhaohui kept it as built.
+
+## What Claude got wrong
+
+1. **Taiko origin.** After joining the parts, the origin sat at Z 0.03, the centre of the base bar
+   (failure case 3). Claude's own script output caught it; `get_scene_info` alone reported
+   "on ground" because it measures the world box. Fixed by moving the mesh, not the object.
+2. **A wrong option offered to Zhaohui.** For the makiwara, "squash the bands into a 0.20 × 0.18
+   ellipse" was offered and chosen, but it could not enclose the pad. Claude checked before
+   building, said so, and offered a chamfered ring instead.
+3. **The first floor check proved less than it claimed** (see "Proving the check can fail").
+4. **Overexposed first render.** The sun at 1.0 plus ambient 0.6 turned the cream drumhead pure
+   white.
+5. **The course prompt was not followed exactly.** The course asks for get_scene_info, then a
+   proposed plan, then approval, then **one `execute_blender_code` call per object**. Claude built
+   each asset in one call (all parts, join, apply) and asked for approval after each asset, not
+   before. Each step was still checked with `get_scene_info` and `look`.
+
+## Inspect-and-revise cycles (A3)
+
+1. `look` on the makiwara showed the round bands standing out about 4 cm like collars. Zhaohui
+   chose chamfered 0.19 × 0.17 rings, which now stand out 1.5 cm at the same 92 triangles.
+2. A script check on the taiko showed the mesh running from Z −0.03 → origin moved to the
+   underside, then re-checked headless.
+3. The first Godot render showed the drumhead clipped to white → light lowered to 0.7 and ambient
+   to 0.35, then re-rendered.
+4. The prop-raising test showed the "min y" check could not fail → floor-gap check added; it fails
+   when the prop is raised and passes on the real scene.
+
+## Honest limitations (A3)
+
+- **TO DO (human): no hand edit in Blender yet.** The assignment requires at least one. If it
+  changes the geometry, re-export and re-run both checks.
+- **TO DO (human): no BLENDER-NOTES.md content yet** (six interface parts in your own words, plus a
+  screenshot).
+- The checks show size, orientation, scale, floor contact, triangle count and colour values. They do
+  not show that the props look right in the game's style or lighting, or that no face is flipped;
+  those are the human look check.
+- The prop room is not connected to the 2D game.
+- The makiwara rope bands are not round cylinders as the brief first said (see CHANGE-BRIEF, build
+  result).

@@ -2,8 +2,12 @@ extends SceneTree
 ## Headless checks for the A3 3D props against CHANGE-BRIEF.md. Run from the repo root:
 ##   godot --headless --path godot --script res://tests/check_props3d.gd
 ## For each prop in props3d/prop_room.tscn it prints the AABB size and min Y, the scale and
-## rotation of every node, the tallest axis, the triangle count and each surface's albedo hex.
+## rotation of every node, the tallest axis, the triangle count and each surface's albedo hex,
+## and the gap between each prop's lowest point and the Floor node's top face.
 ## Exit code 0 = all passed.
+## What it does NOT show: that a prop looks right, reads as what it is, has no missing or
+## flipped faces, or that its colours survive the scene's lighting. Those are human checks
+## (TEST-REPORT.md). Brief sizes are W x D x H in Blender; Godot's axes are x, y (up), z.
 
 const TOL := 0.02
 const PROPS := {
@@ -27,6 +31,10 @@ func _run() -> void:
 	var room: Node3D = load("res://props3d/prop_room.tscn").instantiate()
 	root.add_child(room)
 	await process_frame
+	# the floor's own top face, in world space: props must sit on this, not just on y = 0
+	var floor_mi := room.get_node("Floor") as MeshInstance3D
+	var floor_top := (floor_mi.global_transform * floor_mi.get_aabb()).end.y
+	print("floor top y %.4f" % floor_top)
 	for prop_name in PROPS:
 		var spec: Dictionary = PROPS[prop_name]
 		var prop := room.get_node(prop_name) as Node3D
@@ -68,6 +76,9 @@ func _run() -> void:
 			check(absf(size[axis] - spec.size[axis]) <= TOL,
 					"size axis %d = %.3f, brief %.2f" % [axis, size[axis], spec.size[axis]])
 		check(absf(min_y) <= 0.01, "min y %.4f is 0.00 +- 0.01" % min_y)
+		var gap := box.position.y - floor_top
+		print("    lowest point %.4f m above the floor top (negative = sunk)" % gap)
+		check(absf(gap) <= 0.01, "sits on the floor (gap %.4f)" % gap)
 		var tallest := 0 if size.x >= size.y and size.x >= size.z else (1 if size.y >= size.z else 2)
 		check(tallest == 1, "tallest axis is Y")
 		check(tris > 0 and tris <= spec.tris, "%d triangles within budget %d" % [tris, spec.tris])

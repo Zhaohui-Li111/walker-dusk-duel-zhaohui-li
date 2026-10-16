@@ -45,8 +45,10 @@ acceptable for coursework and are stated here.
 | Godot | 4.7.2 stable | MIT | glTF import, `godot/props3d/prop_room.tscn` |
 
 No generative model made any part of the 3D props. Every mesh was built from primitives by Python
-that Claude Code sent through `execute_blender_code`. Those scripts ran in Blender and are not
-saved as files; FRICTIONAL.md records what each one did. `godot/tests/check_props3d.gd` and
+that Claude Code sent through `execute_blender_code`. Every call body is kept verbatim in
+`tools/blender/build_lantern.py`, `build_makiwara.py` and `build_taiko.py`. `tools/blender/reproduce.py`
+re-runs them headless, and the result matches the committed `.blend` files vertex for vertex.
+`tools/blender/export_glb.py`, `check_blend.py`, `reproduce.py`, `godot/tests/check_props3d.gd` and
 `godot/tests/capture_props3d.gd` were written by Claude Code (Opus 5.5).
 
 **Who did what in A3:** Zhaohui chose the three assets, confirmed the brief's numbers as final,
@@ -98,6 +100,7 @@ See [ASSET-LOG.md](ASSET-LOG.md) and `asset_log.csv`: one row per generation, in
 | GDScript (`godot/`) | 0 % | about 100 %, reviewed and playtested by Zhaohui |
 | Python tools and notebooks (`tools/`, `notebooks/`) | 0 % | about 100 % |
 | Film tools (`youtube/*/tools/`) | 0 % | about 100 % |
+| Blender Python, A3 (`tools/blender/`) | 0 % | 100 % (run through the MCP; the required hand edit in Blender is to be done by Zhaohui with the mouse, not in code) |
 
 Zhaohui's contribution is the specification, the decisions and the verification, not lines of
 code. This is the course's intended division of work.

@@ -475,3 +475,27 @@ contributions, and generative-model outputs. Retrospective notes are labeled.
   [PR #1](https://github.com/Zhaohui-Li111/walker-dusk-duel-zhaohui-li/pull/1) with **rebase**,
   which keeps `main` linear but gives every commit a new SHA: the brief snapshot `780f39c` became
   **`30513a4`** on `main`. The references above were updated to the `main` SHA.
+
+## 2026-10-16 — Gap check against the full assignment text (recorded by Claude Code)
+
+- Zhaohui pasted the full Assignment 3 text and said to carry on without asking. Claude compared
+  the repository with it. **Missing at that point:** the code Claude ran was not saved in
+  `tools/blender/`; there was no BLENDER-NOTES.md, no A3 section in TEST-REPORT.md, no hand edit,
+  no A3 film, no `a3` tag and no A3 SUBMISSION.md. Claude also did not follow the course prompt's
+  "one `execute_blender_code` call per object, plan approved first" (see TEST-REPORT, "What Claude
+  got wrong" 5).
+- **Code saved:** every `execute_blender_code` body from this session, copied verbatim from the
+  transcript into `tools/blender/build_{lantern,makiwara,taiko}.py`, plus `export_glb.py` (the
+  headless export) and `check_blend.py`. **Checked by re-running:** `reproduce.py` runs the three
+  files headless (`-b --factory-startup --python-exit-code 1`) with only the save folder swapped to
+  a scratch folder. The vertex fingerprints match the committed `.blend` files for all three
+  (`7c537d4f8f3c`, `a1091179bdeb`, `dc819786cf3b`). The taiko origin error reappears before
+  the fix call, as it did live.
+- **Check strengthened after a test showed it could not fail:** raising the taiko 0.05 m in
+  the scene left the old "min y" assertion passing, because it is measured from the prop's own node.
+  A floor-gap assertion, measured against the `Floor` node's top face in world space, was added. It
+  failed on the raised taiko (46 checks, 1 failed) and passes on the real scene (46, 0) when run
+  as the assignment writes it: `timeout 120 godot --headless --path godot --script
+  res://tests/check_props3d.gd --fixed-fps 60`.
+- **Written as skeletons only:** BLENDER-NOTES.md (headings and prompts, no descriptions) and the
+  TO DO (human) rows in TEST-REPORT.md. These need Zhaohui's own words.
