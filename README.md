@@ -101,7 +101,7 @@ godot --editor --path godot res://props3d/prop_room.tscn
 ```
 
 - **Check against the brief** (size ±0.02 m, transforms applied, tallest axis, gap to the floor,
-  triangle budget, colours; 46 checks). Run `--import` once after cloning:
+  triangle budget, colours; 49 checks). Run `--import` once after cloning:
 
 ```bash
 godot --headless --path godot --import

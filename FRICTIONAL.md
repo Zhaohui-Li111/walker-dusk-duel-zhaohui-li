@@ -494,7 +494,7 @@ contributions, and generative-model outputs. Retrospective notes are labeled.
 - **Check strengthened after a test showed it could not fail:** raising the taiko 0.05 m in
   the scene left the old "min y" assertion passing, because it is measured from the prop's own node.
   A floor-gap assertion, measured against the `Floor` node's top face in world space, was added. It
-  failed on the raised taiko (46 checks, 1 failed) and passes on the real scene (46, 0) when run
+  failed on the raised taiko (46 checks, 1 failed) and passes on the real scene (46, 0; 49 after the footprint check) when run
   as the assignment writes it: `timeout 120 godot --headless --path godot --script
   res://tests/check_props3d.gd --fixed-fps 60`.
 - **Written as skeletons only:** BLENDER-NOTES.md (headings and prompts, no descriptions) and the
@@ -515,3 +515,40 @@ contributions, and generative-model outputs. Retrospective notes are labeled.
   It has not been run against the moved GLB itself.
 - Claude did not change the live scene. Zhaohui chose to move the taiko back to the origin and make
   the hand edit on one part instead: Edit Mode, L to select the part, then move it or change its colour.
+
+## 2026-10-16 — Hand edit 1 on the taiko, and the defect it made (recorded by Claude Code)
+
+- Zhaohui moved the taiko back to the origin, edited it in Edit Mode, and saved at 16:28
+  ("现在保存了"). How they did it and what they learned is theirs to add.
+- **What changed (per-part comparison of the committed file and the saved one, headless):** only
+  the front drumhead. Its outer face moved from Y −0.275 to −0.255, so the head is now **0 m
+  thick** and lies in exactly the same plane as the lacquer body's front cap. Overall depth went
+  from 0.55 to **0.53 m**, right at the edge of the ±0.02 tolerance. Location (0, 0, 0), rotation 0,
+  scale 1, 168 triangles, 0 non-manifold edges. By the numbers it would still pass.
+- **What `look` showed:** red patches showing through the cream head from oblique views. This is
+  **z-fighting** between two coincident faces. Straight on, from the front, it barely shows. The
+  numeric checks cannot see it; only the look check found it.
+- Zhaohui chose to fix it by hand in Blender. Claude did not change the file.
+
+## 2026-10-16 — Hand edit repaired by Claude; taiko re-exported (recorded by Claude Code)
+
+- Zhaohui: "我不太会改，你改吧". So **the repair is Claude's work**; the hand edit itself (with the
+  mouse, saved 16:28) is Zhaohui's.
+- **Repair, attempt 1 (partial):** moved the front head's outer cap (the 12-gon whose normal points
+  −Y) back to Y −0.275. Thickness and size came back (0.70 × 0.55 × 0.95) and the z-fighting went.
+  **But a vertex-by-vertex comparison with the committed file showed more damage:** the head's
+  inner ring had been scrambled by the edit. Half of its vertices had shifted one step round, two
+  pairs sat on the same spot, and two positions were empty, so the rim quads were twisted.
+  Attempt 1 had not fixed that. Topology (face lists) was identical to the committed file.
+- **Repair, attempt 2:** set all 24 front-head vertices (indices 32–55) back on the 12-gon by index.
+  After that, the bar, legs and both heads are identical to the committed file.
+- **Kept from Zhaohui's edit:** the lacquer body is moved by (−0.0053, +0.0023, +0.0117) m, so it
+  sits about 1.2 cm high inside the heads. The overall size is unchanged because the heads set it.
+- Both repair calls were appended verbatim to `tools/blender/build_taiko.py` (calls 3 and 4).
+  `reproduce.py` still runs and gives the pre-edit fingerprint `dc819786cf3b`, because a mouse edit
+  is not code. The new file's fingerprint is `d560d3f57073`.
+- **Re-export and checks:** `export_glb.py` → `prop_taiko.glb`, `--import` exit 0, `check_props3d.gd`
+  **49 checks, 0 failed** (taiko 0.700 × 0.950 × 0.550, floor gap 0, footprint offset 0, 168 tris).
+  The renders in `evidence/props3d/` were re-made. `project.godot` is unchanged.
+- **What this showed (Claude's observation):** the numbers would have passed the broken drumhead
+  (0.53 m depth, within ±0.02; 0 non-manifold edges). Only the oblique `look` caught it.

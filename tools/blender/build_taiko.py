@@ -90,3 +90,57 @@ ws = [ob.matrix_world @ v.co for v in ob.data.vertices]
 print("world minZ", round(min(v.z for v in ws),4))
 bpy.ops.wm.save_mainfile()
 print(bpy.data.filepath, os.path.getsize(bpy.data.filepath))
+
+# ---- hand edit by Zhaohui (mouse, Edit Mode, saved 16:28) — not code ----
+# The saved file showed: lacquer body moved by (-0.0053, +0.0023, +0.0117) m; front drumhead's
+# outer ring moved onto the inner plane (0 m thick, z-fighting with the body cap) and its inner
+# ring scrambled (two vertices doubled). Zhaohui asked Claude to repair it ("我不太会改，你改吧").
+# Re-running this file headless therefore does NOT reproduce the body offset; see FRICTIONAL.md.
+
+# ---- call 3 of 4 (Claude, repair, partial): move the front head's outer cap back to y -0.275 ----
+import bpy, bmesh
+from mathutils import Vector
+ob = bpy.data.objects["PROP-TAIKO"]
+if ob.mode != 'OBJECT':
+    bpy.ops.object.mode_set(mode='OBJECT')
+me = ob.data
+head_idx = me.materials.find("Head_F2E6D0")
+bm = bmesh.new(); bm.from_mesh(me)
+bm.faces.ensure_lookup_table()
+# the front head's caps: Head-material n-gons whose centre is on the front (y < 0)
+caps = [f for f in bm.faces if f.material_index == head_idx and len(f.verts) == 12 and f.calc_center_median().y < 0]
+for f in caps:
+    print("front head cap: normal", tuple(round(c,3) for c in f.normal), "y", round(f.calc_center_median().y,4))
+outer = [f for f in caps if f.normal.y < -0.5]
+inner = [f for f in caps if f.normal.y > 0.5]
+print("outer caps", len(outer), "inner caps", len(inner))
+assert len(outer) == 1 and len(inner) == 1, "cannot tell the outer face from the inner one"
+for v in outer[0].verts:
+    v.co.y = -0.275
+bm.to_mesh(me); bm.free(); me.update()
+vs = [v.co for v in me.vertices]
+print("dims", [round(d,4) for d in ob.dimensions], "y", round(min(v.y for v in vs),4), round(max(v.y for v in vs),4),
+      "loc", tuple(ob.location), "rot", tuple(ob.rotation_euler), "scale", tuple(ob.scale))
+bpy.ops.wm.save_mainfile()
+print("saved", bpy.data.filepath)
+
+# ---- call 4 of 4 (Claude, repair): put all 24 front-head vertices back on the 12-gon ----
+import bpy, math
+ob = bpy.data.objects["PROP-TAIKO"]
+if ob.mode != 'OBJECT':
+    bpy.ops.object.mode_set(mode='OBJECT')
+me = ob.data
+# front drumhead = vertices 32..55 (topology unchanged from the committed file):
+# even index = inner ring (y -0.255), odd = outer ring (y -0.275), 12-gon r 0.33 centred at z 0.62
+for k in range(12):
+    x = 0.33 * math.sin(math.radians(30 * k))
+    z = 0.62 + 0.33 * math.cos(math.radians(30 * k))
+    me.vertices[32 + 2*k].co = (x, -0.255, z)
+    me.vertices[33 + 2*k].co = (x, -0.275, z)
+me.update()
+bpy.context.view_layer.update()
+vs = [v.co for v in me.vertices]
+print("dims", [round(d,4) for d in ob.dimensions], "z", round(min(v.z for v in vs),4), round(max(v.z for v in vs),4),
+      "loc", tuple(ob.location), "rot", tuple(ob.rotation_euler), "scale", tuple(ob.scale))
+bpy.ops.wm.save_mainfile()
+print("saved", bpy.data.filepath)

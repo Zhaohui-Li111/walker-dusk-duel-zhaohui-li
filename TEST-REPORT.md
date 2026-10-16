@@ -154,7 +154,7 @@ Full round with M and N both on; can whiff, hit, block and K.O. be told apart by
 timeout 120 godot --headless --path godot --script res://tests/check_props3d.gd --fixed-fps 60
 ```
 
-Result: **46 checks, 0 failed**, exit 0. For each prop the script prints the AABB size, the scale
+Result: **49 checks, 0 failed**, exit 0 (46 before the footprint-centre check was added). For each prop the script prints the AABB size, the scale
 and rotation of every node, the tallest axis, the triangle count, the albedo hex of each surface,
 and the gap between the prop's lowest point and the `Floor` node's top face.
 
@@ -234,11 +234,18 @@ The 2D game's suite is unchanged: `test_runner.gd` gives 94 checks, 0 failed.
    to 0.35, then re-rendered.
 4. The prop-raising test showed the "min y" check could not fail → floor-gap check added; it fails
    when the prop is raised and passes on the real scene.
+5. Zhaohui moved the whole taiko to X = 2 m (not saved). An export from a scratch copy carries a
+   2 m node offset that no check measured → "origin at the footprint centre" check added.
+6. Zhaohui's Edit Mode edit collapsed the front drumhead, which then z-fought with the body. Only
+   an oblique `look` showed it; size (0.53 m) and topology still passed → Claude repaired the head
+   (the first repair was partial and a vertex comparison caught that) → re-exported, 49/49.
 
 ## Honest limitations (A3)
 
-- **TO DO (human): no hand edit in Blender yet.** The assignment requires at least one. If it
-  changes the geometry, re-export and re-run both checks.
+- **Hand edit:** Zhaohui edited the taiko in Edit Mode with the mouse. The edit moved the body
+  about 1.2 cm and collapsed the front drumhead to 0 m. Zhaohui asked Claude to repair it, so the
+  repair is Claude's (FRICTIONAL.md). **TO DO (human):** what you did and what it taught you, in
+  BLENDER-NOTES.md.
 - **TO DO (human): no BLENDER-NOTES.md content yet** (six interface parts in your own words, plus a
   screenshot).
 - The checks show size, orientation, scale, floor contact, triangle count and colour values. They do
