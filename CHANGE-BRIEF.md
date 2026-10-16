@@ -98,3 +98,105 @@ while the fighter is not already attacking.
 - Sound requests are counted even when the audio file does not exist yet, so the event-to-sound map
   is tested before any audio is generated. Real playback, loop seams and loudness still need
   listening once the files exist.
+
+---
+
+# Assignment 3 — three 3D props (Blender MCP → Godot)
+
+> **Version 1 · DRAFT · 2026-10-16.** Claude Code drafted this from Zhaohui's choice of assets
+> (stone lantern, makiwara, taiko drum). **Zhaohui: do the "Learn the window" session in Blender
+> first, then edit the numbers below and commit before anything is built.** After that commit this
+> section is only appended to, like the A2 brief above.
+
+## Scale and conventions
+
+- Dusk Duel is 2D, so these props live in a separate small 3D scene (`godot/props3d/prop_room.tscn`:
+  floor, one light, one camera). Later assignments reuse it. It is not wired into the 2D game yet.
+- **Scale reference:** Akaken stands 112 px on screen and Aotake 124 px (CHARACTER-SHEET.md). Taking
+  Akaken as **1.70 m** gives about 1.52 cm per pixel, so Aotake is about **1.88 m**. A 1.70 m reference box
+  goes into the 3D scene for the human look check.
+- 1 Blender unit = 1 m = 1 Godot unit. Blender is Z-up; the glTF exporter's **+Y Up** converts to
+  Godot's Y-up.
+- Each asset is built around the world origin with its base on Z = 0, in its own `.blend` file.
+  **Origin = centre of the underside** for all three, so placing a prop at floor height 0 in Godot
+  makes it stand on the floor.
+- Rotation and scale applied in Blender (rotation 0,0,0; scale 1,1,1) before export.
+- Flat Principled BSDF base colours, mostly from the A2 palette so the props match the 2D art.
+  Two are new (roof `#4E475C`, wood `#8A5A3B`) because A2 has no darker stone or wood tone.
+- **Tolerance for "matches the brief":** ±0.02 m on each dimension.
+
+## The three assets
+
+### 1. PROP-LANTERN — stone lantern (tōrō)
+
+- **In the game:** the courtyard in ENV-BG already shows lanterns (glowing paper ones in the
+  generated image). This is a stone version of the same idea, set at the edges of the arena.
+- **Size (W × D × H):** **0.60 × 0.60 × 1.40 m.** That's about shoulder height on Akaken (1.70 m),
+  so it frames a fighter without hiding one.
+- **Origin:** centre of the base, at floor level.
+- **Look (6 shapes):** an octagonal base (cylinder, 8 segments), an octagonal shaft (cylinder, 8), a
+  firebox (cube), a lit panel set into the firebox front (thin cube), a pyramid roof (cone, 6
+  segments) and a small cone finial on top. It reads as a lantern because of the wide roof over a
+  box sitting on a thin post.
+- **Colours:** stone `#6E6680` (the first proposed mid-tone stone in A2; rejected
+  for the 2D wall behind the fighters, but no contrast rule applies to a prop room), lit panel `#F5C542` (the belt accent,
+  flat colour, not emissive), roof a little darker `#4E475C` (new).
+- **Triangle budget: 150.** Estimate: 28 + 28 + 12 + 12 + 10 + 10 = 100. A default 32-segment
+  cylinder alone would cost 124, so the segment counts must be set low.
+
+### 2. PROP-MAKIWARA — wooden striking post
+
+- **In the game:** a training post for Akaken, whose fighting style is punching. It stands in the
+  prop room now and could be a target in a later tutorial or warm-up.
+- **Size (W × D × H):** **0.30 × 0.30 × 1.50 m.** The straw pad's centre is at about **1.20 m**,
+  roughly chest/fist height on a 1.70 m fighter.
+- **Origin:** centre of the base, at floor level.
+- **Look (5 shapes):** a square stone footing (cube 0.30 × 0.30 × 0.10), a tapered-looking post
+  (cube 0.12 × 0.08 × 1.40, on top of the footing), a straw pad on the front face (cube 0.16 × 0.06
+  × 0.30) and two rope bands around the pad (cylinders, 8 segments). It reads as a training post
+  because of the pad and its rope bands at fist height.
+- **Colours:** wood `#8A5A3B` (new), straw `#D8B676` (Aotake's hat colour), rope `#F2E6D0` (the hand-wrap
+  cream), footing `#6E6680`.
+- **Triangle budget: 120.** Estimate: 12 + 12 + 12 + 28 + 28 = 92.
+
+### 3. PROP-TAIKO — taiko drum on a stand
+
+- **In the game:** the music loop (MUS-LOOP) is taiko and wood flute, so the drum is the visible
+  source of the soundtrack. It would sit at the back of the courtyard.
+- **Size (W × D × H):** **0.70 × 0.55 × 0.95 m.** The drum is about **0.60 m across**, with heads
+  facing ±Y (front and back) and its centre at about 0.62 m. The top of the drum is at about hip
+  height on Akaken.
+- **Origin:** centre of the stand's footprint, at floor level.
+- **Look (6 shapes):** the drum body (cylinder, 12 segments, **rotated 90° about X** so the heads
+  face front and back), two drumheads (thin cylinders, 12 segments), two angled stand legs (cubes)
+  and a base bar (cube). It reads as a taiko because of the round red barrel with pale heads on a
+  low cradle.
+- **Colours:** lacquer body `#D9482B` (the gi red), heads `#F2E6D0`, stand `#1E1B22`.
+- **Triangle budget: 200.** Estimate: 44 + 44 + 44 + 12 + 12 + 12 = 168. This is the one asset that
+  needs a real rotation, so it tests "apply transforms".
+
+## Predicted failure cases and how each will be checked
+
+1. **The taiko arrives rotated or scaled in Godot,** because the 90° turn or a scale was left
+   unapplied. *Check:* Blender's N panel shows rotation 0,0,0 and scale 1,1,1 on every object before
+   export. The headless Godot script prints each node's scale and rotation and the AABB's tallest
+   axis, which should be Y for all three.
+2. **Wrong size, possibly by a factor of 10,** from a unit-scale or object-scale mistake. *Check:*
+   the N-panel dimensions against the table above, then the Godot AABB size against both, within
+   ±0.02 m.
+3. **Origin at the centre, so the prop sinks halfway into the floor** (Blender's default primitives
+   are centred on their origin). *Check:* the Godot AABB's minimum Y should be 0.00 ± 0.01, and each
+   prop placed at y = 0 should be seen standing on the floor, not floating or sunk.
+4. **Claude builds more detail than asked:** more than 6 shapes, default 32-segment cylinders or a
+   UV sphere (960 triangles). *Check:* Blender Scene Statistics (status bar), and the headless script
+   counts triangles per asset against the budget.
+5. **The MCP will not connect on Windows.** The course's commands are written for macOS, and the
+   add-on opens a socket that the firewall may prompt about. *Check:* `get_addon_status` and
+   `get_scene_info` from Claude. Every step and its exact error goes into FRICTIONAL.md, with a
+   2-hour time box before falling back to the script route.
+6. **Colours shift or disappear on export** (sRGB vs linear, or a material lost). *Check:* the
+   headless script prints each surface's albedo as hex to compare with the brief, and the human look
+   check under the scene's single light.
+7. **Missing or flipped faces** that only show from behind or below. *Check:* walk the camera around
+   and under each prop in Godot (human check). Backface culling on the import would hide them from
+   one side.
