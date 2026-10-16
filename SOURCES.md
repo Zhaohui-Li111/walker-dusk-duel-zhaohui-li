@@ -36,6 +36,24 @@ Licence fields were read from the Hugging Face Hub by the notebook and are repea
 ASSET-LOG row. Non-commercial / attribution terms (MusicGen weights, Stable Audio Open) are
 acceptable for coursework and are stated here.
 
+## Assignment 3: 3D tools
+
+| Tool | Version | Licence | Used for |
+|---|---|---|---|
+| Blender | 5.2.2 LTS (built 2026-09-15), Windows 11 | GPL-3.0-or-later | modelling the three props; glTF 2.0 export (the built-in exporter) |
+| mcp-for-blender (`uvx mcp-for-blender`, https://github.com/ahujasid/blender-mcp) | server 2.1.9, Blender add-on 1.8, protocol 13 | MIT | lets Claude Code run Python in the live Blender, take viewport views and read scene facts. Telemetry, asset libraries and 3D generators were all **off** |
+| Godot | 4.7.2 stable | MIT | glTF import, `godot/props3d/prop_room.tscn` |
+
+No generative model made any part of the 3D props. Every mesh was built from primitives by Python
+that Claude Code sent through `execute_blender_code`. Those scripts ran in Blender and are not
+saved as files; FRICTIONAL.md records what each one did. `godot/tests/check_props3d.gd` and
+`godot/tests/capture_props3d.gd` were written by Claude Code (Opus 5.5).
+
+**Who did what in A3:** Zhaohui chose the three assets, confirmed the brief's numbers as final,
+installed Blender and enabled the add-on, chose the makiwara rope shape, and did the walk-around
+look check in the Godot editor. Claude Code drafted the brief, set up the MCP on Windows, built and
+checked the meshes, exported them, and wrote the Godot scene and scripts.
+
 ## References consulted (not copied)
 
 - GDQuest, godot-4-hitbox-hurtbox demo: https://github.com/gdquest-demos/godot-4-hitbox-hurtbox

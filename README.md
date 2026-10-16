@@ -70,6 +70,33 @@ split between Claude, the models and me.
 - Music is MusicGen (CC-BY-NC 4.0) and SFX are Stable Audio Open (Stability AI Community License):
   fine for coursework, not for commercial release.
 
+## Assignment 3: three 3D props
+
+Three low-poly props built in **Blender 5.2.2** through the **Blender MCP** (Claude Code drove
+Blender with Python; no asset libraries or 3D generators were used), exported to glTF and set up
+in a small separate Godot 3D scene. The 2D game does not use them yet.
+
+| Prop | Size W × D × H (m) | Triangles (budget) |
+|---|---|---|
+| Stone lantern (`PROP-LANTERN`) | 0.60 × 0.60 × 1.40 | 100 (150) |
+| Makiwara striking post (`PROP-MAKIWARA`) | 0.30 × 0.30 × 1.50 | 92 (120) |
+| Taiko drum on a stand (`PROP-TAIKO`) | 0.70 × 0.55 × 0.95 | 168 (200) |
+
+- **Spec and results:** [CHANGE-BRIEF.md](CHANGE-BRIEF.md), Assignment 3 (spec, predicted failure
+  cases, build result). **Process log:** [FRICTIONAL.md](FRICTIONAL.md), Assignment 3.
+- **Files:** `blender/*.blend` (sources) → `godot/props3d/models/*.glb` →
+  `godot/props3d/prop_room.tscn` (floor, one light, a camera and a 1.70 m reference box).
+  Renders: [evidence/props3d/](evidence/props3d/).
+- **Check against the brief** (size ±0.02 m, origin on the floor, transforms applied, tallest axis,
+  triangle budget, colours):
+
+```bash
+godot --headless --path godot --script res://tests/check_props3d.gd
+```
+
+- Opening the project in the Godot editor re-saves `godot/project.godot` and drops the
+  `[physics]` lines (60 is the default value). Run `git status` after an editor session.
+
 ## Final film
 
 **"Dusk Duel, Generated"**: a Brutalist explainer made with the `godot-gamedev` skill in walker
