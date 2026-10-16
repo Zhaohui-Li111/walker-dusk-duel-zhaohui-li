@@ -203,7 +203,7 @@ while the fighter is not already attacking.
 
 ## Build result (appended 2026-10-16)
 
-Zhaohui confirmed the numbers above as final, and this section was committed unchanged (`780f39c`)
+Zhaohui confirmed the numbers above as final, and this section was committed unchanged (`30513a4`)
 before anything was built. All three props match it: deviation 0.00 m on every dimension, origin
 at the underside centre, rotation and scale applied, 100 / 92 / 168 triangles, albedo hex exact
 after the glTF round trip. `godot/tests/check_props3d.gd` runs 43 checks, 0 failed. Zhaohui did

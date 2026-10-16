@@ -286,7 +286,7 @@ contributions, and generative-model outputs. Retrospective notes are labeled.
   the 2 m Cube at the origin ("below ground by 1.0"), Light and Camera, unit scale 1.0.
 - Before building, Claude asked Zhaohui whether "Learn the window" was done and the numbers were
   final. Zhaohui answered "done, numbers final" and asked for the brief to be committed first:
-  commit `780f39c` holds the A3 brief exactly as drafted, before any mesh was built.
+  commit `30513a4` holds the A3 brief exactly as drafted, before any mesh was built.
 
 ## 2026-10-16 — PROP-LANTERN built (recorded by Claude Code)
 
@@ -407,7 +407,7 @@ contributions, and generative-model outputs. Retrospective notes are labeled.
   | prop_makiwara.blend | PROP-MAKIWARA | 0.30 × 0.30 × 1.50 | 0.0 | 0 / 0 / 1 | 92 (120) |
   | prop_taiko.blend | PROP-TAIKO | 0.70 × 0.55 × 0.95 | 0.0 | 0 / 0 / 1 | 168 (200) |
 
-- Not done yet: glTF export and the Godot `prop_room` scene. Nothing committed after `780f39c`.
+- Not done yet: glTF export and the Godot `prop_room` scene. Nothing committed after `30513a4`.
 
 ## 2026-10-16 — glTF export and the Godot prop room (recorded by Claude Code)
 
@@ -467,3 +467,11 @@ contributions, and generative-model outputs. Retrospective notes are labeled.
   the checkout ran; the working tree is clean and the physics lines are back.
 - **For next time:** opening the project in the editor re-saves `project.godot`. Run
   `git status` after every editor session.
+
+## 2026-10-16 — PR merged (recorded by Claude Code)
+
+- Zhaohui: "算了，你自己看吧，不需要问我，直接往下执行". Claude reviewed the diff (19 files, no
+  `project.godot` change), appended the build result to CHANGE-BRIEF.md and merged
+  [PR #1](https://github.com/Zhaohui-Li111/walker-dusk-duel-zhaohui-li/pull/1) with **rebase**,
+  which keeps `main` linear but gives every commit a new SHA: the brief snapshot `780f39c` became
+  **`30513a4`** on `main`. The references above were updated to the `main` SHA.
