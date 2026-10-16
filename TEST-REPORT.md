@@ -210,8 +210,14 @@ The 2D game's suite is unchanged: `test_runner.gd` gives 94 checks, 0 failed.
 - 2026-10-16, Zhaohui (in chat, after opening `prop_room.tscn` in the Godot editor and walking
   around): "我看了一一下，没问题" ("I had a look, no problems"). This is one overall
   confirmation, not a per-asset log.
-- **TO DO (human):** per asset, in your own words. Does it read as what it is at game size beside
-  the 1.70 m reference box? Did you look from behind and below? Any missing faces or wrong colours?
+- 2026-10-16, Zhaohui's answers to Claude's follow-up questions (translated from Chinese):
+  - **Do the three props read as what they are?** "我觉得都挺像" ("I think they all look quite
+    like what they're meant to be").
+  - **Anything odd from behind or below (missing faces, wrong colours)?** "没有发现奇怪的地方"
+    ("I didn't find anything strange").
+
+  Zhaohui's own screenshots from below and from behind are in `evidence/blender/`. These are overall
+  answers covering all three props. Zhaohui did not single out the one that reads best or worst.
 - Claude's own observations from two still renders (not a substitute for the walk-around): no
   missing faces seen from front or back. The taiko stand is only 0.12 m deep, so from the side the
   drum looks as if it could tip; Zhaohui kept it as built.
@@ -252,10 +258,11 @@ The 2D game's suite is unchanged: `test_runner.gd` gives 94 checks, 0 failed.
 
 - **Hand edit:** Zhaohui edited the taiko in Edit Mode with the mouse. The edit moved the body
   about 1.2 cm and collapsed the front drumhead to 0 m. Zhaohui asked Claude to repair it, so the
-  repair is Claude's (FRICTIONAL.md). **TO DO (human):** what you did and what it taught you, in
-  BLENDER-NOTES.md.
-- **TO DO (human): no BLENDER-NOTES.md content yet** (six interface parts in your own words, plus a
-  screenshot).
+  repair is Claude's (FRICTIONAL.md). Zhaohui's own account, in BLENDER-NOTES.md, is that they
+  changed the drumhead's colour using L and G, and learned that you can work with shortcuts. The
+  saved file shows no colour change, only the geometry moved; both are recorded side by side there.
+- **BLENDER-NOTES.md:** the six interface parts are Zhaohui's answers, translated by Claude with the
+  Chinese originals kept, plus Zhaohui's screenshot.
 - The checks show size, orientation, scale, floor contact, triangle count and colour values. They do
   not show that the props look right in the game's style or lighting, or that no face is flipped;
   those are the human look check.

@@ -626,3 +626,31 @@ contributions, and generative-model outputs. Retrospective notes are labeled.
     signing in (`drive.usercontent.google.com/download?...&confirm=t`). Result: HTTP 200,
     29 690 645 bytes, SHA-256 `9331a6244a9c8e33ef414912a8e3d0a02cff78ce59994771401339ab61c771d2`,
     identical to the local master. The downloaded copy was then deleted.
+
+## 2026-10-16 — Zhaohui's own account (Zhaohui's answers, translated by Claude Code)
+
+> Claude asked twelve short questions. Zhaohui answered in Chinese and asked Claude to polish the
+> answers and put them into English. The translations below add nothing to what Zhaohui said.
+> The interface answers (1–6) and the hand-edit answers (7–8) are in BLENDER-NOTES.md, and the
+> look-check answers (9–10) are in TEST-REPORT.md A3.
+
+- **Setup:** "没有遇到什么麻烦" — "I didn't run into any real trouble" installing Blender and enabling
+  the add-on. (Whether Windows showed a firewall prompt was asked; this answer does not say.)
+- **The hardest part:** "我觉得渲染视频最难" — "I think rendering the video was the hardest part."
+- **The hand edit, in Zhaohui's words:** "当时改的是鼓面的颜色 L 和G" — "I changed the drumhead's
+  colour, with L and G"; and what it taught them, "可以使用快捷键操作": "you can work with keyboard
+  shortcuts".
+  - **Claude's note:** the saved file shows a geometry move, not a colour change; see "Hand edit 1"
+    and BLENDER-NOTES.md.
+  - **An open question for Zhaohui:** did G move the head when a colour change was intended?
+- **The look check:** all three props "look quite like what they're meant to be" ("我觉得都挺像"),
+  and nothing strange from behind or below ("没有发现奇怪的地方").
+- **Human/AI split in A3, as recorded across this log:**
+  - **Zhaohui:** chose the three props; installed Blender and enabled the add-on; approved the
+    brief's numbers; chose the makiwara rope shape; made the hand edit; took the screenshots; did
+    the Godot look check; uploaded the film.
+  - **Claude:** drafted the brief; set up the MCP; built, checked, exported and repaired the props;
+    wrote the Godot scene and the checks; built the film.
+  - **Accepted from Claude:** the brief as drafted.
+  - **Modified:** the makiwara bands.
+  - **Rejected:** Claude's wrong ellipse option, and the round bands.
