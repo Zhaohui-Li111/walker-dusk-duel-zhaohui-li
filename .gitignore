@@ -30,6 +30,7 @@ credentials/
 
 # Film reel: engine captures, the isolated game copies, rendered clips and audio stay local
 youtube/*/capture/game/
+youtube/*/capture/game-raised/
 youtube/*/capture/game-states/
 youtube/*/capture/*.avi
 youtube/*/media/

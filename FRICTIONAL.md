@@ -290,7 +290,9 @@ contributions, and generative-model outputs. Retrospective notes are labeled.
 
 ## 2026-10-16 — PROP-LANTERN built (recorded by Claude Code)
 
-- **Prompt passed to the MCP tool (`user_prompt`):** Zhaohui's instruction, verbatim: "严格按
+- **Prompt passed to the MCP tool (`user_prompt`):** ~~Zhaohui's instruction, verbatim~~
+  **[Corrected later: these are not Zhaohui's words. They come from the task brief the parent Claude
+  Code session wrote for this session; see the correction entry below.]** "严格按
   CHANGE-BRIEF.md 的 A3 规格，一个一个建（PROP-LANTERN → PROP-MAKIWARA → PROP-TAIKO），每个一个
   .blend 文件".
 - **How:** one `execute_blender_code` script. It deleted the default Cube, built the six parts with
@@ -572,3 +574,47 @@ contributions, and generative-model outputs. Retrospective notes are labeled.
   geometry. Nothing was saved.
 - There is no screenshot of the hand edit itself (it was not recorded while it happened), and none
   of Edit Mode.
+
+## 2026-10-16 — Correction: whose words the build prompt was (recorded by Claude Code)
+
+- The lantern, makiwara and taiko entries say the `user_prompt` passed to the MCP was "Zhaohui's
+  instruction, verbatim". **That was wrong.** The text "严格按 CHANGE-BRIEF.md 的 A3 规格，一个一个建
+  （PROP-LANTERN → PROP-MAKIWARA → PROP-TAIKO），每个一个 .blend 文件" is from the task brief that the
+  parent Claude Code session wrote when it started this session. Zhaohui's own words in that part
+  were "嗯，开始工作吧" (to the parent session) and their answers "已完成，数字定稿" / "先提交两份文件".
+- Zhaohui's own prompts later in the session were passed verbatim: "倒角矩形 0.19×0.17",
+  "我不太会改，你改吧", "现在保存了", "截好了".
+- Found while choosing which prompt the A3 film should show. The film uses Zhaohui's own
+  "我不太会改，你改吧" for its prompt → result pair, and labels the build brief as the parent
+  session's.
+
+## 2026-10-16 — Correction: the drumhead entry overstated two things (recorded by Claude Code)
+
+- The "Hand edit 1 on the taiko" entry says only the front drumhead changed, and calls the red patches
+  **z-fighting between coincident faces**. Both claims came from the first, partial comparison.
+  The later vertex-by-vertex comparison showed:
+  - the lacquer body had moved too (Y +0.0023), so its front cap sat about 2.3 mm behind the
+    flattened head, not in the same plane;
+  - the head's inner ring was scrambled, so its faces were twisted.
+- The red patches are the body showing through a flattened, twisted head. **Whether z-fighting played
+  any part was not tested.** The film and TEST-REPORT now say "red showed through the head" and
+  name no cause beyond the twisted, flattened faces.
+
+## 2026-10-16 — A3 film built (recorded by Claude Code)
+
+- Zhaohui: "在这里完成此任务：A3 Brutalist explainer film (after hand edit)". Built with the course's
+  `godot-gamedev` skill (walker mode) from `D:\courses\7270\brutalist.art-main`. Everything is in
+  `youtube/claude-liam-walker-dusk-duel-zhaohui-li-a3-gamedev/`.
+- **Master:** `claude-liam-walker-dusk-duel-zhaohui-li-a3-gamedev.mp4`, 5:22, 3840 × 2160, SHA-256
+  `9331a6244a9c8e33ef414912a8e3d0a02cff78ce59994771401339ab61c771d2`. It shows `godot/` at
+  `1e88b83`. Not on GitHub; the link is to be added after Zhaohui uploads it.
+- **Zhaohui's own material in it:** the three screenshots (B04, B15) and their prompt
+  "我不太会改，你改吧" (B13). There is no recording of the hand edit itself; the film shows its saved
+  result and says so.
+- **Found and fixed while building:** two of Claude's own logged errors (whose prompt it was, and the
+  z-fighting claim; see the correction entries); six visual defects (`_qc/VISUAL-QC.md`); the GATE T
+  spark-line rule; and four renders lost when C: ran low on space. After that, renders used a temp
+  folder on D:. At Zhaohui's request, the npm cache (2.5 GB), the pip cache and Claude's own temp
+  files were removed from C:.
+- **Checks:** gamedev checker PASS; GATE T PASS (reel and masked copy); GATE V 0 BLOCKER / 0 MAJOR.
+  **Not checked:** how it sounds and reads to a person. Zhaohui should watch it once.

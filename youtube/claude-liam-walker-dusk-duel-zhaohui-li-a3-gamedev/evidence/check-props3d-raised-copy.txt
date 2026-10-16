@@ -1,0 +1,24 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+floor top y 0.0000
+- PROP-LANTERN
+    node PROP-LANTERN     scale (1.0, 1.0, 1.0) rot (0.0, 0.0, 0.0)
+    node PROP-LANTERN     scale (1.0, 1.0, 1.0) rot (0.0, 0.0, 0.0)
+    size 0.600 x 1.400 x 0.600 (x, y, z)  min y 0.0000  tris 100  albedo ["6e6680", "f5c542", "4e475c"]
+    lowest point 0.0000 m above the floor top (negative = sunk)
+    footprint centre 0.0000, 0.0000 m from the node origin (x, z)
+- PROP-MAKIWARA
+    node PROP-MAKIWARA    scale (1.0, 1.0, 1.0) rot (0.0, 0.0, 0.0)
+    node PROP-MAKIWARA    scale (1.0, 1.0, 1.0) rot (0.0, 0.0, 0.0)
+    size 0.300 x 1.500 x 0.300 (x, y, z)  min y 0.0000  tris 92  albedo ["6e6680", "8a5a3b", "d8b676", "f2e6d0"]
+    lowest point 0.0000 m above the floor top (negative = sunk)
+    footprint centre 0.0000, 0.0000 m from the node origin (x, z)
+- PROP-TAIKO
+    node PROP-TAIKO       scale (1.0, 1.0, 1.0) rot (0.0, 0.0, 0.0)
+    node PROP-TAIKO       scale (1.0, 1.0, 1.0) rot (0.0, 0.0, 0.0)
+    size 0.700 x 0.950 x 0.550 (x, y, z)  min y 0.0000  tris 168  albedo ["1e1b22", "d9482b", "f2e6d0"]
+    lowest point 0.0500 m above the floor top (negative = sunk)
+    FAIL: sits on the floor (gap 0.0500)
+    footprint centre 0.0000, 0.0000 m from the node origin (x, z)
+49 checks, 1 failed
+exit 1

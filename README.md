@@ -111,10 +111,19 @@ godot --headless --path godot --import
 timeout 120 godot --headless --path godot --script res://tests/check_props3d.gd --fixed-fps 60
 ```
 
+- **A3 film: "Dusk Duel, Measured".** A Brutalist explainer made with the `godot-gamedev` skill in
+  walker mode. It is 5:22 long, 3840 × 2160, 30 fps.
+  - **Link:** TO DO (Zhaohui uploads the MP4 to the course media storage; it is not on GitHub).
+  - **File name:** `claude-liam-walker-dusk-duel-zhaohui-li-a3-gamedev.mp4`
+  - **SHA-256:** `9331a6244a9c8e33ef414912a8e3d0a02cff78ce59994771401339ab61c771d2`
+  - **Game source shown:** `godot/` at `1e88b83`.
+  - **Film source and evidence:**
+    [youtube/claude-liam-walker-dusk-duel-zhaohui-li-a3-gamedev/](youtube/claude-liam-walker-dusk-duel-zhaohui-li-a3-gamedev/).
+    Start with BUILD-LOG.md, FACTCHECK.md and SOURCES.md.
 - **A3 known limitations:** the checks prove numbers, not looks; the look check is the human
   one in TEST-REPORT. The makiwara rope bands are chamfered rings rather than the round cylinders
   the brief first said. The taiko stand is shallow (0.12 m) and looks tippy from the side. The
-  prop room is not connected to the 2D game. The A3 film is not made yet.
+  prop room is not connected to the 2D game.
 
 - Opening the project in the Godot editor re-saves `godot/project.godot` and drops the
   `[physics]` lines (60 is the default value). Run `git status` after an editor session.

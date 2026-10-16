@@ -1,0 +1,24 @@
+{
+  "figures": {
+    "fig_brief.png": "d67f4d117863529e51955301441148deeb9de48063737ef8e8b1fb83a111c486",
+    "fig_floor_check.png": "f21166ab6d9e8425eba5cc7a95603f763f3b485e9157b7753c467209c4ee67ee",
+    "fig_hand_edit.png": "fdadca3679a617cb0eb37c841a68e1918822e15f7fa220c0559594f36eccad54",
+    "fig_makiwara.png": "28b560c206c866ed475b42e53a4b744317feaaa452f23b5e637e42e03e6cfacf",
+    "fig_numbers.png": "0e29f00159539fc3dc368fde6ad00ff561885b10f85851d6fa1b6458d4729298",
+    "fig_session.png": "c529436bce0a4edf18aa05cfc4f8b15897f3906bbee13cee35412c4efadc7d8e",
+    "fig_taiko_build.png": "3a8c656e4d17435ea38338b48ffb37c56bf47f66343d5d666a1f8ee3630932ae",
+    "fig_zhaohui_views.png": "36669988979bf25c24472ffe1393f58c8467b6311f7c488919501a792ac09903"
+  },
+  "sources": {
+    "evidence/blender/zhaohui_object_mode_taiko_selected.png": "f118a50d00776276bb02f9ac89b64697260c8a54f71f562baa021e55a23c9c43",
+    "evidence/blender/zhaohui_bottom_view_taiko.png": "d9867a4e094238563924c471cb88f096676d98ba2f4f16f699a33b249f140d93",
+    "evidence/blender/zhaohui_back_view_taiko.png": "067a362e23d65ad9c8d067be8b7c4012f8023ba45a3a379ba4d2de971bffc660",
+    "youtube/claude-liam-walker-dusk-duel-zhaohui-li-a3-gamedev/capture/mcp_look/1552_taiko_angles.png": "5e80562f6c994d7aa0995d5d1697dbb13b8cdfaa8d9de429ee794e514e841d08",
+    "youtube/claude-liam-walker-dusk-duel-zhaohui-li-a3-gamedev/capture/stills/real_taiko_floor.png": "bb02ab2b2df70656f47bc2d5af22af4d3140b9a012e92af876fa5f6eb5e41b31",
+    "youtube/claude-liam-walker-dusk-duel-zhaohui-li-a3-gamedev/capture/stills/raised_taiko_floor.png": "d6c3634f6ebd5b8481ba8c3f7accd9f7ee12569da23cc41a6dc8550819b45ac7",
+    "youtube/claude-liam-walker-dusk-duel-zhaohui-li-a3-gamedev/capture/mcp_look/1629_taiko_after_hand_edit.png": "77a45ff7b8c235ab72fcd8c48ec7416f9588cf307955ed25ed1f6b2a7d658468",
+    "youtube/claude-liam-walker-dusk-duel-zhaohui-li-a3-gamedev/capture/mcp_look/1635_taiko_repaired.png": "3411c6a3a73caa9d87eb6a2b89f18020f0f0f69ed5ae10807f0c5475ef6c46c0",
+    "youtube/claude-liam-walker-dusk-duel-zhaohui-li-a3-gamedev/capture/mcp_look/1549_makiwara_round_bands.png": "9aa3b843776e75211a320f9ae4f481bdf4deb9ef767c1f3e06d016622cf22929",
+    "youtube/claude-liam-walker-dusk-duel-zhaohui-li-a3-gamedev/capture/mcp_look/1550_makiwara_chamfered_bands.png": "dcfe7394de5999c6349ea19897c64bfcff5a6b4736950dd4372553895cc59dfb"
+  }
+}

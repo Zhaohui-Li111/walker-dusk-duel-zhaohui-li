@@ -236,7 +236,7 @@ The 2D game's suite is unchanged: `test_runner.gd` gives 94 checks, 0 failed.
    when the prop is raised and passes on the real scene.
 5. Zhaohui moved the whole taiko to X = 2 m (not saved). An export from a scratch copy carries a
    2 m node offset that no check measured → "origin at the footprint centre" check added.
-6. Zhaohui's Edit Mode edit collapsed the front drumhead, which then z-fought with the body. Only
+6. Zhaohui's Edit Mode edit collapsed and twisted the front drumhead; red showed through it. Only
    an oblique `look` showed it; size (0.53 m) and topology still passed → Claude repaired the head
    (the first repair was partial and a vertex comparison caught that) → re-exported, 49/49.
 

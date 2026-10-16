@@ -1,0 +1,541 @@
+{
+ "schema_version": 1,
+ "game": "godot",
+ "source_revision": "1e88b83",
+ "teaching_contract": "code-then-result-v1",
+ "files": [
+  {
+   "path": "props3d/models/prop_lantern.glb",
+   "sha256": "124d7f3d2be1faec7adc61a65e072a6859385eebd9b3f1ffe5782e3fab81e55c",
+   "role": "3D asset (binary glTF)",
+   "component_ids": [
+    "prop-assets"
+   ]
+  },
+  {
+   "path": "props3d/models/prop_lantern.glb.import",
+   "sha256": "6550916731dd15b4e234b94d0ee9b01e208b64e6e271e8101ae6862dc0e6750a",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "prop-assets"
+   ]
+  },
+  {
+   "path": "props3d/models/prop_makiwara.glb",
+   "sha256": "5bc98769737f89d72ab236df30870c808746980760f0c5fb844ea6cc12a07c03",
+   "role": "3D asset (binary glTF)",
+   "component_ids": [
+    "prop-assets"
+   ]
+  },
+  {
+   "path": "props3d/models/prop_makiwara.glb.import",
+   "sha256": "1da8d35d21375dcf9a4c7debe9db34ce77e44228ad5485a7fb49f3dc170d4cc4",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "prop-assets"
+   ]
+  },
+  {
+   "path": "props3d/models/prop_taiko.glb",
+   "sha256": "2e0e5011b1a1576649e12488fc015f25def39e9deaa0f92548e214e567266cc0",
+   "role": "3D asset (binary glTF)",
+   "component_ids": [
+    "prop-assets"
+   ]
+  },
+  {
+   "path": "props3d/models/prop_taiko.glb.import",
+   "sha256": "3636dec721ab08a83dec8cc4f57f625c16d62f76cd3cd3dd57bae664c6a46547",
+   "role": "Godot import settings sidecar (authored defaults)",
+   "component_ids": [
+    "prop-assets"
+   ]
+  },
+  {
+   "path": "props3d/prop_room.tscn",
+   "sha256": "23b14953fa9ba02a183d8f3bc8634aa7375bbaea982586067e51b79855f86663",
+   "role": "scene",
+   "component_ids": [
+    "prop-room-scene"
+   ]
+  },
+  {
+   "path": "tests/capture_props3d.gd",
+   "sha256": "4bda0b1c93936be096785e38d54479232ee4b5664b08150c6d2cf22c3d2573d8",
+   "role": "GDScript source",
+   "component_ids": [
+    "prop-checks"
+   ]
+  },
+  {
+   "path": "tests/check_props3d.gd",
+   "sha256": "145399d57d51d114822584df2328876a2a2b82cac26951526544f1c4dbcbfa46",
+   "role": "GDScript source",
+   "component_ids": [
+    "prop-checks"
+   ]
+  }
+ ],
+ "components": [
+  {
+   "id": "prop-assets",
+   "explanation": "The three props as binary glTF exported from blender/*.blend with +Y up and transforms applied (tools/blender/export_glb.py), with Godot's default scene-import settings in the .import sidecars (root scale 1.0).",
+   "beat_ids": [
+    "B02",
+    "B06",
+    "B11"
+   ],
+   "files": [
+    "props3d/models/prop_lantern.glb",
+    "props3d/models/prop_lantern.glb.import",
+    "props3d/models/prop_makiwara.glb",
+    "props3d/models/prop_makiwara.glb.import",
+    "props3d/models/prop_taiko.glb",
+    "props3d/models/prop_taiko.glb.import"
+   ]
+  },
+  {
+   "id": "prop-room-scene",
+   "explanation": "props3d/prop_room.tscn: a 6 x 4 m floor with its top at y = 0, one DirectionalLight3D, a camera, ambient light, the three GLB instances at y = 0 with identity bases, and a 1.70 m reference box. Not connected to the 2D game.",
+   "beat_ids": [
+    "B07",
+    "B08"
+   ],
+   "files": [
+    "props3d/prop_room.tscn"
+   ]
+  },
+  {
+   "id": "prop-checks",
+   "explanation": "tests/check_props3d.gd measures each prop headless against the A3 brief (AABB size, node scale/rotation, tallest axis, floor gap, footprint centre, triangles, albedo hex); tests/capture_props3d.gd renders the room's evidence stills.",
+   "beat_ids": [
+    "B09",
+    "B10",
+    "B11"
+   ],
+   "files": [
+    "tests/capture_props3d.gd",
+    "tests/check_props3d.gd"
+   ]
+  }
+ ],
+ "excerpts": [
+  {
+   "beat_id": "B07",
+   "path": "props3d/prop_room.tscn",
+   "start_line": 49,
+   "end_line": 60,
+   "text": "[node name=\"PROP-LANTERN\" parent=\".\" instance=ExtResource(\"1_lantern\")]\ntransform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0, 0)\n\n[node name=\"PROP-MAKIWARA\" parent=\".\" instance=ExtResource(\"2_makiwara\")]\ntransform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0, 0)\n\n[node name=\"PROP-TAIKO\" parent=\".\" instance=ExtResource(\"3_taiko\")]\ntransform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 0)\n\n[node name=\"Reference_1_70m\" type=\"MeshInstance3D\" parent=\".\"]\ntransform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0.85, 0)\nmesh = SubResource(\"Mesh_ref\")"
+  },
+  {
+   "beat_id": "B09",
+   "path": "tests/check_props3d.gd",
+   "start_line": 72,
+   "end_line": 81,
+   "text": "\t\tvar min_y := box.position.y - prop.global_position.y\n\t\tprint(\"    size %.3f x %.3f x %.3f (x, y, z)  min y %.4f  tris %d  albedo %s\"\n\t\t\t\t% [size.x, size.y, size.z, min_y, tris, hexes])\n\t\tfor axis in 3:\n\t\t\tcheck(absf(size[axis] - spec.size[axis]) <= TOL,\n\t\t\t\t\t\"size axis %d = %.3f, brief %.2f\" % [axis, size[axis], spec.size[axis]])\n\t\tcheck(absf(min_y) <= 0.01, \"min y %.4f is 0.00 +- 0.01\" % min_y)\n\t\tvar gap := box.position.y - floor_top\n\t\tprint(\"    lowest point %.4f m above the floor top (negative = sunk)\" % gap)\n\t\tcheck(absf(gap) <= 0.01, \"sits on the floor (gap %.4f)\" % gap)"
+  }
+ ],
+ "exclusions": [
+  {
+   "path": "art/akaken/block.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/akaken/block.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/akaken/crouch.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/akaken/crouch.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/akaken/fall.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/akaken/fall.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/akaken/hurt.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/akaken/hurt.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/akaken/idle.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/akaken/idle.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/akaken/kick.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/akaken/kick.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/akaken/ko.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/akaken/ko.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/akaken/punch.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/akaken/punch.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/akaken/rise.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/akaken/rise.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/akaken/walk.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/akaken/walk.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/akaken/win.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/akaken/win.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/aotake/block.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/aotake/block.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/aotake/hurt.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/aotake/hurt.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/aotake/idle.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/aotake/idle.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/aotake/kick.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/aotake/kick.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/aotake/ko.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/aotake/ko.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/env/bg.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/env/bg.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/akaken/block.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/akaken/block.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/akaken/crouch.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/akaken/crouch.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/akaken/fall.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/akaken/fall.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/akaken/hurt.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/akaken/hurt.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/akaken/idle.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/akaken/idle.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/akaken/kick.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/akaken/kick.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/akaken/ko.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/akaken/ko.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/akaken/punch.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/akaken/punch.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/akaken/rise.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/akaken/rise.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/akaken/walk.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/akaken/walk.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/akaken/win.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/akaken/win.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/aotake/block.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/aotake/block.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/aotake/hurt.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/aotake/hurt.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/aotake/idle.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/aotake/idle.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/aotake/kick.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/aotake/kick.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/aotake/ko.png",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "art/placeholder/aotake/ko.png.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "audio/music/loop.ogg",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "audio/music/loop.ogg.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "audio/sfx/block.ogg",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "audio/sfx/block.ogg.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "audio/sfx/hit.ogg",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "audio/sfx/hit.ogg.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "audio/sfx/ko.ogg",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "audio/sfx/ko.ogg.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "audio/sfx/whiff.ogg",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "audio/sfx/whiff.ogg.import",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "data/poses.json",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "fighter/cpu_controller.gd",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "fighter/fighter.gd",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "fighter/fighter.tscn",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "fighter/fighter_art.gd",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "fighter/intent.gd",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "fighter/player_controller.gd",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "fighter/scripted_controller.gd",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "game/audio_director.gd",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "game/controls.gd",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "game/effects.gd",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "game/hud.gd",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "game/main.gd",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "game/main.tscn",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "game/stage.gd",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "project.godot",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "tests/capture_flow.gd",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "tests/capture_states.gd",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  },
+  {
+   "path": "tests/test_runner.gd",
+   "reason": "Assignment 2 2D game, unchanged by Assignment 3 and not used by the prop room; explained in the A2 film (youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev)"
+  }
+ ],
+ "code_result_pairs": [
+  {
+   "code_beat": "B07",
+   "result_beat": "B08",
+   "observation": "In the engine capture's low pass round the back, the bases of all three props meet the floor's top face: none sunk, none floating, none on its side; the drumheads face front and back.",
+   "media": {
+    "path": "media/B08.mp4",
+    "sha256": "18379ae6c364c7ec200dfeb4186c6b4d8f73e3828f1288d28d19608239d9c181"
+   }
+  },
+  {
+   "code_beat": "B09",
+   "result_beat": "B10",
+   "observation": "With the taiko raised 0.05 m in a test copy, its shadow separates from the base and the check prints 'FAIL: sits on the floor (gap 0.0500)', 49 checks, 1 failed; the real scene prints 49 checks, 0 failed.",
+   "media": {
+    "path": "media/B10.mp4",
+    "sha256": "1821a5c1b6ac1e25958a587770891622e736c86a6979064782a30b636a65e5cc"
+   }
+  }
+ ]
+}

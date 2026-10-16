@@ -51,6 +51,8 @@ re-runs them headless, and the result matches the committed `.blend` files verte
 `tools/blender/export_glb.py`, `check_blend.py`, `reproduce.py`, `godot/tests/check_props3d.gd` and
 `godot/tests/capture_props3d.gd` were written by Claude Code (Opus 5.5).
 
+**A3 film:** built with the same Brutalist toolkit as the A2 film (godot-gamedev, walker mode; Kokoro narration, local and free). Its sources, hashes and prompts are in `youtube/claude-liam-walker-dusk-duel-zhaohui-li-a3-gamedev/SOURCES.md` and `PROMPTS.md`.
+
 **Who did what in A3:** Zhaohui chose the three assets, confirmed the brief's numbers as final,
 installed Blender and enabled the add-on, chose the makiwara rope shape, and did the walk-around
 look check in the Godot editor. Claude Code drafted the brief, set up the MCP on Windows, built and
