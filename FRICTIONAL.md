@@ -483,7 +483,7 @@ contributions, and generative-model outputs. Retrospective notes are labeled.
 - Zhaohui pasted the full Assignment 3 text and said to carry on without asking. Claude compared
   the repository with it. **Missing at that point:** the code Claude ran was not saved in
   `tools/blender/`; there was no BLENDER-NOTES.md, no A3 section in TEST-REPORT.md, no hand edit,
-  no A3 film, no `a3` tag and no A3 SUBMISSION.md. Claude also did not follow the course prompt's
+  no A3 film, no `a3` tag and no A3 SUBMISSION.md (the A2 note is now SUBMISSION-A2.md). Claude also did not follow the course prompt's
   "one `execute_blender_code` call per object, plan approved first" (see TEST-REPORT, "What Claude
   got wrong" 5).
 - **Code saved:** every `execute_blender_code` body from this session, copied verbatim from the
