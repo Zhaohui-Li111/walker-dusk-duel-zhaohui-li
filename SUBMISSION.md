@@ -79,6 +79,27 @@
   See README "A3 known limitations" and TEST-REPORT A3 "Honest limitations".
 - **Changed games since Assignment 2:** no.
 
-## Verification
+## Verification (clone check, 2026-10-16, by Claude Code)
 
-TO BE FILLED by the clone check.
+The check was run on `4f094c3`. The `a3` tag points at the next commit, which adds only this
+section; that was confirmed after tagging, see below.
+
+- **Clone:** `git clone https://github.com/Zhaohui-Li111/walker-dusk-duel-zhaohui-li.git
+  D:\coursesǗ03-check`, into a folder that did not exist before, without signing in.
+  `blender/*.blend`, `godot/props3d/models/*.glb` + `.import` and `tools/blender/*.py` are all
+  present.
+- **The film shows this source:** `git diff --quiet 1e88b83 HEAD -- godot/` reports no difference.
+- **Import:** `godot --headless --path godot --import`.
+  - The first import on the fresh clone **crashed on exit**: segfault, exit 139, after importing,
+    with no error lines. The same thing happened once on the film's capture copy.
+  - A second `--import` exited 0. A reviewer may see the crash too. Running the import again is
+    enough.
+- **Checks in the clone:**
+  - `check_props3d.gd`: 49 checks, 0 failed.
+  - `test_runner.gd`: 94 checks, 0 failed.
+  - `capture_props3d.gd` opened `props3d/prop_room.tscn` in a window and rendered both views.
+- **Working tree after import:** `git status` lists 41 `.import` files as modified, but `git diff`
+  is empty and nothing would be added. The listing comes from line endings: Windows checkout with
+  `core.autocrlf=true`, and Godot rewrites the files with LF. No content changed.
+- **Not checked in the clone:** opening the project in the Godot editor. The editor re-saves
+  `project.godot` and drops the `[physics]` lines; see README.
