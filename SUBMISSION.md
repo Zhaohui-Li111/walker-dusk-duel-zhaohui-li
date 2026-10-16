@@ -81,11 +81,13 @@
 
 ## Verification (clone check, 2026-10-16, by Claude Code)
 
-The check was run on `4f094c3`. The `a3` tag points at the next commit, which adds only this
-section; that was confirmed after tagging, see below.
+The check was run on `4f094c3`. The `a3` tag points at a later commit that changes only this
+note (this section, and a typo fix in it). After tagging, the clone was moved to `a3`: its diff
+from `4f094c3` is SUBMISSION.md only, `godot/` is identical to `1e88b83`, and the prop check
+gives 49 checks, 0 failed.
 
 - **Clone:** `git clone https://github.com/Zhaohui-Li111/walker-dusk-duel-zhaohui-li.git
-  D:\coursesǗ03-check`, into a folder that did not exist before, without signing in.
+  D:/courses/7270/a3-check`, into a folder that did not exist before, without signing in.
   `blender/*.blend`, `godot/props3d/models/*.glb` + `.import` and `tools/blender/*.py` are all
   present.
 - **The film shows this source:** `git diff --quiet 1e88b83 HEAD -- godot/` reports no difference.
