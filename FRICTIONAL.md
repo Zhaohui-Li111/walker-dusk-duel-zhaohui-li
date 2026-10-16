@@ -212,3 +212,68 @@ contributions, and generative-model outputs. Retrospective notes are labeled.
   operation by Claude; Zhaohui accepted the model licence and added `HF_TOKEN` to Colab Secrets.
 - **Still unresolved:** whether the picks sound right in play, especially whether the block clack
   reads as a forearm block and whether the K.O. tone sounds like a gong.
+
+---
+
+# Assignment 3 — Blender MCP
+
+## 2026-10-16 — MCP setup on Windows 11 (recorded by Claude Code as it happened)
+
+> The commands and outputs below are copied from the session. Zhaohui adds their own experience
+> (Blender install, enabling the add-on, the window session) underneath.
+
+- **Starting state:** Blender was not installed. `uv`/`uvx` were not installed. Godot 4.7.2 sat in
+  `Downloads\Godot_v4.7.2-stable_win64.exe` and was not on PATH.
+- **uv:** the course says `brew install uv` (macOS). On Windows I used the PowerShell installer
+  instead: `irm https://astral.sh/uv/install.ps1 | iex`. It installed **uv 0.13.1** to
+  `C:\Users\rockefeller\.local\bin`, which is not on PATH until the shell restarts.
+- **Registering the server: the chapter's line failed.**
+  `claude mcp add -e DISABLE_TELEMETRY=true blender -- uvx mcp-for-blender` gave
+  `Invalid environment variable format: blender, environment variables should be added as: -e KEY1=value1 -e KEY2=value2`.
+  Claude Code 2.1.237's `-e` takes several values, so it read the server name as a second variable.
+  **Working form:** put the name first:
+  `claude mcp add blender -e DISABLE_TELEMETRY=true -- uvx mcp-for-blender`. `claude mcp get blender`
+  then showed local scope, `DISABLE_TELEMETRY=true`, status "Connected". That status only means the
+  `uvx` process started; it says nothing about Blender, which was not running or installed.
+- **Server version:** `mcp-for-blender` **2.1.9**, the same version as the README the assignment
+  quotes. Its subcommands are `install-addon`, `addon-paths`, `setup` and `update`.
+- **Add-on:** `uvx mcp-for-blender install-addon` gave `Could not find a Blender user addons directory.
+  Set BLENDERMCP_ADDONS_DIR to your Blender scripts/addons path, or install addon.py manually from
+  the repo.` That is expected, because Blender was not installed yet. To retry after the install.
+- **Not run on purpose:** `uvx mcp-for-blender setup` and the one-line installer, because they
+  configure every MCP client on the machine.
+
+## 2026-10-16 — Blender installed, add-on installed (recorded by Claude Code)
+
+- **Blender:** Zhaohui installed it to `D:\blender\`. `blender.exe --version` reports
+  **Blender 5.2.2 LTS** (built 2026-09-15). That is not the 5.1.2 the chapter used; recorded as a
+  difference to watch, for example in glTF exporter defaults.
+- `uvx mcp-for-blender addon-paths` found
+  `%APPDATA%\Blender Foundation\Blender\5.2\scripts\addons` and marked it "(missing)". This time
+  `install-addon` created it and wrote `blender_mcp.py` there. The earlier failure was only because
+  Blender had not been installed.
+- **What the installed add-on file says, read before enabling it:**
+  - `bl_info` version **(1, 8)**, while the server package is 2.1.9. They are versioned separately.
+  - The socket binds to `localhost`, port **9876**.
+  - **Allow Telemetry** defaults to `False`.
+  - Poly Haven, Sketchfab, Poly Pizza, Hyper3D, Hunyuan3D and Tripo are all controlled by
+    `blendermcp_use_*` scene toggles.
+  - The start button in this file is labelled **"Connect to Claude"**, not "Connect to MCP server"
+    as the assignment says the code labels it. Another README/code difference.
+  - A `load_post` handler restarts the server whenever a file loads, so the add-on really is
+    always on while enabled. Turn it off in Preferences when not in use.
+
+## 2026-10-16 — Connection test from Claude Code (recorded by Claude Code)
+
+- The Claude Code session had started before `blender` was registered. Its tools only appeared
+  partway through, as deferred tools ("still connecting", then listed), without a restart.
+- `get_addon_status`: `up_to_date: true`, protocol **13** (expected 13), add-on **(1, 8)**,
+  Blender **5.2.2 LTS**, source "native", `telemetry_consent: false`. Libraries Poly Haven,
+  Sketchfab and Poly Pizza **off**; generators Hunyuan3D and Hyper3D **off**, Tripo "off (Premium
+  only)". So the add-on was enabled and its server started, and nothing can be downloaded or
+  generated; every shape has to be built with `execute_blender_code`.
+- `get_scene_info`: unsaved default scene, EEVEE, unit scale **1.0**; Cube 2.0 × 2.0 × 2.0 at the
+  origin, Light, Camera. The default cube is centred on its origin, which is failure case 3 in the
+  brief before anything is built.
+- The connection worked on the first call, so failure case 5 (no connection on Windows) did not
+  happen. Whether Windows showed a firewall prompt is for Zhaohui to add; Claude cannot see it.
