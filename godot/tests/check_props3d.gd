@@ -79,6 +79,10 @@ func _run() -> void:
 		var gap := box.position.y - floor_top
 		print("    lowest point %.4f m above the floor top (negative = sunk)" % gap)
 		check(absf(gap) <= 0.01, "sits on the floor (gap %.4f)" % gap)
+		# origin at the centre of the footprint: the AABB's x/z centre is on the prop's node
+		var off := Vector2(box.get_center().x - prop.global_position.x, box.get_center().z - prop.global_position.z)
+		print("    footprint centre %.4f, %.4f m from the node origin (x, z)" % [off.x, off.y])
+		check(off.length() <= TOL, "origin at the footprint centre (offset %.3f m)" % off.length())
 		var tallest := 0 if size.x >= size.y and size.x >= size.z else (1 if size.y >= size.z else 2)
 		check(tallest == 1, "tallest axis is Y")
 		check(tris > 0 and tris <= spec.tris, "%d triangles within budget %d" % [tris, spec.tris])

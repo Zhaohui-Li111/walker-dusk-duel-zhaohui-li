@@ -499,3 +499,19 @@ contributions, and generative-model outputs. Retrospective notes are labeled.
   res://tests/check_props3d.gd --fixed-fps 60`.
 - **Written as skeletons only:** BLENDER-NOTES.md (headings and prompts, no descriptions) and the
   TO DO (human) rows in TEST-REPORT.md. These need Zhaohui's own words.
+
+## 2026-10-16 — First hand move in Blender, and what it showed (recorded by Claude Code)
+
+- Zhaohui: "我再blender里把物体移动了一下". `get_scene_info` showed the whole `PROP-TAIKO`
+  object at location **(2.0, 0, 0)**. Size, rotation and scale were unchanged and the file was not
+  saved (`prop_taiko.blend` still from 15:52). What Zhaohui did and noticed in the window is theirs
+  to add.
+- **What it would have done:** a scratch copy with the same move, exported with `export_glb.py`,
+  gives a glTF node with `translation [2, 0, 0]`. The 2 m offset travels into Godot, so the drum
+  would stand 2 m from its node. That breaks the brief's "built around the world origin".
+- **A gap in the Godot check, found because of this:** the check measured size, height and floor
+  gap but **not the horizontal origin**. Added "origin at the footprint centre": the AABB's x/z
+  centre must be within 0.02 m of the prop node. On the real scene the result is 49 checks, 0 failed.
+  It has not been run against the moved GLB itself.
+- Claude did not change the live scene. Zhaohui chose to move the taiko back to the origin and make
+  the hand edit on one part instead: Edit Mode, L to select the part, then move it or change its colour.
