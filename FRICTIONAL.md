@@ -622,5 +622,7 @@ contributions, and generative-model outputs. Retrospective notes are labeled.
   - Claude opened the page without signing in. It loads (HTTP 200), and its title names
     `claude-liam-walker-dusk-duel-zhaohui-li-a3-gamedev.mp4`, so link sharing is on and the file
     name matches.
-  - **Not verified:** that the uploaded file's SHA-256 matches `9331a624…771d2`. That would need a
-    download, which Claude did not do.
+  - **Verified afterwards (Zhaohui asked):** Claude downloaded the file from Drive without
+    signing in (`drive.usercontent.google.com/download?...&confirm=t`). Result: HTTP 200,
+    29 690 645 bytes, SHA-256 `9331a6244a9c8e33ef414912a8e3d0a02cff78ce59994771401339ab61c771d2`,
+    identical to the local master. The downloaded copy was then deleted.

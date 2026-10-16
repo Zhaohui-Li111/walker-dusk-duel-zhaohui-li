@@ -115,7 +115,8 @@ timeout 120 godot --headless --path godot --script res://tests/check_props3d.gd 
   walker mode. It is 5:22 long, 3840 × 2160, 30 fps.
   - **Link:** https://drive.google.com/file/d/1D2tbScAO8qrlzJBOb68VAFXHdIzu7u_f/view?usp=sharing
   - **File name:** `claude-liam-walker-dusk-duel-zhaohui-li-a3-gamedev.mp4`
-  - **SHA-256:** `9331a6244a9c8e33ef414912a8e3d0a02cff78ce59994771401339ab61c771d2`
+  - **SHA-256:** `9331a6244a9c8e33ef414912a8e3d0a02cff78ce59994771401339ab61c771d2`. The copy on Drive was downloaded
+    without signing in and gives the same hash (2026-10-16).
   - **Game source shown:** `godot/` at `1e88b83`.
   - **Film source and evidence:**
     [youtube/claude-liam-walker-dusk-duel-zhaohui-li-a3-gamedev/](youtube/claude-liam-walker-dusk-duel-zhaohui-li-a3-gamedev/).
