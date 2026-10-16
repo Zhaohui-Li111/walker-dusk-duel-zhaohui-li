@@ -193,9 +193,17 @@ The 2D game's suite is unchanged: `test_runner.gd` gives 94 checks, 0 failed.
 | Albedo hex in Godot vs brief | 6e6680 f5c542 4e475c, exact | 8a5a3b d8b676 f2e6d0 6e6680, exact | d9482b f2e6d0 1e1b22, exact |
 | Imports and appears | yes, `--import` printed no errors; visible in `evidence/props3d/prop_room_front.png` | yes | yes |
 
-- **TO DO (human):** the triangle counts as shown in Blender's own Scene Statistics (right-click
-  the status bar). The numbers above come from Blender's `loop_triangles` in a script.
-- **TO DO (human):** the dimensions as read in the N-panel sidebar, if they differ from the above.
+- **Scene Statistics (read by Claude, not by Zhaohui in the status bar):** each saved file,
+  opened headless, returned `scene.statistics()`, the same string the status bar shows:
+  - lantern `Verts:62 | Faces:46 | Tris:100`
+  - makiwara `Verts:56 | Faces:38 | Tris:92`
+  - taiko `Verts:96 | Faces:60 | Tris:168`
+
+  These match the `loop_triangles` counts above.
+- **Sidebar dimensions:** the "Blender dimensions" row is `object.dimensions`, the value the N-panel
+  Item tab displays. Zhaohui's screenshot shows the Object Properties Transform panel (location 0,
+  rotation 0°, scale 1.000), not the Item tab's Dimensions field. **Optional (human):** a screenshot
+  of N → Item → Dimensions for one prop.
 
 ## HUMAN CHECK: look
 
