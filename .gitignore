@@ -41,3 +41,6 @@ youtube/*/_qc/capture/
 youtube/*/_qc/stills/
 youtube/*/_qc/clips/
 *.wav
+
+# Blender save backups
+*.blend1
