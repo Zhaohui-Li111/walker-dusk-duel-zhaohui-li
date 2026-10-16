@@ -618,3 +618,9 @@ contributions, and generative-model outputs. Retrospective notes are labeled.
   files were removed from C:.
 - **Checks:** gamedev checker PASS; GATE T PASS (reel and masked copy); GATE V 0 BLOCKER / 0 MAJOR.
   **Not checked:** how it sounds and reads to a person. Zhaohui should watch it once.
+- **2026-10-16, film uploaded by Zhaohui:** https://drive.google.com/file/d/1D2tbScAO8qrlzJBOb68VAFXHdIzu7u_f/view?usp=sharing
+  - Claude opened the page without signing in. It loads (HTTP 200), and its title names
+    `claude-liam-walker-dusk-duel-zhaohui-li-a3-gamedev.mp4`, so link sharing is on and the file
+    name matches.
+  - **Not verified:** that the uploaded file's SHA-256 matches `9331a624…771d2`. That would need a
+    download, which Claude did not do.

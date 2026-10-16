@@ -113,7 +113,7 @@ timeout 120 godot --headless --path godot --script res://tests/check_props3d.gd 
 
 - **A3 film: "Dusk Duel, Measured".** A Brutalist explainer made with the `godot-gamedev` skill in
   walker mode. It is 5:22 long, 3840 × 2160, 30 fps.
-  - **Link:** TO DO (Zhaohui uploads the MP4 to the course media storage; it is not on GitHub).
+  - **Link:** https://drive.google.com/file/d/1D2tbScAO8qrlzJBOb68VAFXHdIzu7u_f/view?usp=sharing
   - **File name:** `claude-liam-walker-dusk-duel-zhaohui-li-a3-gamedev.mp4`
   - **SHA-256:** `9331a6244a9c8e33ef414912a8e3d0a02cff78ce59994771401339ab61c771d2`
   - **Game source shown:** `godot/` at `1e88b83`.
