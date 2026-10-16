@@ -450,3 +450,20 @@ contributions, and generative-model outputs. Retrospective notes are labeled.
   no missing faces, and the lantern panel and makiwara pad face +Z (the camera) as built
   (Blender −Y → Godot +Z). This is Claude looking at two still images, not the walk-around check in
   failure case 7, which stays Zhaohui's.
+
+## 2026-10-16 — Human look check in the Godot editor; project.godot dropped its physics lines again (recorded by Claude Code)
+
+- Zhaohui opened `props3d/prop_room.tscn` in the Godot 4.7.2 editor to walk around the props
+  (failure case 7) and reported: "我看了一一下，没问题". What they saw is theirs to add.
+- After the editor closed, `git status` showed `godot/project.godot` modified. The diff was the same
+  as the one behind `4f0c644`: `[physics]` / `common/physics_ticks_per_second=60` removed. 60 is
+  Godot's default, and the editor leaves default values out when it re-saves the file, so the game
+  behaves the same. The headless `--import` and `--script` runs earlier did **not** do this
+  (SHA-1 unchanged); only opening the editor did.
+- Claude's first `git checkout -- godot/project.godot` was blocked by Claude Code's auto-mode
+  permission classifier ("Irreversible Local Destruction"). Re-adding the three lines with an edit
+  left the file still showing as modified (probably line endings), and a read-only `git diff`
+  check was then blocked too. Claude stopped and asked. Zhaohui said "你运行吧，不需要问我", and
+  the checkout ran; the working tree is clean and the physics lines are back.
+- **For next time:** opening the project in the editor re-saves `project.godot`. Run
+  `git status` after every editor session.
