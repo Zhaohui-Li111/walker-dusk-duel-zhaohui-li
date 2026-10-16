@@ -408,3 +408,45 @@ contributions, and generative-model outputs. Retrospective notes are labeled.
   | prop_taiko.blend | PROP-TAIKO | 0.70 × 0.55 × 0.95 | 0.0 | 0 / 0 / 1 | 168 (200) |
 
 - Not done yet: glTF export and the Godot `prop_room` scene. Nothing committed after `780f39c`.
+
+## 2026-10-16 — glTF export and the Godot prop room (recorded by Claude Code)
+
+- Zhaohui: "你就看着做吧，不需要问我", so the export and the Godot side went ahead without
+  further questions.
+- **Export:** headless Blender, one run per `.blend`, `export_scene.gltf` with `export_format='GLB'`,
+  `use_selection=True` (only the prop mesh), `export_yup=True` (the default), `export_apply=True`,
+  cameras and lights off. Before that, the exporter options were read from 5.2.2's RNA, because
+  the brief warned that its defaults might differ from 5.1.2. `export_yup` defaults to True and
+  `export_apply` to False; `export_format`'s enum list came back **empty** from RNA (it is filled in
+  dynamically), so 'GLB' was passed inside try/except. It was accepted.
+  Output: `godot/props3d/models/prop_lantern.glb` (7 840 B), `prop_makiwara.glb` (7 608 B),
+  `prop_taiko.glb` (10 580 B).
+- **Godot:** Godot 4.7.2 is not on PATH, and `Downloads\Godot_v4.7.2-stable_win64.exe` is a
+  **folder** (the unzipped archive), not the program. The console build inside it worked:
+  `...\Godot_v4.7.2-stable_win64.exe\Godot_v4.7.2-stable_win64_console.exe --headless --path godot --import`.
+  `godot/project.godot` had SHA-1 `d3999dd…` before and after every Godot run, so the import did
+  not drop the `[physics]` lines this time (unlike the editor save behind `4f0c644`).
+- **Scene** `godot/props3d/prop_room.tscn`, written by hand: a 6 × 4 m floor with its top at y = 0,
+  one DirectionalLight3D with shadows, one Camera3D, a WorldEnvironment for ambient light only,
+  the three GLBs placed at y = 0 (x −1.6, −0.6, 0.5), and a 0.3 × 1.70 × 0.2 m grey reference box
+  at x 1.6. The brief says "floor, one light, one camera". The WorldEnvironment is an addition
+  (ambient light, not a second light) so faces turned away from the sun are not black.
+- **Headless check** `godot/tests/check_props3d.gd` (failure cases 1, 2, 3, 4, 6):
+  `--headless --path godot --script res://tests/check_props3d.gd` printed **43 checks, 0 failed**.
+
+  | Prop | AABB x × y × z (m) | min y | node scale / rot | tris (budget) | albedo |
+  |---|---|---|---|---|---|
+  | PROP-LANTERN | 0.600 × 1.400 × 0.600 | 0.0000 | 1 / 0 | 100 (150) | 6e6680 f5c542 4e475c |
+  | PROP-MAKIWARA | 0.300 × 1.500 × 0.300 | 0.0000 | 1 / 0 | 92 (120) | 6e6680 8a5a3b d8b676 f2e6d0 |
+  | PROP-TAIKO | 0.700 × 0.950 × 0.550 | 0.0000 | 1 / 0 | 168 (200) | 1e1b22 d9482b f2e6d0 |
+
+  The tallest axis is Y for all three. The albedo hex matches the brief exactly, so converting the
+  colours from sRGB to linear in Blender survived the round trip (failure case 6 did not happen).
+  The 2D game's own suite still passes (94 checks, 0 failed).
+- **Renders** `godot/tests/capture_props3d.gd` (needs a window) → `evidence/props3d/prop_room_front.png`
+  and `prop_room_back_low.png`. **First render:** the taiko's `#F2E6D0` head came out pure white and
+  the lantern panel very saturated, because the sun at energy 1.0 plus ambient 0.6 clipped pale
+  colours facing it. **Fix:** sun 0.7, ambient 0.35; after that the head reads cream. From behind:
+  no missing faces, and the lantern panel and makiwara pad face +Z (the camera) as built
+  (Blender −Y → Godot +Z). This is Claude looking at two still images, not the walk-around check in
+  failure case 7, which stays Zhaohui's.
