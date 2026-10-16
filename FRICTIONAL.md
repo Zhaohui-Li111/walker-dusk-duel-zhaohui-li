@@ -277,3 +277,134 @@ contributions, and generative-model outputs. Retrospective notes are labeled.
   brief before anything is built.
 - The connection worked on the first call, so failure case 5 (no connection on Windows) did not
   happen. Whether Windows showed a firewall prompt is for Zhaohui to add; Claude cannot see it.
+
+## 2026-10-16 — Second connection check before modelling (recorded by Claude Code)
+
+- A new Claude Code session re-ran `get_addon_status` and `get_scene_info`. Every value matched
+  the entry above: Blender 5.2.2 LTS, add-on (1, 8), protocol 13/13, `up_to_date: true`, all three
+  libraries and all three generators off, `telemetry_consent: false`, unsaved default scene with
+  the 2 m Cube at the origin ("below ground by 1.0"), Light and Camera, unit scale 1.0.
+- Before building, Claude asked Zhaohui whether "Learn the window" was done and the numbers were
+  final. Zhaohui answered "done, numbers final" and asked for the brief to be committed first:
+  commit `780f39c` holds the A3 brief exactly as drafted, before any mesh was built.
+
+## 2026-10-16 — PROP-LANTERN built (recorded by Claude Code)
+
+- **Prompt passed to the MCP tool (`user_prompt`):** Zhaohui's instruction, verbatim: "严格按
+  CHANGE-BRIEF.md 的 A3 规格，一个一个建（PROP-LANTERN → PROP-MAKIWARA → PROP-TAIKO），每个一个
+  .blend 文件".
+- **How:** one `execute_blender_code` script. It deleted the default Cube, built the six parts with
+  `bmesh.ops.create_cone` / `create_cube` (segment counts set explicitly: base and shaft 8, roof
+  and finial 6, `cap_tris=False` so caps stay n-gons), joined them into one object named
+  `PROP-LANTERN`, and applied rotation and scale. No `bpy.ops` primitive was used, so no default
+  32-segment cylinder appeared.
+- **Part layout (Z ranges):** base r 0.30, 0.00–0.15 · shaft r 0.09, 0.15–0.70 · firebox
+  0.36 × 0.36, 0.70–1.00 · lit panel 0.20 × 0.02 × 0.18 on the −Y face · roof r 0.30, 1.00–1.25 ·
+  finial r 0.05, 1.25–1.40.
+- **Colours:** three Principled BSDF materials, found by node type `BSDF_PRINCIPLED`, Base Color set
+  on the node input. The hex values were converted from sRGB to linear first, because the node
+  input is linear; typing the hex digits straight in as 0–1 floats would make the colour lighter in
+  render than in the brief (part of failure case 6). Roughness 0.8. `diffuse_color` set too, but
+  only for the viewport.
+- **Check (`get_scene_info` + script):** size **0.60 × 0.60 × 1.40 m** (deviation 0.00 on all
+  three), "on ground", min Z 0.0000, location (0, 0, 0), rotation (0, 0, 0), scale (1, 1, 1).
+  **100 triangles** (budget 150; per part 28 + 28 + 12 + 12 + 10 + 10, exactly the brief's
+  estimate). 46 faces: 28 quads, 12 tris, 6 n-gons; 0 non-manifold, 0 boundary edges, 0 loose
+  verts. Materials Stone_6E6680, LitPanel_F5C542, Roof_4E475C.
+- **Something the brief did not say:** a 6-segment cone is a hexagon, so its footprint is not
+  square. With radius 0.30 the roof measures 0.52 (X) × 0.60 (Y). The whole lantern is still
+  0.60 × 0.60 because the base octagon sets X.
+- **`look` (angles, material shading):** reads as a lantern: wide roof over a box on a thin post,
+  yellow panel visible from the front only.
+- **Saved:** `blender/prop_lantern.blend` (97 573 bytes). The folder is new; the brief did not name
+  one.
+
+## 2026-10-16 — PROP-MAKIWARA built (recorded by Claude Code)
+
+- Zhaohui confirmed PROP-LANTERN ("确认，建 MAKIWARA") before this was started.
+- **Prompt passed to the MCP tool:** the same verbatim instruction as for the lantern.
+- **How:** one `execute_blender_code` script, same helper functions as the lantern. It removed the
+  lantern object and its now-unused meshes and materials from the open scene (the lantern was
+  already saved in its own file), built the five parts, joined them into `PROP-MAKIWARA`, applied
+  rotation and scale, and saved with "Save As" to a new file.
+- **Part layout:** footing 0.30 × 0.30 × 0.10, Z 0.00–0.10 · post 0.12 × 0.08 × 1.40, Z 0.10–1.50 ·
+  straw pad 0.16 × 0.06 × 0.30 on the −Y face, centre Z **1.20** · two rope bands, 8-segment
+  cylinders r 0.12, 0.03 high, at Z 1.11 and 1.29, centred on the post+pad cross-section (Y −0.03).
+- **Check:** size **0.30 × 0.30 × 1.50 m** (deviation 0.00), on ground, min Z 0.0000, rotation
+  (0, 0, 0), scale (1, 1, 1). **92 triangles** (budget 120; 12 + 12 + 12 + 28 + 28, the brief's
+  estimate). 38 faces: 34 quads, 4 n-gons; 0 non-manifold, 0 boundary edges, 0 loose verts.
+  Materials Stone_6E6680, Wood_8A5A3B, Straw_D8B676, Rope_F2E6D0.
+- **What `look` showed that the numbers did not:** an 8-segment cylinder is round, but the pad and
+  post are a 0.16 × 0.14 box. To enclose that box the bands need r ≈ 0.12, so they stick out
+  about 4 cm past the pad on each side and read more like **flat collars than tight rope**. The
+  brief's shape list ("cylinders, 8 segments") allows it. Raised with Zhaohui rather than changed.
+- **Saved:** `blender/prop_makiwara.blend` (98 228 bytes).
+
+## 2026-10-16 — PROP-MAKIWARA rope bands reshaped (recorded by Claude Code)
+
+- Zhaohui first picked "squash the bands into an ellipse about 0.20 × 0.18". **That option was
+  Claude's mistake.** Checking before building showed that a squashed regular octagon cuts its
+  corners, so at 0.20 × 0.18 the pad's four corners would poke through the rope. Enclosing the
+  0.16 × 0.14 cross-section takes about 0.23 × 0.20, barely smaller than the 0.24 × 0.24 already
+  there. Claude told Zhaohui and asked again. Zhaohui chose a **chamfered rectangle 0.19 × 0.17**.
+- **Prompt passed to the MCP tool:** "倒角矩形 0.19×0.17" (Zhaohui's answer, verbatim).
+- **How:** edited the saved mesh with bmesh. It deleted the faces that use the Rope material, then
+  built each band from 8 hand-placed vertices (half-extents 0.095 × 0.085, 0.02 m chamfers,
+  centred at Y −0.03): 8 side quads + two 8-gon caps, the same topology as an 8-segment cylinder.
+  The chamfer line has x + y = 0.160 and the pad corner has 0.150, so the rope clears the corners
+  by about 7 mm. Normals recalculated.
+- **Check:** size still 0.30 × 0.30 × 1.50 m, on ground, rotation (0, 0, 0), scale (1, 1, 1),
+  **92 triangles**, 38 faces (34 quads, 4 n-gons), 0 non-manifold, 0 boundary edges. The rope
+  now sticks out 1.5 cm past the pad instead of 4 cm.
+- **Recorded difference from the brief:** the brief says "cylinders, 8 segments" for the bands.
+  They keep the segment count and triangle cost but are no longer round.
+- **Mistake along the way:** a `look` with `distance=0.9` framed the object's centre (Z 0.75), not
+  the pad, so all four tiles showed only the post. The default framing worked.
+- File re-saved in place: `blender/prop_makiwara.blend` (98 211 bytes).
+
+## 2026-10-16 — PROP-TAIKO built (recorded by Claude Code)
+
+- Zhaohui confirmed PROP-MAKIWARA ("确认，建 TAIKO") before this was started.
+- **Prompt passed to the MCP tool:** the same verbatim instruction as for the lantern.
+- **How:** unlike the first two, each part was its own object with its position and rotation set
+  on the object, so the rotation step could be checked. The drum body and both heads were built
+  as Z-axis 12-segment cylinders with object **rotation X = 90°** (printed as 90.0 before apply);
+  the legs lean ±14.4° about Y. `transform_apply(rotation, scale)` on all six printed rotation
+  (0, 0, 0) for every part; then they were joined into `PROP-TAIKO` and applied again.
+- **Part layout:** base bar 0.70 × 0.12 × 0.06, Z 0.00–0.06 · drum body r 0.30, 0.51 long on Y,
+  centre Z **0.62** · two heads r 0.33, 0.02 thick, at Y ±0.265 (faces ±Y) · two legs
+  0.06 × 0.10 × 0.42 from the bar ends up under the drum. The 0.95 height comes from the heads
+  (0.62 + 0.33); the body is 0.60 across as in the brief.
+- **Error, caught by the script's own check (failure case 3 happened):** after the join the mesh
+  ran Z **−0.03 to 0.92**, and the object sat at location (0, 0, 0.03). `get_scene_info` alone
+  would have said "size 0.7x0.55x0.95, on ground" and hidden it, because it measures the world box.
+  The cause: `join` keeps the *active* object's origin, and the active part was the base bar, whose
+  origin was at its own centre (Z 0.03). The lantern and makiwara had not hit this because there
+  every part's offset was baked into the mesh and each object sat at the origin.
+  **Fix:** moved the mesh up by the object's location (`mesh.transform(Translation(location))`) and
+  set location to (0, 0, 0). After: mesh Z 0.0000–0.9500, object at (0, 0, 0).
+- **Check:** size **0.70 × 0.55 × 0.95 m** (deviation 0.00), on ground, min Z 0.0000, rotation
+  (0, 0, 0), scale (1, 1, 1). **168 triangles** (budget 200; 44 + 44 + 44 + 12 + 12 + 12, the
+  brief's estimate). 60 faces: 54 quads, 6 n-gons; 0 non-manifold, 0 boundary edges, 0 loose
+  verts. Tallest axis is Z (Y in Godot), as failure case 1 requires. Materials Stand_1E1B22,
+  Lacquer_D9482B, Head_F2E6D0.
+- **What `look` showed:** reads as a taiko (red barrel, pale heads facing front and back, dark
+  cradle). From the side the stand is only 0.12 m deep under a 0.55 m drum, so it looks like a
+  single post and the drum looks as if it could tip. The brief's shape list (one bar, two legs)
+  allows it. Raised with Zhaohui.
+- **Saved:** `blender/prop_taiko.blend` (98 300 bytes).
+
+## 2026-10-16 — All three props confirmed; files re-checked headless (recorded by Claude Code)
+
+- Zhaohui kept the taiko stand as built ("保持原样，确认").
+- Each saved file was reopened in a separate headless Blender
+  (`blender.exe -b <file> --factory-startup --python chk.py`), not in the live session, because the
+  add-on's `load_post` handler restarts the MCP server when a file is opened.
+
+  | File | Object | Size (m) | min Z | loc / rot / scale | Tris (budget) |
+  |---|---|---|---|---|---|
+  | prop_lantern.blend | PROP-LANTERN | 0.60 × 0.60 × 1.40 | 0.0 | 0 / 0 / 1 | 100 (150) |
+  | prop_makiwara.blend | PROP-MAKIWARA | 0.30 × 0.30 × 1.50 | 0.0 | 0 / 0 / 1 | 92 (120) |
+  | prop_taiko.blend | PROP-TAIKO | 0.70 × 0.55 × 0.95 | 0.0 | 0 / 0 / 1 | 168 (200) |
+
+- Not done yet: glTF export and the Godot `prop_room` scene. Nothing committed after `780f39c`.
