@@ -200,3 +200,20 @@ while the fighter is not already attacking.
 7. **Missing or flipped faces** that only show from behind or below. *Check:* walk the camera around
    and under each prop in Godot (human check). Backface culling on the import would hide them from
    one side.
+
+## Build result (appended 2026-10-16)
+
+Zhaohui confirmed the numbers above as final, and this section was committed unchanged (`780f39c`)
+before anything was built. All three props match it: deviation 0.00 m on every dimension, origin
+at the underside centre, rotation and scale applied, 100 / 92 / 168 triangles, albedo hex exact
+after the glTF round trip. `godot/tests/check_props3d.gd` runs 43 checks, 0 failed. Zhaohui did
+the walk-around check in the Godot editor and found no problems.
+
+**Differences from the spec above:**
+- PROP-MAKIWARA's rope bands are chamfered 8-vertex rings (0.19 × 0.17 m), not round 8-segment
+  cylinders, so they sit close to the pad. Zhaohui chose this; the triangle count is unchanged.
+- The prop room adds a WorldEnvironment (ambient light only) next to the floor, the light and the
+  camera.
+
+Failure cases seen: **3** (taiko origin at Z 0.03 after the join; caught and fixed in Blender).
+Not seen: 1, 2, 4, 5, 6, 7. See FRICTIONAL.md, Assignment 3.
