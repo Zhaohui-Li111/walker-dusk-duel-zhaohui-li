@@ -1,0 +1,8 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+nor_gl  directx=false 0.3545  directx=true 1.6455
+nor_dx  directx=false 1.6455  directx=true 0.3545
+format nor_gl 4, nor_dx 4 (Image.Format)
+PASS: each file scores lower in its own convention
+control albedo-as-normal  1.0001
+control random noise      1.0018
