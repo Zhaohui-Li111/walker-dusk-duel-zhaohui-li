@@ -217,3 +217,237 @@ the walk-around check in the Godot editor and found no problems.
 
 Failure cases seen: **3** (taiko origin at Z 0.03 after the join; caught and fixed in Blender).
 Not seen: 1, 2, 4, 5, 6, 7. See FRICTIONAL.md, Assignment 3.
+
+---
+
+# Assignment 5 — shaders and materials
+
+> **Version 1 · 2026-10-26.** Claude Code drafted the state, rules, boundaries, evidence
+> split and material plan from Zhaohui's choices (hurt flash, keep Compatibility, stone lantern;
+> the lantern was replaced by the floor and a plinth before commit, see the material plan).
+> Claude Code also filled the project facts (pixel coordinates and stored values read from the
+> sprite and background files, importer enum values read from the Godot 4.7.2 source).
+> **Every line marked TO DO (Zhaohui) is Zhaohui's to write: the colour line, the uniform defaults
+> Zhaohui wants, every hand-computed prediction and the short answers.** Edit anything else that is
+> wrong, then commit this section before writing either shader or sending prompt-1. After that
+> commit this section is only appended to, with dated revisions.
+>
+> **At commit (2026-10-26):** Zhaohui wrote the colour line, chose the red flash colour, and
+> computed the six pixel predictions by hand. Zhaohui chose to commit now with these still open:
+> the **hint-experiment predictions**, the **short answers**, the **contrast ratio**, and
+> confirming the hurt-flash `render_mode` and the granite uniform table. They will be added below
+> in a dated revision **before** the hint experiment is measured, before the driver is run, and
+> before either shader is written.
+
+## The state
+
+- **What it communicates:** "this fighter was just hit cleanly." The hurt image already changes the
+  pose, but in a fast exchange the player can miss which of the two fighters took the hit. A flash
+  on the hit fighter's sprite answers it in the first frame, even muted.
+- **Where it lives:** `Fighter.state == "hurt"` (`godot/fighter/fighter.gd`, `_set_state("hurt")`
+  in the hit handler), with `Fighter.stun` counting down from `HITSTUN = 18` physics ticks.
+  `main.gd` freezes both fighters for `HITSTOP_FRAMES = 4` ticks first, and stun does not count
+  down during hitstop. A K.O. hit goes to `"ko"`, never `"hurt"`, so it does not flash.
+- Two instances exist: `P1` (Akaken) and `P2` (Aotake) in `godot/game/main.tscn`, both from
+  `godot/fighter/fighter.tscn`, drawn by its `Sprite2D`.
+
+## Effect specification — hurt flash
+
+**The shader:** `godot/shaders/hurt_flash.gdshader`, `shader_type canvas_item;`, no render_mode
+(TO DO (Zhaohui): confirm, or name one). On a ShaderMaterial set as the `Sprite2D`'s `material`.
+No sampler uniforms; the sprite texture arrives in `COLOR`.
+
+| Uniform | Type | Hint | Default | Set by |
+|---|---|---|---|---|
+| `hurt_amount` | `float` | `hint_range(0.0, 1.0)` | `0.0` | the driver, every physics tick, from `stun` (below) |
+| `flash_color` | `vec4` | `source_color` | `vec4(1.0, 0.0, 0.0, 1.0)` (pure red, Zhaohui's choice: red reads as "hurt") | the material only; never code |
+
+**The colour line** (inside `fragment()`), written by Zhaohui:
+
+```glsl
+COLOR.rgb = mix(COLOR.rgb, flash_color.rgb, hurt_amount);
+```
+
+It blends each pixel's own colour toward `flash_color` by `hurt_amount`, and leaves `COLOR.a`
+alone, so transparent pixels stay transparent and the 254 alpha of the sprite is kept.
+
+**The driver rule** (presentation only, reads state, never writes it):
+`hurt_amount = float(stun) / float(HITSTUN)` while `state == "hurt"`, else `0.0`.
+
+### Observable rules
+
+1. **Begin / end values.** `hurt_amount` is `1.0` on the tick the fighter enters `"hurt"` and
+   `0.0` on the tick it leaves (to `"idle"`, or to `"ko"` if hit again).
+2. **Duration.** Held at `1.0` for the 4 hitstop ticks, then falls by 1/18 per tick, reaching `0.0`
+   at tick 22 after the hit: 22 / 60 = **0.367 s of game time**, tolerance ± one frame period
+   (± 0.033 s at 30 fps, ± 0.017 s at 60, ± 0.007 s at 144). The same at 30, 60 and 144 fps,
+   because it counts physics ticks (`physics_ticks_per_second = 60`), not rendered frames.
+3. **Retrigger: restart.** A second hit during hurt sets `stun = HITSTUN` again (the hit handler
+   forces a fresh `"hurt"`), so `hurt_amount` jumps back to `1.0` and the 0.367 s starts over.
+4. **Time scale and pause.** Scaled: under `Engine.time_scale = 0.5` the flash lasts 0.733 s of
+   real time. The fight's pause (`main.paused`, Esc / P) stops stepping, so the value is frozen at
+   whatever it was; it resumes from there. The tree itself is never paused by the game.
+5. **State ends early.** If hurt ends before the fade finishes (hit into K.O.), the value is `0.0`
+   on that tick, with no tail.
+6. **Instances.** Each fighter gets its own ShaderMaterial instance (duplicated in code, or
+   `resource_local_to_scene`), so a hit on P2 changes only P2's `hurt_amount`; P1's stays `0.0`.
+
+### Boundaries
+
+Unchanged: collision boxes, movement, input, the state machine and every timing in `fighter.gd`
+and `main.gd`, `effects.gd`, `audio_director.gd`, the HUD, the background, the existing tests
+(`test_runner.gd` 94 checks, `check_props3d.gd` 49 checks) and their expectations. The driver may
+read `state`, `stun` and `HITSTUN`; it never writes them.
+
+### Evidence split
+
+| Rule | Check |
+|---|---|
+| Shader parses; uniform names and types | headless: `get_shader_uniform_list()`, not a set-then-get round trip |
+| Defaults | headless: read from the shader source text |
+| 1, 2, 3, 5 | headless: real hits through the real game loop and input, uniform sampled each frame from a high `process_priority` node, at 30, 60, 144 fps |
+| 4 | headless: the same test under `Engine.time_scale = 0.5`; pause: value unchanged across paused frames |
+| 6 | headless: P1's value stays 0.0 while P2 flashes |
+| The colour on screen | human: in-engine captures at the controlled values, sampled pixels vs the table below |
+| Reads in play | human: playtest, several hits each way, muted |
+
+### Controlled inputs and predicted values
+
+Background: the courtyard (`ENV-BG`, `godot/art/env/bg.png`, drawn 1:1 at 640 × 360 by
+`stage.gd`). The flash changes sprite pixels only; transparent pixels stay background.
+Compatibility renderer, `rendering/viewport/hdr_2d` not set, so 2D arithmetic is on the sRGB values
+as stored. Fighter sprites are unlit (no `Light2D` in `main.tscn`).
+
+**Capture setup:** Akaken in `idle` at the start of round 1 (`reset(220.0, 1)`), facing right. The
+sprite (`godot/art/akaken/idle.png`, 108 × 158, linear filter, lossless import) has its top-left
+at viewport (172.1, 156.0) = (220 − 369.55 × 0.1296, 305 − 1150 × 0.1296). The window is
+1280 × 720 with `canvas_items` stretch, so a capture is 1280 × 720 and viewport coordinates double.
+The two texels below were chosen where every neighbour in a 3 × 3 block is within 2 steps per
+channel, so bilinear filtering at the fractional position cannot move them by more than that.
+
+| Pixel | Texel in idle.png | Viewport (≈) | Capture (≈) | Sprite RGBA as stored | Background under it |
+|---|---|---|---|---|---|
+| **P-gi**: orange gi, lower torso | (52, 101) | (224.6, 257.5) | (449, 515) | (222, 89, 0, 254) | (48, 35, 47) |
+| **P-fist**: pale hand wrap, front fist | (75, 68) | (247.6, 224.5) | (495, 449) | (240, 230, 172, 254) | (66, 37, 60) |
+
+Note 1: the generated sprite is orange (222, 89, 0), not the palette's gi red `#D9482B`, so the
+prediction starts from the stored texel, not the palette. Note 2: these texels have alpha 254,
+not 255, so the background shows through by 1/255. That is under one 8-bit step, but say whether
+your colour line keeps `COLOR.a`. Coordinates are confirmed or corrected from the first capture.
+
+| Pixel | `hurt_amount = 0.0` | `0.5` | `1.0` |
+|---|---|---|---|
+| P-gi | (222, 89, 0) | (238.5, 44.5, 0) → (239, 45, 0) ± 1 | (255, 0, 0) |
+| P-fist | (240, 230, 172) | (247.5, 115, 86) → (248, 115, 86) ± 1 | (255, 0, 0) |
+
+Computed by hand by Zhaohui from the colour line, `mix(a, b, t) = a + (b − a)·t` per channel with
+`flash_color` = (255, 0, 0). Values ending in .5 may land on either neighbour when the GPU
+converts to 8 bits, hence ± 1. The background term is ignored: alpha 254 moves each channel by
+under one step.
+
+TO DO (Zhaohui): if the flash colour changes contrast against the background, the ratio.
+
+### Hint experiment predictions
+
+3 × 1 PNG with greys 64, 128, 192, unshaded quads, Linear tonemap, exposure 1.0.
+**This project uses the Compatibility renderer, not Forward+/Mobile, so these are predictions to
+be measured before they are explained.**
+
+| Band | Stored | Quad A: `source_color` | Quad B: no hint |
+|---|---|---|---|
+| 1 | 64 | TO DO (Zhaohui) | TO DO |
+| 2 | 128 | TO DO | TO DO |
+| 3 | 192 | TO DO | TO DO |
+
+Which quad shows the file's values unchanged, and why: TO DO (Zhaohui).
+
+## Material plan — granite floor and stone plinth
+
+**Why not the lantern (decided before this section was committed):** the first draft put the
+shader on PROP-LANTERN. A headless probe found that none of the three A3 props has UVs:
+`surface_get_arrays()` returns no `ARRAY_TEX_UV` on any surface of the lantern, makiwara or taiko.
+Adding UVs would change the source models, which this assignment keeps unchanged, and projecting
+UVs inside the shader would make the hand-written shader much harder. Zhaohui chose to texture
+the prop room's floor and a new stone plinth instead; both are Godot `BoxMesh`es, which have UVs.
+
+- **Objects:** in `godot/props3d/prop_room.tscn`, the existing `Floor` (BoxMesh 6 × 0.1 × 4 m,
+  top at y = 0) and a new `StonePlinth` (BoxMesh 0.8 × 0.3 × 0.8 m), standing on the floor at
+  x = 1.0, z = −1.0, clear of the three props and the 1.70 m reference box. No prop is moved.
+- **Material wiring:** these meshes are not imported, so there is no importer **Use External**
+  step; each `MeshInstance3D` takes its material as `material_override`, pointing at a `.tres`
+  file. The A3 props keep their imported materials.
+- **Lighting to judge under:** the prop room's `Sun` (DirectionalLight3D, energy 0.7, shadows) and
+  ambient 0.35. No SSAO, glow or fog.
+- **Shader:** `godot/shaders/granite.gdshader`, `shader_type spatial;`.
+- **Materials:** `godot/props3d/materials/granite_floor.tres` and `granite_plinth.tres`, both
+  ShaderMaterials of that one shader.
+- **UV layout to keep in mind:** `BoxMesh` lays its six faces into a 3 × 2 grid of the 0–1 UV
+  square (to be confirmed with a probe), so each face shows about a third by a half of the texture
+  at `uv_scale = 1`.
+
+| Texture | Source | What the numbers mean | Sampled as | compress/mode | compress/normal_map | mipmaps/generate |
+|---|---|---|---|---|---|---|
+| `granite_wall_diff_1k.png` | Poly Haven *Granite Wall* | sRGB-encoded surface colour | colour, `source_color` | 2 VRAM Compressed | 2 Disabled | true |
+| `granite_wall_rough_1k.png` | same | roughness 0–1, linear | data, no `source_color` | 2 VRAM Compressed | 2 Disabled | true |
+| `granite_wall_nor_gl_1k.png` | same, **OpenGL** convention | tangent-space normal, xyz = rgb·2−1 | data, `hint_normal` | 2 VRAM Compressed | 1 Enable | true |
+| `granite_wall_nor_dx_1k.png` | same, DirectX convention | calibration only, no material uses it | — | 0 Lossless | 2 Disabled | false |
+| `hint_grey_3x1.png` | written by a committed GDScript | greys 64, 128, 192 | both (hint experiment) | 0 Lossless | 2 Disabled | false |
+
+Enum values are positional in the importer's `PROPERTY_HINT_ENUM` strings, read from Godot
+4.7.2-stable `editor/import/resource_importer_texture.cpp`: `compress/mode` =
+"Lossless,Lossy,VRAM Compressed,VRAM Uncompressed,Basis Universal" (0–4), `compress/normal_map` =
+"Detect,Enable,Disabled" (0–2); `mipmaps/generate` is a bool.
+
+Source: `https://polyhaven.com/a/granite_wall`, authors Dimitrios Savva (all roles, per the Poly
+Haven API), licence CC0. Files: 1k PNG from `dl.polyhaven.org`. Date checked: 2026-10-26.
+Credits and SHA-256 per file: `godot/props3d/textures/ATTRIBUTION.md`.
+
+Uniforms (at least four, at least two `group_uniforms`). TO DO (Zhaohui): confirm names, ranges
+and defaults.
+
+| Group | Uniform | Type | Hint | Default | Expected on screen across the range |
+|---|---|---|---|---|---|
+| `surface` | `tint` | `vec4` | `source_color` | white | multiplies albedo; the plinth darker |
+| `surface` | `uv_scale` | `float` | `hint_range(0.25, 8.0)` | `1.0` | how many times the granite repeats across a face |
+| `detail` | `roughness_scale` | `float` | `hint_range(0.0, 1.0)` | `1.0` | 0 = glossy highlight, 1 = as scanned |
+| `detail` | `normal_strength` | `float` | `hint_range(0.0, 2.0)` | `1.0` | 0 = flat, 2 = exaggerated relief |
+
+**What differs between the two materials:** `uv_scale` (the 6 × 4 m floor repeats the granite
+several times; the 0.8 m plinth about once) and `tint` (the plinth toward `#6E6680`, the A3 stone
+colour, so it reads as a separate block on the floor).
+
+### Predicted failure cases
+
+1. **One flash on both fighters** (a shared material). *Check:* the rule 6 assertion; a capture
+   with only P2 hit.
+2. **Duration changes with frame rate or time scale** (the driver counts frames or uses `TIME`).
+   *Check:* the 30/60/144 runs and the `time_scale = 0.5` run.
+3. **Retrigger ignored** (the driver latches on the first `state_changed`). *Check:* a second hit
+   during hurt must read `1.0` again.
+4. **Roughness or normal map sampled with `source_color`.** *Check:* `test_materials.gd` reads the
+   hints from the source; the look check at `roughness_scale` minimum and maximum.
+5. **Normal map in DirectX convention, or not a real normal map.** *Check:* `normal_map_check.gd`
+   curl ratio, calibrated on the gl/dx pair.
+6. **The object has no usable UVs.** *Already seen* on the lantern before this section was
+   committed (see the material plan); it is why the floor and plinth are used. *Check for the
+   new objects:* the BoxMesh UV arrays read headlessly; the floor in the editor at `uv_scale = 1`.
+7. **The material is saved embedded in the scene instead of as the `.tres` file,** so the two
+   materials stop being shared resources of one shader. *Check:* `test_materials.gd` asserts each
+   `material_override.resource_path` and that both name the same shader path, after deleting
+   `godot/.godot` and reimporting.
+8. **The red flash is weak on Akaken,** whose gi is already orange-red (222, 89, 0): red can add at
+   most 33 to R and leaves B at 0, so only G carries most of the change. Aotake should read more
+   clearly. *Check:* the P-gi capture at `hurt_amount = 0.5` against P-fist, and the muted
+   playtest: can the player tell Akaken was hit? If not, revise `flash_color` with a dated entry.
+
+### Short answers
+
+TO DO (Zhaohui), each in a sentence or two:
+- The renderer project.godot names (`renderer/rendering_method="gl_compatibility"`, line 35) and
+  what it rules out.
+- What colour arrives in `fragment()` before you change it, and the tempting alternative.
+- What `texture(TEXTURE, UV)` would give instead of `COLOR`.
+- For spatial: `ALBEDO` if never written, and what `COLOR` holds.
+- A frame-counting version's duration at 30, 60 and 144 fps.
+- Which resource holds the default, which the current value, and what sharing a material does.
+- Does `hint_range` clamp a value the driver sets from code? (a prediction)
