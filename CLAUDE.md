@@ -2,10 +2,12 @@
 
 ## Project context
 
-- **Engine:** Godot 4.7.2 stable (`README.md:10`, `scripts/run-test.sh:3`); the project declares
+- **Engine:** Godot 4.7.2 stable (`README.md:10`; the run itself prints "Godot Engine
+  v4.7.2.stable.official.ed1daf0bf", `logs/test_runner_60fps.log:1`); the project declares
   feature "4.7" (`godot/project.godot:15`). The project lives in `godot/`.
 - **Renderer:** GL Compatibility, `renderer/rendering_method="gl_compatibility"`, also for mobile
-  (`godot/project.godot:35-36`). No Forward+/Mobile-only features.
+  (`godot/project.godot:35-36`). This rules out decals, compute shaders, VoxelGI, SDFGI and SSIL
+  (A5 handout, Step 1 questions).
 - **Main scene:** `res://game/main.tscn` (`godot/project.godot:14`). Viewport 640 × 360, window
   1280 × 720, `canvas_items` stretch (`godot/project.godot:23-27`). Physics 60 ticks/s
   (`godot/project.godot:31`).
@@ -28,7 +30,8 @@
   plans `material_override` → `godot/props3d/materials/granite_floor.tres` and
   `granite_plinth.tres`, both ShaderMaterials of `godot/shaders/granite.gdshader`
   (`CHANGE-BRIEF.md:376-383`). Textures: `godot/props3d/textures/granite_wall_*_1k.png`, credits
-  in `godot/props3d/textures/ATTRIBUTION.md`.
+  in `godot/props3d/textures/ATTRIBUTION.md`. BoxMesh UVs are a 3 × 2 grid; the top face uses
+  UV (⅓–⅔, ½–1) (probe, `FRICTIONAL.md:724`).
 - **Tests** — run from the repo root, always through the wrapper
   (`scripts/run-test.sh <file in godot/tests/> <fps>`, `scripts/run-test.sh:2`). It needs
   `GODOT` set to the console build if `godot` is not on PATH (`:3-6`), runs headless with a 120 s
@@ -45,7 +48,26 @@
   `30` / `144` as the second argument. `godot/tests/normal_map_check.gd` is a library
   (`extends RefCounted`, `:1`), not a runnable test. `capture_states.gd`, `capture_flow.gd` and
   `capture_props3d.gd` need a window (`godot/tests/capture_states.gd:3`,
-  `capture_props3d.gd:3`), so they do not run through the headless wrapper.
+  `capture_props3d.gd:3`; `capture_flow.gd:4` gives its command without `--headless`), so they
+  do not run through the headless wrapper. Baseline at 60 fps: `test_runner.gd` 94 checks,
+  0 failed (`logs/test_runner_60fps.log:24`); `check_props3d.gd` 49, 0 failed
+  (`logs/check_props3d_60fps.log:22`). Run `godot --headless --path godot --import` once
+  after cloning (`README.md:104-107`).
+
+## Headless facts (this machine: Windows 11, Godot 4.7.2, Git Bash)
+
+- A headless run uses the dummy renderer and draws nothing. It can prove that a shader parses,
+  that its uniforms are declared and driven, and that materials are wired. It cannot prove how
+  anything looks. Captures need a real window (`capture_*.gd`, `capture_flow.gd:4`).
+- Exit code 0 does not mean no errors. `scripts/run-test.sh:11` fails on `SHADER ERROR` /
+  `SCRIPT ERROR`; exit 124 means the 120 s timeout hit (`:9`).
+- `--fixed-fps N` fixes the frame delta; physics still runs 60 ticks per game second
+  (`project.godot:31`). `test_runner.gd` turns physics off and calls `main.step(1/60)` itself
+  (`test_runner.gd:8`, `:48`), so its result is the same at any fps. A test for rule 2 must go
+  through the real `_physics_process` loop.
+- `get_shader_uniform_list()` gives names and types; defaults are read from the shader source text.
+  To confirm by the Step 2 mutations: a shader that fails to parse returns an empty list, and
+  `set_shader_parameter` with an undeclared name raises no error and reads its value back.
 
 ## Current change
 
@@ -57,7 +79,7 @@
   by the human (Zhaohui). An agent never creates, edits, reformats or "fixes" these files. If a
   shader looks wrong, report it and stop.
 - Lines marked "TO DO (Zhaohui)" in `CHANGE-BRIEF.md` are Zhaohui's to write. The A5 section is
-  only appended to, with dated revisions (`CHANGE-BRIEF.md:229-233`).
+  only appended to, with dated revisions (`CHANGE-BRIEF.md:232-233`).
 
 ## Out of scope
 
@@ -77,24 +99,16 @@
 
 ## Unconfirmed
 
-- Check counts: the brief says `test_runner.gd` has 94 checks and `check_props3d.gd` 49
-  (`CHANGE-BRIEF.md:299`), `README.md:103-104` says 49, but the A3 build result says 43
-  (`CHANGE-BRIEF.md:209`). Not run here, so none of these is confirmed.
-- Whether `--fixed-fps` changes anything for `test_runner.gd`: it drives `main.step(DT)` itself
-  with `DT = 1/60` and turns off `_physics_process` (`godot/tests/test_runner.gd:8`, `:48`), so
-  the 30/144 fps runs the brief wants probably need a new test that uses the real loop.
-- Whether a fresh clone needs `godot --headless --path godot --import` before the wrapper
-  (`README.md:103-108`); `run-test.sh` does not import.
 - Where the hurt-flash driver will live (a new node, or code in `fighter.gd`) and how each
   fighter gets its own material; the brief leaves both open (`CHANGE-BRIEF.md:274-275`, `:292-293`).
-- The hurt-flash `render_mode`, the contrast ratio, the granite uniform table and the hint
-  experiment predictions are still TO DO (`CHANGE-BRIEF.md:256-257`, `:348`, `:356-362`, `:405`).
-- BoxMesh UV layout (3 × 2 grid) is "to be confirmed with a probe" (`CHANGE-BRIEF.md:384-386`).
+- The hurt-flash `render_mode`, the contrast ratio, the granite uniform table, the hint
+  experiment predictions and the short answers are still TO DO (`CHANGE-BRIEF.md:256-257`,
+  `:348`, `:356-362`, `:405`, `:443`).
 - `godot/shaders/` and `godot/props3d/materials/` do not exist yet; `StonePlinth` is not in
   `prop_room.tscn`. The hint-experiment scene (`godot/hint_experiment/hint_experiment.tscn`) has
   two quads with no material yet.
 - The sprite texel coordinates in the brief are to be "confirmed or corrected from the first
   capture" (`CHANGE-BRIEF.md:336`).
-- Whether `timeout` and `tee` in `run-test.sh` work in the shell used on this Windows machine
-  (Git Bash assumed).
+- `blender/prop_taiko.blend` already had an uncommitted change before A5 began (git status at the
+  start of A5); it is not part of this change and must not be committed with it.
 - There is no `AGENTS.md` at the repository root, so this file does not import one.
