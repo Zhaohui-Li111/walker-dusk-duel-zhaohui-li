@@ -723,3 +723,18 @@ None of this is committed yet; the brief must be committed first.
   and the subtype both look calm; only reading the result event shows the run did nothing.
 - Before it: BoxMesh UV layout confirmed by a probe — 3 × 2 grid; the top face (normal +Y) gets
   UV (1/3–2/3, 1/2–1).
+
+## 2026-10-26 — prompt-1, second attempt (recorded by Claude Code)
+
+- `claude update` failed ("npm registry is unreachable"), although `npm view
+  @anthropic-ai/claude-code version` reached the registry and returned 2.1.311. Installed with
+  `npm install -g @anthropic-ai/claude-code@latest` instead (Zhaohui approved the update).
+- Rerun of prompt-1 exactly as the handout writes it, transcript `sessions/session-1.jsonl`. The
+  **last line is not the result event** (it is a `task_summary`); the `result` event is
+  `subtype: success`, `is_error: false`, 26 turns, `stop_reason: end_turn`,
+  `terminal_reason: completed`, `permission_denials: []`. It created only `CLAUDE.md`
+  (100 lines); `godot/shaders/` does not exist and `scripts/run-test.sh` is unchanged.
+- It ran `wc -l` through Bash although `--allowedTools` lists only git status/diff/log and ls,
+  and no denial was recorded. The scoped tools did not contain that call; the git diff is what
+  shows nothing else changed.
+- Committed unedited as `a878968`. Not yet reviewed.
