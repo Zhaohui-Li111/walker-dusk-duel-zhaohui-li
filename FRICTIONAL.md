@@ -712,3 +712,14 @@ None of this is committed yet; the brief must be committed first.
   any shader. A texture cannot be placed by `UV` on these meshes. Decision pending with Zhaohui.
 - **Prompts saved:** `prompts/prompt-1.txt`, `prompt-2-plan.txt`, `prompt-3-audit.txt`, verbatim
   from the handout.
+
+## 2026-10-26 — prompt-1, first attempt: the CLI was too old (recorded by Claude Code)
+
+- The brief was committed (`4c8d90a`), then prompt-1 was run exactly as the handout writes it,
+  saved to `sessions/session-1-attempt1-old-cli.jsonl`. Exit code **0**, and the final result event
+  says `"subtype": "success"` — but also `"is_error": true`, `num_turns` 1, cost 0, and the result
+  text "API Error: 400 Claude Code 2.1.237 does not support this model; version 2.1.280 or newer
+  is required". No CLAUDE.md was written. This is the handout's warning in practice: the exit code
+  and the subtype both look calm; only reading the result event shows the run did nothing.
+- Before it: BoxMesh UV layout confirmed by a probe — 3 × 2 grid; the top face (normal +Y) gets
+  UV (1/3–2/3, 1/2–1).
