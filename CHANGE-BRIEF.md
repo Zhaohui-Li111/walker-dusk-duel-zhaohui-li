@@ -523,3 +523,25 @@ changes.
   values assigned from code. *To be checked in Use It with a capture at `hurt_amount = 2.0`.*
 
 Still open: the contrast ratio.
+
+## Revision 5 · 2026-10-28 · contrast ratio (before any shader or measurement)
+
+WCAG contrast of P-gi against the background beneath it, computed by hand by Zhaohui with a
+calculator: decode each channel (c = v / 255, ((c + 0.055) / 1.055)^2.4), L = 0.2126 R +
+0.7152 G + 0.0722 B, ratio = (L_light + 0.05) / (L_dark + 0.05).
+
+| Colour | RGB | L | Ratio against the background |
+|---|---|---|---|
+| Background under P-gi | (48, 35, 47) | 0.02036 | — |
+| P-gi, `hurt_amount = 0.0` | (222, 89, 0) | 0.22674 | 3.93 : 1 |
+| P-gi, `hurt_amount = 1.0` | (255, 0, 0) | 0.21260 | **3.73 : 1** |
+
+Zhaohui first wrote 3.93 for the full-red row as well; Claude's check gave 0.2626 / 0.07036 ≈
+3.73, and Zhaohui accepted the correction. The other values agree with Claude's check.
+
+**Finding:** the red flash *lowers* Akaken's gi contrast slightly (3.93 → 3.73), because red takes
+G from 89 to 0 and G carries the largest luminance weight. The flash is visible through the hue
+change, not a brightness change. This supports predicted failure case 8; the capture and the
+muted playtest decide it.
+
+All TO DO items of Version 1 are now filled. The next step is the hand-written shader.
