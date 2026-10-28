@@ -488,3 +488,38 @@ and the granite uniform table. Measured values go in TEST-REPORT.md, not here.
   keeps Zhaohui's sentence as written, with its English translation beside it.
 
 Still open: the short answers and the contrast ratio.
+
+## Revision 4 · 2026-10-28 · short answers (before any shader or measurement)
+
+Q5 and Q7 are Zhaohui's (Q5 computed with a calculator; Q7 in Zhaohui's own words). Q1–Q4 and
+Q6 were drafted by Claude Code after Zhaohui asked for help; Zhaohui read them and asked for no
+changes.
+
+- **Q1 — renderer** *(Claude-drafted)*. `godot/project.godot:35` names `gl_compatibility`, and
+  line 36 uses it for mobile too. That rules out decals, compute shaders, VoxelGI, SDFGI and
+  SSIL. It also means the hint-experiment predictions, which the handout derives for
+  Forward+/Mobile, must be measured before they are explained.
+- **Q2 — the colour arriving in `fragment()`** *(Claude-drafted)*. `COLOR` arrives as the
+  sprite's texture sample multiplied by the node's modulate (the vertex colour), alpha included.
+  The tempting alternative, `COLOR = flash_color;`, overwrites alpha too, so the whole transparent
+  rectangle around the fighter would turn solid red; even `COLOR.rgb = flash_color.rgb;` would
+  erase the sprite's shading.
+- **Q3 — `texture(TEXTURE, UV)` instead of `COLOR`** *(Claude-drafted)*. It gives the raw texel
+  without the modulate. The fighters set no modulate today, so the pixels would match now, but the
+  shader would silently ignore any modulate added later (for example a fade-out on K.O.).
+- **Q4 — spatial `ALBEDO` and `COLOR`** *(Claude-drafted)*. `ALBEDO` is white, `vec3(1.0)`, if
+  never written. `COLOR` in `fragment()` holds the vertex colour interpolated from `vertex()`;
+  it is neither a texture nor the output.
+- **Q5 — a frame-counting version** *(Zhaohui)*. 22 frames last 22 ÷ 30 ≈ 0.733 s at 30 fps,
+  22 ÷ 60 ≈ 0.367 s at 60 fps and 22 ÷ 144 ≈ 0.153 s at 144 fps. Only at 60 fps does it match
+  rule 2's 0.367 s, which is why the driver reads `stun` (physics ticks) instead of counting
+  frames.
+- **Q6 — default, current value, sharing** *(Claude-drafted)*. The default lives in the shader
+  source (the `= 0.0` on the `hurt_amount` uniform line); the current value lives in the
+  ShaderMaterial resource. If both fighters shared one material, setting `hurt_amount` for P2
+  would flash P1 too, so each fighter gets its own material (rule 6).
+- **Q7 — does `hint_range` clamp a value set from code? (prediction)** *(Zhaohui)*. No.
+  `hint_range` primarily controls the range shown in the Inspector and does not necessarily clamp
+  values assigned from code. *To be checked in Use It with a capture at `hurt_amount = 2.0`.*
+
+Still open: the contrast ratio.
