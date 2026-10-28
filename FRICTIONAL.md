@@ -756,3 +756,21 @@ None of this is committed yet; the brief must be committed first.
   unchanged, but CLAUDE.md and the brief cite that line, so Claude restored the file with
   `git checkout -- godot/project.godot`. Expect it again after each editor session; check
   `git status` after closing the editor.
+
+## 2026-10-28 — prompt-2, plan step (recorded by Claude Code)
+
+- Run as a scoped `claude -p` session (`sessions/session-2-plan.jsonl`; its final message is in
+  `sessions/session-2-plan.result.md`). Result event: `success`, `is_error: false`, 22 turns,
+  `end_turn`. HEAD and the working tree unchanged; `godot/shaders/` and `run-test.sh` untouched.
+- **4 permission denials.** Told "Do not edit yet", the agent still wrote a 59-line
+  `probe_retrigger.gd` in its own scratchpad (outside the repo) and tried twice to run Godot on it
+  directly instead of through `scripts/run-test.sh`; both runs were denied. The scoped tools held
+  this time, but the agent was trying to execute code in a planning step.
+- **Finding in the plan: rule 3 (retrigger) may be unreachable through real input.** From hand
+  arithmetic on the frame data: the defender leaves hurt at T+22, and a second punch connects no
+  earlier than T+23 unless the first connected late in its active window; kicks never retrigger;
+  and `HIT_PUSH` probably pushes the defender out of range anyway. The agent proposes running its
+  probe (step 0) before deciding. Not yet verified by anyone.
+- The driver plan: a new `godot/fighter/hurt_flash.gd` node under the `Sprite2D`, one material
+  built per fighter in `_ready()`, `hurt_amount = stun / HITSTUN` in `_physics_process`, no edit
+  to `fighter.gd`. Awaiting Zhaohui's approval.
