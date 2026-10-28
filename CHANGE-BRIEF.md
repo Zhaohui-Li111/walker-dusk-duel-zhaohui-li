@@ -474,3 +474,17 @@ encode back to sRGB; the two inverse operations cancel and give back the origina
 
 Still open from Version 1: the short answers, the contrast ratio, the hurt-flash `render_mode`
 and the granite uniform table. Measured values go in TEST-REPORT.md, not here.
+
+## Revision 3 · 2026-10-28 · two confirmations (before any shader)
+
+- **Hurt-flash `render_mode`: none.** Zhaohui agreed with Claude's suggestion: the fighter
+  sprites are unlit and the default blend (alpha mix) is what the flash needs, so the shader
+  declares no `render_mode`.
+- **Granite uniform table: confirmed as written in Version 1** by Zhaohui, unchanged: `tint`
+  (`vec4`, `source_color`, white), `uv_scale` (`float`, `hint_range(0.25, 8.0)`, 1.0) in group
+  `surface`; `roughness_scale` (`float`, `hint_range(0.0, 1.0)`, 1.0) and `normal_strength`
+  (`float`, `hint_range(0.0, 2.0)`, 1.0) in group `detail`.
+- From here on, entries in this file are written in English only (Zhaohui's request). Revision 2
+  keeps Zhaohui's sentence as written, with its English translation beside it.
+
+Still open: the short answers and the contrast ratio.
