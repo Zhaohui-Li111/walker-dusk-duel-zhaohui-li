@@ -1,0 +1,31 @@
+Read CLAUDE.md first. The specification in CHANGE-BRIEF.md is the
+contract for this change. The shader in godot/shaders/ is hand-written
+by me and is not yours to edit: do not edit any .gdshader file. If you
+believe it is wrong or cannot meet the spec, say so and stop.
+
+Your plan from the previous session is in sessions/session-2-plan.result.md.
+I approve step 1 only, as you proposed it:
+
+- Add godot/fighter/hurt_flash.gd, a Node that is a child of the
+  Sprite2D in godot/fighter/fighter.tscn. In _ready() it builds its own
+  ShaderMaterial from res://shaders/hurt_flash.gdshader and sets it as
+  that sprite's material, so each fighter instance has its own.
+- In _physics_process it sets hurt_amount to
+  float(fighter.stun) / float(Fighter.HITSTUN) while fighter.state ==
+  "hurt", else 0.0. It reads state and stun; it never writes game state.
+  Give it a high process_physics_priority so it runs after main.gd has
+  stepped the fighters in the same tick.
+- Never set flash_color from code.
+- Do not edit fighter.gd, main.gd, any other script, any existing test,
+  or any .gdshader file. The only scene change is adding that one node
+  to fighter.tscn.
+
+Do not write the new test yet (step 2 is not approved), and do not run
+or write a retrigger probe.
+
+After the change, run the existing tests through the wrapper, at 60:
+  ./scripts/run-test.sh test_runner.gd 60
+  ./scripts/run-test.sh check_props3d.gd 60
+Show the real output, including any SHADER ERROR or SCRIPT ERROR lines,
+and the diff. Say what these runs prove about step 1 and what they do
+not. Do not commit.
