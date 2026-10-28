@@ -451,3 +451,26 @@ TO DO (Zhaohui), each in a sentence or two:
 - A frame-counting version's duration at 30, 60 and 144 fps.
 - Which resource holds the default, which the current value, and what sharing a material does.
 - Does `hint_range` clamp a value the driver sets from code? (a prediction)
+
+## Revision 2 · 2026-10-28 · hint-experiment predictions (before any shader or measurement)
+
+Computed by hand by Zhaohui with a calculator, from the handout's encode function
+encode(x) = 1.055·x^(1/2.4) − 0.055 (x > 0.0031308), with x = stored / 255. The three
+stored greys are all above the linear-segment threshold.
+
+| Band | Stored | Quad A: `source_color` | Quad B: no hint |
+|---|---|---|---|
+| 1 | 64 | 64 | 137 |
+| 2 | 128 | 128 | 188 |
+| 3 | 192 | 192 | 224 |
+
+Claude's check of the arithmetic: 64 → 137.2 and 128 → 187.84 agree. 192 → 224.9998, which
+rounds to 225, so band 3 on Quad B may measure 224 or 225.
+
+**Which quad shows the file's values unchanged, and why** (Zhaohui's words): Quad A 显示原值，因为
+source_color 让 Godot 先将 sRGB 解码为线性值，再编码回 sRGB，两个互逆操作抵消，还原原始数值。
+(Quad A shows the stored values, because source_color makes Godot decode sRGB to linear and then
+encode back to sRGB; the two inverse operations cancel and give back the original numbers.)
+
+Still open from Version 1: the short answers, the contrast ratio, the hurt-flash `render_mode`
+and the granite uniform table. Measured values go in TEST-REPORT.md, not here.
