@@ -738,3 +738,21 @@ None of this is committed yet; the brief must be committed first.
   and no denial was recorded. The scoped tools did not contain that call; the git diff is what
   shows nothing else changed.
 - Committed unedited as `a878968`. Not yet reviewed.
+
+## 2026-10-28 — Zhaohui's hurt-flash shader, and the editor's project.godot rewrite (recorded by Claude Code)
+
+- **Zhaohui wrote `godot/shaders/hurt_flash.gdshader` by hand** in the Godot editor, from the
+  brief's uniform table and colour line, after Claude explained the three parts of a canvas_item
+  shader with a different example ("poison"). Claude did not create, edit or rename it.
+- **First save had a doubled extension**, `hurt_flash.gdshader.gdshader`: the save dialog appended
+  `.gdshader` to a name that already had it. Claude read the file (contents matched the brief
+  exactly) and ran a read-only parse probe: mode canvas_item, `hurt_amount` float with range
+  0.0–1.0, `flash_color` colour. Claude asked Zhaohui to rename it rather than doing so, because
+  agents do not touch `godot/shaders/`. Zhaohui renamed it in the editor; the `.uid` moved too.
+- After the rename: `--import` exit 0, no `SHADER ERROR` (`logs/import_after_hurt_flash.log`),
+  parse probe unchanged.
+- **The editor removed `[physics] common/physics_ticks_per_second=60`** from `project.godot`
+  when it saved, because 60 is the default (the same rewrite as A3, `4f0c644`). Behaviour is
+  unchanged, but CLAUDE.md and the brief cite that line, so Claude restored the file with
+  `git checkout -- godot/project.godot`. Expect it again after each editor session; check
+  `git status` after closing the editor.
