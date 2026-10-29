@@ -545,3 +545,25 @@ change, not a brightness change. This supports predicted failure case 8; the cap
 muted playtest decide it.
 
 All TO DO items of Version 1 are now filled. The next step is the hand-written shader.
+
+## Revision 6 · 2026-10-29 · rule 3 cannot happen through real input (before the test is written)
+
+Zhaohui's decision, after the agent's plan and the probe (FRICTIONAL.md, 2026-10-28):
+
+- **Finding.** A second hit cannot land on a fighter still in `"hurt"` through real input. The
+  defender leaves hurt 22 ticks after a hit; the attacker's next punch connects at tick 23 at the
+  earliest, a kick later still, and `HIT_PUSH` moves the defender away. The probe tried 7 840
+  combinations (P1 punch or kick; P2 standing or walking in; mid-stage or against the right wall;
+  start gap 20–89 px; second press 0–13 ticks after recovery) and found **0**
+  (`logs/_probe_retrigger_direct.log`). Not searched: P2 attacking, jumps, crouches.
+- **Rule 3 is revised to:** *Retrigger: restart, by construction.* The game's own timing makes a
+  retrigger unreachable in play. If a hit ever does land during hurt (a later change to frame
+  data, push or hitboxes), the hit handler forces a fresh `"hurt"` with `stun = HITSTUN`, so the
+  driver's `hurt_amount` returns to `1.0` and the 22 ticks start over. Fight timing is not
+  changed to make this reachable (out of scope).
+- **How it is checked.** The step 2 test reaches the retrigger through the real loop and real
+  input, but with **test setup** between the two hits: it moves the defender back into range
+  while it is still in `"hurt"`. That setup writes a position, which presentation code never may;
+  only the test does it, and the test labels the case as setup, not input. The other rules are
+  checked through real input with no such setup, except the K.O. case (rule 5), whose setup
+  lowers the defender's health first and is labelled the same way.
