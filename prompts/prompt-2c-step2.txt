@@ -1,0 +1,52 @@
+Read CLAUDE.md first. The specification in CHANGE-BRIEF.md is the
+contract for this change; read its Revision 6 on rule 3 before you
+start. The shader in godot/shaders/ is hand-written by me and is not
+yours to edit: do not edit any .gdshader file. If you believe it is
+wrong or cannot meet the spec, say so and stop.
+
+Your plan is in sessions/session-2-plan.result.md and step 1 is
+committed (godot/fighter/hurt_flash.gd). I approve step 2 only: one new
+headless test, godot/tests/test_hurt_flash.gd (extends SceneTree).
+
+Rules:
+- Do not edit any existing file: no script, scene, test, shader or the
+  wrapper. The only new file is the test (and its .uid, if Godot makes
+  one).
+- Uniform names and types come from get_shader_uniform_list() on the
+  material each fighter actually has, and the list must not be empty.
+  Defaults come from the shader source text. No set-then-get round trip
+  counts as a type check.
+- Drive the fight through the real game loop: main's _physics_process
+  stays on (unlike test_runner.gd, which turns it off), and P1 attacks
+  through real input to its PlayerController, not by calling step()
+  or the driver yourself.
+- Sample hurt_amount from a node with a high process_priority, so it
+  reads after every other _process() in the frame. Record per sample
+  the rendered frame number, the physics tick and the value.
+- Time: under --fixed-fps every frame advances a fixed delta, so wall
+  clock time is meaningless. Measure durations from frame and tick
+  counts (frames / fps for "real" seconds, ticks / 60 for game
+  seconds), and state which one each assertion uses.
+- Rule 3 (Revision 6): the only setup allowed between the two hits is
+  moving the defender back into range while it is still in "hurt".
+  Rule 5: the only setup allowed is lowering the defender's health
+  first. Label both in the output as SETUP, not input. No other rule
+  may use setup that writes game state.
+- One PASS/FAIL line per assertion, a final "N checks, M failed" line,
+  and exit 1 on any failure. Quit on every path, so a failure cannot
+  leave Godot running.
+- Run it through the wrapper at 30, 60 and 144:
+    ./scripts/run-test.sh test_hurt_flash.gd 30
+    ./scripts/run-test.sh test_hurt_flash.gd 60
+    ./scripts/run-test.sh test_hurt_flash.gd 144
+  and the existing ones at 60:
+    ./scripts/run-test.sh test_runner.gd 60
+    ./scripts/run-test.sh check_props3d.gd 60
+  Run each command on its own (no chaining with ; or &&). Show the real
+  output, including any SHADER ERROR or SCRIPT ERROR lines.
+- If a frame rate fails, report it and stop. Do not change the test to
+  call the driver or step() directly to make it pass.
+- Say exactly which spec rule each assertion covers, what the test
+  proves and what it cannot prove headlessly, and list the human checks
+  still needed.
+- Do not commit.
