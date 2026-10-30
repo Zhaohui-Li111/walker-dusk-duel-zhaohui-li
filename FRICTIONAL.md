@@ -1029,3 +1029,16 @@ restored it; Claude only ran the test and checked the diff.
   returns a material's shader. **There is no script route; the editor menu is the supported one.**
   The script was deleted, uncommitted (`logs/generate_standard_shader.log` kept).
 - So Step 4's conversion goes back to Zhaohui in the editor, as the handout describes.
+
+## 2026-10-29 — Step 4 done in the editor (recorded by Claude Code)
+
+- Zhaohui asked why this was still theirs ("我怎么还要做"): no script can reach the generated code,
+  and Claude cannot operate the desktop editor. To cut the work, Claude wrote a scratch scene
+  (`godot/scratch/step4_convert_me.tscn`, not committed, deleted afterwards) with a BoxMesh and a
+  StandardMaterial3D already holding the three granite textures and **Normal Map** enabled
+  (checked headlessly first). Zhaohui opened it, used **Convert to ShaderMaterial**, and saved the
+  shader as `res://shaders/standard_generated.gdshader` (48 lines).
+- Check: `NORMAL_MAP` on line 46, no `BENT_NORMAL_MAP`. The editor again dropped `[physics]` from
+  `project.godot`; restored.
+- Found in the generated file: the normal map's sampler is `hint_roughness_normal` (line 19), not
+  the `hint_normal` used in `granite.gdshader:5`. For LANGUAGE-NOTES; not explained here.
