@@ -1,0 +1,125 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+-- shader source
+PASS: res://shaders/granite.gdshader readable
+PASS: granite.gdshader declares 7 uniforms (found ["albedo_texture", "roughness_texture", "normal_texture", "tint", "uv_scale", "roughness_scale", "normal_strength"])
+PASS: granite.gdshader albedo_texture: type sampler2D, hints 'source_color, repeat_enable', default '', group '' (found ["sampler2D", "source_color, repeat_enable", "", ""])
+PASS: granite.gdshader roughness_texture: type sampler2D, hints 'repeat_enable', default '', group '' (found ["sampler2D", "repeat_enable", "", ""])
+PASS: granite.gdshader normal_texture: type sampler2D, hints 'hint_normal, repeat_enable', default '', group '' (found ["sampler2D", "hint_normal, repeat_enable", "", ""])
+PASS: granite.gdshader tint: type vec4, hints 'source_color', default 'vec4(1.0, 1.0, 1.0, 1.0)', group 'surface' (found ["vec4", "source_color", "vec4(1.0, 1.0, 1.0, 1.0)", "surface"])
+PASS: granite.gdshader uv_scale: type float, hints 'hint_range(0.25, 8.0)', default '1.0', group 'surface' (found ["float", "hint_range(0.25, 8.0)", "1.0", "surface"])
+PASS: granite.gdshader roughness_scale: type float, hints 'hint_range(0.0, 1.0)', default '1.0', group 'detail' (found ["float", "hint_range(0.0, 1.0)", "1.0", "detail"])
+PASS: granite.gdshader normal_strength: type float, hints 'hint_range(0.0, 2.0)', default '1.0', group 'detail' (found ["float", "hint_range(0.0, 2.0)", "1.0", "detail"])
+PASS: granite.gdshader render_mode ''
+PASS: res://shaders/hint_experiment.gdshader readable
+PASS: hint_experiment.gdshader declares 3 uniforms (found ["grey_as_color", "grey_as_data", "read_as_color"])
+PASS: hint_experiment.gdshader grey_as_color: type sampler2D, hints 'source_color, filter_nearest', default '', group '' (found ["sampler2D", "source_color, filter_nearest", "", ""])
+PASS: hint_experiment.gdshader grey_as_data: type sampler2D, hints 'filter_nearest', default '', group '' (found ["sampler2D", "filter_nearest", "", ""])
+PASS: hint_experiment.gdshader read_as_color: type bool, hints '', default 'true', group '' (found ["bool", "", "true", ""])
+PASS: hint_experiment.gdshader render_mode 'unshaded'
+-- get_shader_uniform_list()
+    granite.gdshader albedo_texture type=24 hint=17 hint_string='Texture2D'
+    granite.gdshader roughness_texture type=24 hint=17 hint_string='Texture2D'
+    granite.gdshader normal_texture type=24 hint=17 hint_string='Texture2D'
+    granite.gdshader tint type=20 hint=0 hint_string=''
+    granite.gdshader uv_scale type=3 hint=1 hint_string='0.25,8.0,0.0010000000475'
+    granite.gdshader roughness_scale type=3 hint=1 hint_string='0.0,1.0,0.0010000000475'
+    granite.gdshader normal_strength type=3 hint=1 hint_string='0.0,2.0,0.0010000000475'
+PASS: granite.gdshader parses (uniform list not empty)
+PASS: granite.gdshader uniform names and types { "albedo_texture": 24, "roughness_texture": 24, "normal_texture": 24, "tint": 20, "uv_scale": 3, "roughness_scale": 3, "normal_strength": 3 }
+    hint_experiment.gdshader grey_as_color type=24 hint=17 hint_string='Texture2D'
+    hint_experiment.gdshader grey_as_data type=24 hint=17 hint_string='Texture2D'
+    hint_experiment.gdshader read_as_color type=1 hint=0 hint_string=''
+PASS: hint_experiment.gdshader parses (uniform list not empty)
+PASS: hint_experiment.gdshader uniform names and types { "grey_as_color": 24, "grey_as_data": 24, "read_as_color": 1 }
+-- materials
+PASS: res://props3d/materials/granite_floor.tres loads as ShaderMaterial
+PASS: granite_floor.tres shader res://shaders/granite.gdshader
+PASS: granite_floor.tres albedo_texture = res://props3d/textures/granite_wall_diff_1k.png (read res://props3d/textures/granite_wall_diff_1k.png)
+PASS: granite_floor.tres roughness_texture = res://props3d/textures/granite_wall_rough_1k.png (read res://props3d/textures/granite_wall_rough_1k.png)
+PASS: granite_floor.tres normal_texture = res://props3d/textures/granite_wall_nor_gl_1k.png (read res://props3d/textures/granite_wall_nor_gl_1k.png)
+PASS: granite_floor.tres tint = ffffff (read ffffff)
+PASS: granite_floor.tres uv_scale = 6.0 (read 6.0)
+PASS: granite_floor.tres roughness_scale = 1.0 (read 1.0)
+PASS: granite_floor.tres normal_strength = 1.0 (read 1.0)
+PASS: res://props3d/materials/granite_plinth.tres loads as ShaderMaterial
+PASS: granite_plinth.tres shader res://shaders/granite.gdshader
+PASS: granite_plinth.tres albedo_texture = res://props3d/textures/granite_wall_diff_1k.png (read res://props3d/textures/granite_wall_diff_1k.png)
+PASS: granite_plinth.tres roughness_texture = res://props3d/textures/granite_wall_rough_1k.png (read res://props3d/textures/granite_wall_rough_1k.png)
+PASS: granite_plinth.tres normal_texture = res://props3d/textures/granite_wall_nor_gl_1k.png (read res://props3d/textures/granite_wall_nor_gl_1k.png)
+PASS: granite_plinth.tres tint = 6e6680 (read 6e6680)
+PASS: granite_plinth.tres uv_scale = 1.0 (read 1.0)
+PASS: granite_plinth.tres roughness_scale = 1.0 (read 1.0)
+PASS: granite_plinth.tres normal_strength = 1.0 (read 1.0)
+PASS: res://hint_experiment/hint_as_color.tres loads as ShaderMaterial
+PASS: hint_as_color.tres shader res://shaders/hint_experiment.gdshader
+PASS: hint_as_color.tres grey_as_color = res://hint_experiment/hint_grey_3x1.png (read res://hint_experiment/hint_grey_3x1.png)
+PASS: hint_as_color.tres grey_as_data = res://hint_experiment/hint_grey_3x1.png (read res://hint_experiment/hint_grey_3x1.png)
+PASS: hint_as_color.tres read_as_color = true (read true)
+PASS: res://hint_experiment/hint_as_data.tres loads as ShaderMaterial
+PASS: hint_as_data.tres shader res://shaders/hint_experiment.gdshader
+PASS: hint_as_data.tres grey_as_color = res://hint_experiment/hint_grey_3x1.png (read res://hint_experiment/hint_grey_3x1.png)
+PASS: hint_as_data.tres grey_as_data = res://hint_experiment/hint_grey_3x1.png (read res://hint_experiment/hint_grey_3x1.png)
+PASS: hint_as_data.tres read_as_color = false (read false)
+PASS: both granite materials name the same shader res://shaders/granite.gdshader
+PASS: no material binds res://props3d/textures/granite_wall_nor_dx_1k.png (calibration only)
+-- import settings
+PASS: granite_wall_diff_1k.png.import readable
+PASS: granite_wall_diff_1k.png compress/mode, compress/normal_map, mipmaps/generate = [2, 2, true] (read [2, 2, true])
+    granite_wall_diff_1k.png imported_formats ["s3tc_bptc"]
+PASS: granite_wall_rough_1k.png.import readable
+PASS: granite_wall_rough_1k.png compress/mode, compress/normal_map, mipmaps/generate = [2, 2, true] (read [2, 2, true])
+    granite_wall_rough_1k.png imported_formats ["s3tc_bptc"]
+PASS: granite_wall_nor_gl_1k.png.import readable
+PASS: granite_wall_nor_gl_1k.png compress/mode, compress/normal_map, mipmaps/generate = [2, 1, true] (read [2, 1, true])
+    granite_wall_nor_gl_1k.png imported_formats ["s3tc_bptc"]
+PASS: granite_wall_nor_dx_1k.png.import readable
+PASS: granite_wall_nor_dx_1k.png compress/mode, compress/normal_map, mipmaps/generate = [0, 2, false] (read [0, 2, false])
+    granite_wall_nor_dx_1k.png imported_formats (none)
+PASS: hint_grey_3x1.png.import readable
+PASS: hint_grey_3x1.png compress/mode, compress/normal_map, mipmaps/generate = [0, 2, false] (read [0, 2, false])
+    hint_grey_3x1.png imported_formats (none)
+-- scenes: wiring, lights, environment
+PASS: Floor material_override is the file res://props3d/materials/granite_floor.tres (read 'res://props3d/materials/granite_floor.tres')
+PASS: StonePlinth material_override is the file res://props3d/materials/granite_plinth.tres (read 'res://props3d/materials/granite_plinth.tres')
+PASS: prop_room.tscn env tonemap_mode = 0 (read 0)
+PASS: prop_room.tscn env tonemap_exposure = 1.0 (read 1.0)
+PASS: prop_room.tscn env background_mode = 1 (read 1)
+PASS: prop_room.tscn env background_color = 5a4766 (read 5a4766)
+PASS: prop_room.tscn env ambient_light_source = 2 (read 2)
+PASS: prop_room.tscn env ambient_light_color = 8c8599 (read 8c8599)
+PASS: prop_room.tscn env ambient_light_energy = 0.35 (read 0.34999999403954)
+PASS: prop_room.tscn env reflected_light_source = 0 (read 0)
+PASS: prop_room.tscn env glow_enabled = false (read false)
+PASS: prop_room.tscn env fog_enabled = false (read false)
+PASS: prop_room.tscn env ssao_enabled = false (read false)
+PASS: prop_room.tscn env adjustment_enabled = false (read false)
+    prop_room.tscn lights: 1
+    Sun DirectionalLight3D energy 0.70 colour ffffff shadow true rot (-49.99998, 30.00001, 0.0)
+PASS: Sun: energy 0.7, white, shadows on
+PASS: prop room has one light
+PASS: Floor BoxMesh still has an embedded StandardMaterial3D (hidden by material_override), path 'res://props3d/prop_room.tscn::Mat_floor'
+PASS: Floor face (0.0, 1.0, 0.0) at uv_scale 6.0: 3.000 m per copy along X, 1.333 m along Z (stretch 2.25 : 1)
+PASS: StonePlinth face (0.0, 1.0, 0.0) at uv_scale 1.0: 2.400 m per copy along X, 1.600 m along Z (stretch 1.50 : 1)
+PASS: StonePlinth face (0.0, 0.0, 1.0) at uv_scale 1.0: 2.400 m per copy along X, 0.600 m along Y (stretch 4.00 : 1)
+PASS: QuadA_source_color material_override is the file res://hint_experiment/hint_as_color.tres (read 'res://hint_experiment/hint_as_color.tres')
+PASS: QuadB_no_hint material_override is the file res://hint_experiment/hint_as_data.tres (read 'res://hint_experiment/hint_as_data.tres')
+PASS: hint_experiment.tscn env tonemap_mode = 0 (read 0)
+PASS: hint_experiment.tscn env tonemap_exposure = 1.0 (read 1.0)
+PASS: hint_experiment.tscn env background_mode = 1 (read 1)
+PASS: hint_experiment.tscn env background_color = 1a1a1a (read 1a1a1a)
+PASS: hint_experiment.tscn env ambient_light_source = 1 (read 1)
+PASS: hint_experiment.tscn env reflected_light_source = 1 (read 1)
+PASS: hint_experiment.tscn env glow_enabled = false (read false)
+PASS: hint_experiment.tscn env fog_enabled = false (read false)
+PASS: hint_experiment.tscn env ssao_enabled = false (read false)
+PASS: hint_experiment.tscn env adjustment_enabled = false (read false)
+    hint_experiment.tscn lights: 0
+-- normal maps (curl ratio; ~0 right convention, ~2 wrong, ~1 no surface)
+PASS: granite_wall_nor_gl_1k.png decodes with Image.load_from_file
+    granite_wall_nor_gl_1k.png 1024x1024 format 4: curl_ratio directx=false 0.3545, directx=true 1.6455
+PASS: granite_wall_nor_gl_1k.png is an OpenGL-convention normal map (gl < 1 < dx)
+PASS: granite_wall_nor_dx_1k.png decodes with Image.load_from_file
+    granite_wall_nor_dx_1k.png 1024x1024 format 4: curl_ratio directx=false 1.6455, directx=true 0.3545
+PASS: granite_wall_nor_dx_1k.png is a DirectX-convention normal map (dx < 1 < gl)
+96 checks, 0 failed
