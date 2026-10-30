@@ -38,3 +38,12 @@
   does not slow the fight or the flash; in Compatibility both hint quads show the stored values; the
   BoxMesh UVs stretch the granite so it reads as planks; the OS-screenshot comparison was not done.
 - **Changed games since Assignment 2:** no.
+
+## Clone check (2026-10-29)
+
+`git clone` of the repository at `52b1bbb` into a fresh folder, `godot --headless --path godot
+--import` (exit 0), then every suite through `scripts/run-test.sh`: `test_runner.gd` 60 → 94 / 0;
+`check_props3d.gd` 60 → 49 / 0; `test_hurt_flash.gd` 30, 60, 144 → 69 / 0 each;
+`test_materials.gd` 60 → 96 / 0; `calibrate_normal_map.gd` 60 → PASS. No log contains SHADER ERROR or
+SCRIPT ERROR. The counts match TEST-REPORT.md. (Run on the local clone; the GitHub copy is checked
+after the push.)
