@@ -1,0 +1,37 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 - Build 31.0.101.4502 - Compatibility - Using Device: Intel - Intel(R) UHD Graphics
+
+capture_a5: Godot 4.7.2-stable (official), renderer opengl3, window (1280, 720)
+== 1. hurt flash
+  capture size 1280x720 (scale 2.00 from the 640x360 viewport); P1 state 'idle' at (220.0, 305.0)
+  hurt_amount 0.0  P-gi   texel (52.0, 101.0) -> capture (449, 514) (brief predicted (449, 515)): (221, 89, 0)  read back 0.0
+  hurt_amount 0.0  P-fist texel (75.0, 68.0) -> capture (495, 448) (brief predicted (495, 449)): (239, 230, 171)  read back 0.0
+  hurt_amount 0.5  P-gi   texel (52.0, 101.0) -> capture (449, 514) (brief predicted (449, 515)): (238, 44, 0)  read back 0.5
+  hurt_amount 0.5  P-fist texel (75.0, 68.0) -> capture (495, 448) (brief predicted (495, 449)): (247, 115, 86)  read back 0.5
+  hurt_amount 1.0  P-gi   texel (52.0, 101.0) -> capture (449, 514) (brief predicted (449, 515)): (254, 0, 0)  read back 1.0
+  hurt_amount 1.0  P-fist texel (75.0, 68.0) -> capture (495, 448) (brief predicted (495, 449)): (254, 0, 0)  read back 1.0
+  hurt_amount 2.0  P-gi   texel (52.0, 101.0) -> capture (449, 514) (brief predicted (449, 515)): (254, 0, 0)  read back 2.0
+  hurt_amount 2.0  P-fist texel (75.0, 68.0) -> capture (495, 448) (brief predicted (495, 449)): (254, 0, 0)  read back 2.0
+  clamp check, flash_color (128,128,128), hurt_amount 1.0: P-gi (128, 128, 128)
+  clamp check, flash_color (128,128,128), hurt_amount 2.0: P-gi (34, 167, 254)
+== 2. hint experiment
+  QuadA_source_color  bands 64 / 128 / 192 -> (64, 64, 64) / (128, 128, 128) / (192, 192, 192)
+  QuadB_no_hint       bands 64 / 128 / 192 -> (64, 64, 64) / (128, 128, 128) / (192, 192, 192)
+  QuadB_no_hint with its own texture object -> (64, 64, 64) / (128, 128, 128) / (192, 192, 192)
+== 3. granite
+  as saved: floor (120, 97, 76) at (589, 575), plinth front (10, 4, 6) at (826, 401)
+  floor uv_scale        min      = 0.25                   floor (135, 112, 89)  plinth (10, 4, 6)
+  floor uv_scale        material = 6.0                    floor (120, 97, 76)  plinth (10, 4, 6)
+  floor uv_scale        max      = 8.0                    floor (103, 84, 69)  plinth (10, 4, 6)
+  floor roughness_scale min      = 0.0                    floor (115, 91, 68)  plinth (10, 4, 6)
+  floor roughness_scale material = 1.0                    floor (120, 97, 76)  plinth (10, 4, 6)
+  floor normal_strength min      = 0.0                    floor (112, 90, 70)  plinth (10, 4, 6)
+  floor normal_strength material = 1.0                    floor (120, 97, 76)  plinth (10, 4, 6)
+  floor normal_strength max      = 2.0                    floor (115, 93, 72)  plinth (10, 4, 6)
+  floor tint            min      = (0.0, 0.0, 0.0, 1.0)   floor (26, 26, 26)  plinth (10, 4, 6)
+  floor tint            material = (1.0, 1.0, 1.0, 1.0)   floor (120, 97, 76)  plinth (10, 4, 6)
+  floor tint -> (0.4, 0.8, 0.4): floor (50, 78, 34)  plinth (10, 4, 6) (plinth must equal 'as saved')
+== 4. time scale, windowed, no --fixed-fps
+  time_scale 1.0: 120 physics ticks in 2.009 s of real time = 59.7 ticks/s
+  time_scale 0.5: 121 physics ticks in 2.017 s of real time = 60.0 ticks/s
+capture_a5: done, files in D:/courses/7270/walker-dusk-duel-zhaohui-li/godot/../evidence/a5

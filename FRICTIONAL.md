@@ -988,3 +988,28 @@ restored it; Claude only ran the test and checked the diff.
   `git checkout 25e6dd8 -- godot/shaders/granite.gdshader`, which writes back the file exactly as
   Zhaohui committed it. No content was written by Claude; `git diff HEAD -- godot/shaders/` is
   empty and `test_materials.gd` is back to 96 / 0.
+
+## 2026-10-29 — In-engine captures, and the hint experiment's surprise (recorded by Claude Code)
+
+- Zhaohui asked Claude to do the rest of what it can ("你剩下的事情能不能都自己做完呢"). Claude wrote
+  `godot/tests/capture_a5.gd` and ran it windowed (it opens a Godot window for a few seconds).
+- **Claude's own mistake, caught by looking at the images:** the first run sampled every 3D pixel
+  at the wrong place — `Camera3D.unproject_position()` returns 640 × 360 viewport coordinates and
+  the capture is 1280 × 720 — so every 3D sample was background, and the sweep "showed" no change.
+  The images themselves were right. Fixed by scaling; rerun.
+- **Q7 settled:** `hint_range` does not clamp a value set from code (2.0 with a grey flash colour
+  gives (34, 167, 254), the extrapolated `mix()`). With the red flash it cannot be seen, because
+  1.0 and 2.0 both saturate. Zhaohui's prediction held.
+- **Controlled values:** every pixel within one step of Zhaohui's hand predictions; the steady −1
+  is the sprite's alpha of 254, which the brief had called "under one step".
+- **The hint experiment does not match the prediction:** quad B shows 64 / 128 / 192, like quad A,
+  not 137 / 188 / 224. Checked the audit's suspicion first (one texture object bound under two
+  hints): a separate texture object for B changed nothing. Then read the Godot 4.7.2 GLES3 source:
+  `scene.glsl:2398` decodes every `ALBEDO` with `srgb_to_linear()` regardless of the sampler hint,
+  and `:2798` encodes on output. So in Compatibility the hint does not change the value written
+  through `ALBEDO`. This is the "measure before you explain" case the brief warned about.
+- **Time scale, windowed:** about 60 ticks per real second at both 1.0 and 0.5, as Revision 7 says.
+- **Granite:** every uniform changes the floor pixel; changing one material leaves the plinth's
+  pixel alone. Seen in the capture: the stretched floor reads as horizontal planks.
+- TEST-REPORT.md A5 section drafted with the measured values; the HUMAN CHECK rows are left for
+  Zhaohui.

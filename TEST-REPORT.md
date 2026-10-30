@@ -269,3 +269,128 @@ The 2D game's suite is unchanged: `test_runner.gd` gives 94 checks, 0 failed.
 - The prop room is not connected to the 2D game.
 - The makiwara rope bands are not round cylinders as the brief first said (see CHANGE-BRIEF, build
   result).
+
+---
+
+# Assignment 5 — shaders and materials
+
+Source revision for the results below: `74301ad` (plus the capture script in this commit). Godot
+4.7.2-stable (official), **GL Compatibility** (`opengl3`, OpenGL 3.3, Intel UHD Graphics),
+Windows 11. All tests through `scripts/run-test.sh` unless noted. Rows marked **HUMAN CHECK**
+are Zhaohui's: Claude measured the numbers but has not judged how anything looks.
+
+## Baseline (earlier suites, before and after A5)
+
+| Suite | Before A5 (`a078642`) | After (fresh cache, `3560081`) |
+|---|---|---|
+| `test_runner.gd` at 60 | 94 checks, 0 failed | 94 checks, 0 failed |
+| `check_props3d.gd` at 60 | 49 checks, 0 failed | 49 checks, 0 failed |
+
+## Shaders parse
+
+| Shader | Uniform list (`get_shader_uniform_list()`) | SHADER ERROR |
+|---|---|---|
+| `hurt_flash.gdshader` | `hurt_amount` float 0–1, `flash_color` Color | none |
+| `granite.gdshader` | 3 samplers, groups `surface` / `detail`, 4 uniforms | none |
+| `hint_experiment.gdshader` | 2 samplers, `read_as_color` bool | none |
+
+## Mutations (each by Zhaohui in the shader, each restored)
+
+| Mutation | Test | Result | Log |
+|---|---|---|---|
+| Delete the `;` on `hurt_flash.gdshader:3` | `test_hurt_flash.gd` 60 | exit 1, 7 of 69 failed, SHADER ERROR | `logs/mutation1_semicolon_60fps.log` |
+| Rename `hurt_amount` in the shader only | `test_hurt_flash.gd` 60 | exit 1, 6 of 69 failed, no SHADER ERROR; all 23 behaviour checks still passed | `logs/mutation2_rename_60fps.log` |
+| Delete `source_color` from `albedo_texture` | `test_materials.gd` 60 | exit 1, 1 of 96 failed, no SHADER ERROR | `logs/mutation3_source_color_60fps.log` |
+
+## Driver (headless, real loop and real input)
+
+`test_hurt_flash.gd`: **69 checks, 0 failed at 30, 60 and 144 fps** (`logs/test_hurt_flash_*fps.log`).
+A punch by the J key: 1.0 on the hit tick, held 4 ticks, then stun / 18, 0.0 on tick 22 =
+0.367 s of game time, and the same real time in frames at every rate. Pause freezes the value.
+Retrigger and the mid-fade K.O. only by labelled SETUP (brief Revisions 6–7). P1 stays at 0.0
+while P2 flashes. The first run failed 4 of 58 (rules 3 and 4); see Inspect-and-revise.
+
+## Controlled values (in-engine capture, `godot/tests/capture_a5.gd`, windowed)
+
+Captures from the rendered viewport at 1280 × 720 (`evidence/a5/hurt_flash_*.png`), driver
+paused, P1 idle. The texel positions map to capture (449, 514) and (495, 448), one pixel above the
+brief's estimate (449, 515) / (495, 449).
+
+| Pixel | 0.0 predicted / measured | 0.5 predicted / measured | 1.0 predicted / measured |
+|---|---|---|---|
+| P-gi | (222, 89, 0) / (221, 89, 0) | (239, 45, 0) ± 1 / (238, 44, 0) | (255, 0, 0) / (254, 0, 0) |
+| P-fist | (240, 230, 172) / (239, 230, 171) | (248, 115, 86) ± 1 / (247, 115, 86) | (255, 0, 0) / (254, 0, 0) |
+
+Every value is within one step. The consistent −1 is the texels' alpha of 254: the brief predicted
+that it would move each channel by "under one step"; measured, it moves the top of the range by one.
+
+**Q7, does `hint_range` clamp a value set from code?** `hurt_amount = 2.0` reads back as 2.0.
+With the red flash both 1.0 and 2.0 saturate to (254, 0, 0), so a second check used a grey
+`flash_color` (128, 128, 128), in memory only: 1.0 → (128, 128, 128); **2.0 → (34, 167, 254)**,
+which is `mix()` extrapolated (222 + 2 × (128 − 222) = 34; 89 + 2 × 39 = 167). **Not clamped**;
+Zhaohui's prediction ("No") holds.
+
+**HUMAN CHECK (Zhaohui): do the captures look like the predicted colours? Compare one in-engine
+capture with an OS screenshot once, and say which you trust and why.** — *to do*
+
+## Time scale in a normal windowed run (no --fixed-fps)
+
+`Engine.time_scale` 1.0: 59.2 physics ticks per real second; 0.5: 60.0. The fight is not
+slowed, so the flash lasts 0.367 s either way, as brief Revision 7 says.
+
+## Hint experiment (`evidence/a5/hint_experiment.png`)
+
+| Band | Stored | Quad A predicted / measured | Quad B predicted / measured |
+|---|---|---|---|
+| 1 | 64 | 64 / **64** | 137 / **64** |
+| 2 | 128 | 128 / **128** | 188 / **128** |
+| 3 | 192 | 192 / **192** | 224 / **192** |
+
+**Quad B does not match the prediction.** Finding and first explanation: giving quad B its own
+texture object (in memory) changed nothing (`evidence/a5/hint_experiment_b_own_texture.png`), so
+it is not the shared texture (MATERIALS.md finding 5). The Godot 4.7.2 Compatibility source shows
+why: `drivers/gles3/shaders/scene.glsl:2398` decodes every `ALBEDO` with `srgb_to_linear()`
+whatever the sampler's hint, and `:2798` encodes once on output, so both quads get decode then
+encode. The prediction followed the Forward+/Mobile pipeline. *Zhaohui's explanation goes in
+LANGUAGE-NOTES.md.*
+
+**HUMAN CHECK (Zhaohui): look at the capture and confirm the two quads look the same.** — *to do*
+
+## Interface sweep (floor material, in memory; `evidence/a5/granite_sweep_*.png`)
+
+Floor pixel sampled at capture (589, 575), plinth top at (826, 401).
+
+| Uniform | min | material value | max |
+|---|---|---|---|
+| `uv_scale` | 0.25: (135, 112, 89) | 6.0: (120, 97, 76) | 8.0: (103, 84, 69) |
+| `roughness_scale` | 0.0: (115, 91, 68) | 1.0: (120, 97, 76) | (= material) |
+| `normal_strength` | 0.0: (112, 90, 70) | 1.0: (120, 97, 76) | 2.0: (115, 93, 72) |
+| `tint` | black: (26, 26, 26) | white: (120, 97, 76) | (= material) |
+
+Each uniform changes the floor pixel; the plinth pixel stayed (10, 4, 6) throughout. Observed by
+Claude in `granite_materials.png`: **the stretched floor reads as horizontal planks rather than
+granite** (the 2.25 : 1 stretch, MATERIALS.md finding 1). The tint-black row shows (26, 26, 26),
+not black: the ambient or reflected light still adds a little.
+
+**HUMAN CHECK (Zhaohui): look through the sweep images; what changed, and which setting breaks the
+look?** — *to do*
+
+## One shader, two materials
+
+- One value in one material (Claude, in memory): floor `tint` → (0.4, 0.8, 0.4) changed the floor
+  pixel to (50, 78, 34); the plinth stayed (10, 4, 6). Only the floor changed.
+- **HUMAN CHECK (Zhaohui): edit one line of `granite.gdshader`, see both objects change, restore
+  it.** — *to do*
+- **HUMAN CHECK (Zhaohui): side-by-side look at `evidence/a5/granite_materials.png`.** — *to do*
+
+## Material wiring and texture data
+
+- `test_materials.gd`: 96 / 0, also from an empty cache (`3560081`); `source_color` mutation exit 1.
+- Curl ratio: `nor_gl` 0.3545 (OpenGL) / 1.6455 (DirectX); `nor_dx` the reverse; the albedo
+  and random noise as controls 1.00. Threshold 1.0, set from the pair.
+- Import settings: the fresh reimport rewrote no `.import` file; no editor session has yet.
+
+## In play
+
+**HUMAN CHECK (Zhaohui): play several rounds with both buses muted; is a hit on Akaken readable
+(failure case 8)? Do the boundaries hold?** — *to do*
