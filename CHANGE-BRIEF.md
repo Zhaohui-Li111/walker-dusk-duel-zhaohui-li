@@ -595,3 +595,20 @@ removed.
   expected value becomes 0.367 s. *Human check still needed:* the same in a normal windowed run
   (not `--fixed-fps`).
 - **Pause** is unchanged and already passes.
+
+## Revision 8 · 2026-10-29 · material plan corrections from the audit
+
+From the materials audit (`godot/MATERIALS.md`, findings 1–3) and its review, approved by
+Zhaohui ("Apply all"):
+
+- **"The 0.8 m plinth about once" is wrong.** `BoxMesh` maps every face to a third × a half of
+  the UV square whatever its size (probe, confirmed), so at `uv_scale = 1.0` each plinth face
+  shows about **a third × a half** of the texture, not one copy. One copy covers 2.4 × 1.6 m on
+  the plinth's top and 2.4 × 0.6 m on its sides.
+- **The texture is not square on either object.** One `uv_scale` scales both axes, so the floor's
+  6 × 4 m top at 6.0 shows 2 × 3 copies of 3.0 × 1.33 m each (stretched 2.25 : 1), the plinth top
+  1.5 : 1 and its sides 4 : 1. The grain size also differs between the floor and the plinth.
+- **No change to the materials or the shader now.** Whether the stretch and the grain mismatch are
+  visible is a look question; the interface sweep and the side-by-side capture decide it. If they
+  matter, a later revision may set different values or add a second scale; any shader change is
+  Zhaohui's.
