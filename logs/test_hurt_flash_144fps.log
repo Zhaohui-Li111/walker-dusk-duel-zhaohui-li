@@ -10,7 +10,7 @@ PASS [harness] main's _physics_process is on and P1 is driven by its PlayerContr
     INPUT: Enter (title) pressed after tick -1
 PASS [harness] Enter on the title started round 1; the intro ran into the fight (phase fight)
     HARNESS (writes no fight state): P2's controller set to null when the round starts, so Aotake stands still
-PASS [defaults] read the shader source text from res://shaders/hurt_flash.gdshader (230 bytes)
+PASS [defaults] read the shader source text from res://shaders/hurt_flash.gdshader (238 bytes)
 PASS [wiring] AKAKEN's Sprite2D has a ShaderMaterial of res://shaders/hurt_flash.gdshader
     AKAKEN uniform list: ["hurt_amount: float, hint 1 \'0.0,1.0,0.0010000000475\'", "flash_color: Color, hint 0 \'\'"]
 PASS [parse] AKAKEN: get_shader_uniform_list() is not empty (2), so the shader parsed

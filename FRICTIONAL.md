@@ -855,3 +855,26 @@ None of this is committed yet; the brief must be committed first.
 - Still not shown by any headless run: pixel colours, the 2.0 clamp question (Q7), time scale in a
   windowed run. And the two shader mutations are still to do — by Zhaohui, since agents do not
   touch `godot/shaders/`.
+
+## 2026-10-29 — The two shader mutations, done by Zhaohui (recorded by Claude Code)
+
+Zhaohui edited `godot/shaders/hurt_flash.gdshader` by hand in VS Code for each mutation and
+restored it; Claude only ran the test and checked the diff.
+
+- **Mutation 1 — delete the `;` at the end of line 3.** `test_hurt_flash.gd` at 60 fps: **exit 1,
+  69 checks, 7 failed**, `SHADER ERROR: Expected a ';'.` (`logs/mutation1_semicolon_60fps.log`).
+  Both materials' `get_shader_uniform_list()` returned **0** entries, so `parse` failed twice,
+  `names/types` four times and the `defaults` source-text check once. The wrapper would also have
+  exited 1 on the `SHADER ERROR` line alone. Restored: diff empty, 69 / 0.
+- **Mutation 2 — rename `hurt_amount` to `hurt_amt` in the shader only** (lines 3 and 7, so it
+  still parses). **Exit 1, 69 checks, 6 failed, no SHADER ERROR**
+  (`logs/mutation2_rename_60fps.log`). The uniform list was `["hurt_amt=float",
+  "flash_color=Color"]`, so `names/types` failed four times, plus `defaults` and `brief` from the
+  source text. **All 23 behaviour checks for rules 1–6 still passed**: the driver's
+  `set_shader_parameter("hurt_amount", …)` raised no error and reading the value back gave the
+  stored number, though the shader no longer declared it. Only the uniform-list and source-text
+  assertions caught it — exactly the handout's point.
+- **The restore after mutation 2 was not exact at first:** VS Code saved the file without its
+  final newline. The tests passed (69 / 0 at 30, 60, 144), but `git diff` still showed
+  "No newline at end of file". Zhaohui fixed it; the diff is now empty and the file is
+  byte-identical to `f13d617`. Final runs on that file: 69 / 0 at 30, 60 and 144 fps.
