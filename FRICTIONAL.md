@@ -960,3 +960,17 @@ restored it; Claude only ran the test and checked the diff.
   floor, 4 : 1 on the plinth sides), and the brief's "plinth about once", which contradicts its own
   UV note. Brief Revision 8 corrects it; no material or shader change until the look is checked.
 - CLAUDE.md's floor line and four Unconfirmed items were stale; updated in the review commit.
+
+## 2026-10-29 — Fresh-cache check (recorded by Claude Code)
+
+- Zhaohui approved deleting the cache ("Yes, do it"). `godot/.godot` (12 MB, git-ignored:
+  `imported/`, `shader_cache/`, `uid_cache.bin`, editor state) was deleted, then
+  `godot --headless --path godot --import`: exit 0, no ERROR lines (`logs/fresh_import.log`).
+- From the empty cache, through the wrapper: `test_materials.gd` **96 / 0**
+  (`logs/test_materials_fresh_cache_60fps.log`), `test_runner.gd` 94 / 0, `check_props3d.gd`
+  49 / 0, `test_hurt_flash.gd` 69 / 0 at 30, 60 and 144, `calibrate_normal_map.gd` exit 0.
+- `git status` afterwards: **no `.import`, `.tres`, `.tscn` or `project.godot` changed** — the
+  reimport rewrote nothing, so the explicit import settings held (no Detect key for it to fill in).
+  Predicted failure 7 (material saved embedded / lost on reimport) not seen.
+- Still to do in Step 3: the `source_color` mutation (Zhaohui edits the shader), and the human
+  checks.

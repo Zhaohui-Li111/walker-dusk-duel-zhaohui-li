@@ -170,7 +170,3 @@ PASS [5] no tail: hurt_amount 0.0 on all 31 ticks and 30 frames from the K.O. ti
 == rule 6 over all scenarios ==
 PASS [6] P1's hurt_amount was 0.0 on all 821 frames and 821 ticks recorded, while P2 flashed on 154 frames (max P1 0.0000)
 69 checks, 0 failed
-WARNING: 8 ObjectDB instances were leaked at exit (run with `--verbose` for details).
-   at: cleanup (core/object/object.cpp:2536)
-ERROR: 4 resources still in use at exit (run with --verbose for details).
-   at: clear (core/io/resource.cpp:822)
