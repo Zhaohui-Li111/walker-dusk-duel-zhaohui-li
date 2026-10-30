@@ -915,3 +915,15 @@ restored it; Claude only ran the test and checked the diff.
   1.0, tint white vs (0.431, 0.4, 0.502); plinth bottom at y 0.000; both meshes have UVs.
   `check_props3d.gd` 49 / 0 and `test_runner.gd` 94 / 0.
 - Not shown: how either material looks. That is the editor sweep and the side-by-side capture.
+
+## 2026-10-29 — Zhaohui's hint-experiment shader (recorded by Claude Code)
+
+- **Zhaohui wrote `godot/shaders/hint_experiment.gdshader` by hand** in VS Code in one round,
+  after Claude explained its four parts (type and `render_mode unshaded`; two samplers that differ
+  only in `source_color`, both `filter_nearest`; a bool; an `if` in `fragment()`), using an example
+  with different names. Sampler and bool names were Claude's suggestion; Zhaohui used them.
+  Correct the first time; Claude did not edit it.
+- Check: `--import` exit 0, no SHADER ERROR (`logs/import_after_hint_shader.log`); probe: spatial,
+  two `Texture2D` samplers, `read_as_color` bool.
+- With this, all three hand-written shaders exist: `hurt_flash` (`f13d617`), `granite`
+  (`25e6dd8`) and `hint_experiment`. No agent session has changed `godot/shaders/`.
