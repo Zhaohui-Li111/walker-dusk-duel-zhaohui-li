@@ -1052,3 +1052,22 @@ restored it; Claude only ran the test and checked the diff.
   whatever the hint; `hint_normal` only supplies a flat default texture when none is bound
   (`drivers/gles3/storage/material_storage.cpp:1029-1030`) and lets the importer detect a normal
   map (`:953`). MATERIALS.md finding 11 corrected; Zhaohui to reword their answer.
+
+## 2026-10-29 — LANGUAGE-NOTES, questions 1–8 (recorded by Claude Code)
+
+- **Zhaohui wrote the answers**; Claude checked each line reference, typed them into
+  `LANGUAGE-NOTES.md`, and asked for rewrites where a fact was wrong. Questions 1–5 were written by
+  Zhaohui in English (Zhaohui confirmed "我自己写的英文"); 6–8 in Chinese and translated by Claude,
+  with the Chinese kept in the file's appendix.
+- Checks that led to rewrites by Zhaohui: Q3 named `texture()` as a built-in variable (it is a
+  function; the shaders read only two built-in variables, UV and COLOR); Q4 said the 137/188/224
+  prediction was for the colour-hinted sampler (it was for quad B, without the hint), and repeated
+  Claude's own wrong claim about `hint_normal` (see the entry above).
+- Q5: Zhaohui asked Claude to finish the remaining work ("你这些能不能都自己写完呢"). Claude declined
+  to write the answers, because the handout requires the language notes to be the student's, and
+  applied only three marked factual corrections to Q5 (material, not shader, read back the value;
+  the grey retest was run by Claude's capture script, not by Zhaohui; the path).
+- **A question Claude raised about provenance:** Zhaohui's reply for "Part 1" read like another AI
+  assistant answering ("把那张表发给我，我可以逐项核对"). Claude asked whether any answers came from
+  another tool. **Zhaohui said they wrote them themselves.** Recorded here as both said it.
+- Part 1 (the generated shader's line list) is still open.
