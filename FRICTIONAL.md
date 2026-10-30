@@ -832,3 +832,26 @@ None of this is committed yet; the brief must be committed first.
 - Rules that pass at all three rates: parse, names, types, defaults (source text), wiring, rule 1,
   rule 2 (ticks and frames), rule 4 pause, rule 5 (K.O. from idle), rule 6, and "the sampled frame
   value equals the value set on that frame's last tick".
+
+## 2026-10-29 — Revision 7 and the green test (recorded by Claude Code)
+
+- Zhaohui decided: rule 3 and the rule 5 mid-fade case are checked by landing the second hit as
+  SETUP through the game's own `receive_hit()`; rule 4's expectation follows game ticks
+  (0.367 s under `time_scale = 0.5`), with a windowed human check still to do. Brief Revision 7.
+- **Session 2d** (`sessions/session-2d-revision7.jsonl`): `success`, 25 turns, one denial (it
+  prefixed a wrapper call with `cd … &&`). It changed only `test_hurt_flash.gd`.
+- **Claude read the diff, not the summary.** Removed `check(` lines are the old rule 3 scenario
+  (replaced) and the 0.733 s expected value (replaced by 0.367 s with the same tolerance). Added: a
+  `SetupHit` node at physics priority 50 (after main at 0, before the driver at 100: where
+  `check_hit()` itself calls `receive_hit()`), the new rule 3 assertions (1.0 on the SETUP tick,
+  `stun / HITSTUN` on every later tick, 0.0 at 18 ticks) and the rule 5 mid-fade case. The test
+  calls neither the driver nor `main.step()`.
+- **An observation the revision got right:** the setup retrigger lasts 18 ticks, not 22, because
+  hitstop comes from the attacker's `attack_resolved` signal, which `receive_hit()` alone does not
+  emit. Predicted in Revision 7 from reading `fighter.gd:171-173` and `main.gd:137-138`, then
+  confirmed by the run.
+- **Claude's runs:** `test_hurt_flash.gd` **69 checks, 0 failed** at 30, 60 and 144 fps, exit 0,
+  no SHADER/SCRIPT ERROR. Baseline 94 / 49, 0 failed. `--import` made the test's `.uid`.
+- Still not shown by any headless run: pixel colours, the 2.0 clamp question (Q7), time scale in a
+  windowed run. And the two shader mutations are still to do — by Zhaohui, since agents do not
+  touch `godot/shaders/`.

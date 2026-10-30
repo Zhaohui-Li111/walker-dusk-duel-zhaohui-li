@@ -23,7 +23,7 @@ PASS [parse] AOTAKE: get_shader_uniform_list() is not empty (2), so the shader p
 PASS [names/types] AOTAKE: exactly hurt_amount (float) and flash_color (vec4 source_color, listed as Color): ["hurt_amount=float", "flash_color=Color"]
 PASS [names/types] AOTAKE: hurt_amount is listed with a 0..1 range hint
 PASS [wiring] AOTAKE: the material's shader code is the text of the file
-PASS [6] P1 and P2 have different ShaderMaterial instances (ids -9223372004541856250, -9223372001521957376) of one shader
+PASS [6] P1 and P2 have different ShaderMaterial instances (ids -9223372004508301816, -9223372001488402942) of one shader
 PASS [defaults] source text: uniform float hurt_amount : hint_range(0.0, 1.0) = 0.0
 PASS [defaults] source text: uniform vec4 flash_color : source_color = vec4(1.0, 0.0, 0.0, 1.0)
 PASS [brief] source text: the colour line as written, nothing assigns COLOR or COLOR.a, no render_mode
@@ -93,9 +93,10 @@ PASS [harness] P1 walked to punch range with the D key (gap 57.5 px, target <= 5
     INPUT: J (punch) pressed after tick 595
 PASS [harness] P1's punch from the J key hit P2 ([{ "tick": 601, "kind": "punch", "result": "hit" }])
 PASS [4] game time: 22 ticks / 60 = 0.367 s, want 22 ticks = 0.367 s (ticks, exact)
-FAIL [4] real time at time_scale 0.5: frames 600..622 = 22 frames / 60 fps = 0.3667 s, want 0.733 ± 0.0167 s (frames)
+    expected real time 0.367 s, not 0.367 / 0.5 (revision 7): the fight steps by ticks, and time_scale does not change the tick count
+PASS [4] real time at time_scale 0.5: frames 600..622 = 22 frames / 60 fps = 0.3667 s, want 0.367 ± 0.0167 s (frames)
 
-== rule 3 (revision 6): two punches, defender moved back into range by SETUP ==
+== rule 3 (revision 7): punch 1 by input, second hit by SETUP through P2.receive_hit() ==
 PASS [harness] main's _physics_process is on and P1 is driven by its PlayerController
     INPUT: Enter (title) pressed after tick 628
 PASS [harness] Enter on the title started round 1; the intro ran into the fight (phase fight)
@@ -104,31 +105,72 @@ PASS [harness] Enter on the title started round 1; the intro ran into the fight 
 PASS [harness] P1 walked to punch range with the D key (gap 57.5 px, target <= 58.6) and stopped
     INPUT: J (punch 1) pressed after tick 787
 PASS [harness] punch 1 from the J key hit P2 ([{ "tick": 793, "kind": "punch", "result": "hit" }])
-    SETUP (not input): after tick T1+17, P2.position.x 430.0 -> 421.1 (gap 58.6 px); P2 'hurt', stun 5, hurt_amount 0.2778
-    INPUT: J (punch 2) pressed after tick 810
-    P1 results: ["punch hit at T1+0", "punch hit at T1+23"]; hurt from punch 1 ends at tick T1+22
-PASS [3] punch 2 (J pressed once P1 was back in idle) connects: { "tick": 816, "kind": "punch", "result": "hit" }
-FAIL [3] punch 2 lands while P2 is still in hurt from punch 1 (P2 'idle' on tick T1+22, the tick before)
-FAIL [3] hurt_amount jumps back to 1.0 on the retrigger (0.0000 -> 1.0000)
-FAIL [3] the 22 ticks start over from the retrigger: 0.0 at T2+22 (ticks)
+PASS [harness] P2 is mid-fade in hurt from punch 1 (stun 10, hurt_amount 0.5556)
+    SETUP (not input): on tick T1+13, P2 'hurt' stun 9: P2.receive_hit(P1, 8) then P2.flush_ko(), as check_hit() does
+PASS [harness] the SETUP hit ran inside a physics tick (tick 806)
+    tick trace (T2 = 806, the SETUP hit tick; punch 1 hit at T2-13):
+      T2 -1  P2 hurt  stun 10  hurt_amount 0.5556
+      T2 +0  P2 hurt  stun 18  hurt_amount 1.0000
+      T2 +1  P2 hurt  stun 17  hurt_amount 0.9444
+      T2 +2  P2 hurt  stun 16  hurt_amount 0.8889
+      T2 +3  P2 hurt  stun 15  hurt_amount 0.8333
+      T2 +4  P2 hurt  stun 14  hurt_amount 0.7778
+      T2 +5  P2 hurt  stun 13  hurt_amount 0.7222
+      T2 +6  P2 hurt  stun 12  hurt_amount 0.6667
+      T2 +7  P2 hurt  stun 11  hurt_amount 0.6111
+      T2 +8  P2 hurt  stun 10  hurt_amount 0.5556
+      T2 +9  P2 hurt  stun  9  hurt_amount 0.5000
+      T2+10  P2 hurt  stun  8  hurt_amount 0.4444
+      T2+11  P2 hurt  stun  7  hurt_amount 0.3889
+      T2+12  P2 hurt  stun  6  hurt_amount 0.3333
+      T2+13  P2 hurt  stun  5  hurt_amount 0.2778
+      T2+14  P2 hurt  stun  4  hurt_amount 0.2222
+      T2+15  P2 hurt  stun  3  hurt_amount 0.1667
+      T2+16  P2 hurt  stun  2  hurt_amount 0.1111
+      T2+17  P2 hurt  stun  1  hurt_amount 0.0556
+      T2+18  P2 idle  stun  0  hurt_amount 0.0000
+      T2+19  P2 idle  stun  0  hurt_amount 0.0000
+PASS [3] the SETUP hit lands while P2 is still in hurt from punch 1 (P2 'hurt' on tick T2-1, T1+12)
+PASS [3] hurt_amount jumps back to 1.0 on the SETUP hit tick (0.5556 -> 1.0000, stun 18)
+PASS [3] on every following tick in hurt (T2+1..T2+17) hurt_amount equals stun / HITSTUN
+    WHY no 4-tick hold: hitstop is set only when the attacker emits attack_resolved (main.gd:137-138); receive_hit() alone does not emit it, so stun counts down from the next tick
+PASS [3] 0.0 at 18 ticks after the SETUP hit, no hitstop hold: P2 leaves hurt at T2+18 with 0.0000 (ticks)
 
 == rule 5: a K.O. hit, health lowered by SETUP ==
 PASS [harness] main's _physics_process is on and P1 is driven by its PlayerController
-    INPUT: Enter (title) pressed after tick 843
+    INPUT: Enter (title) pressed after tick 829
 PASS [harness] Enter on the title started round 1; the intro ran into the fight (phase fight)
     HARNESS (writes no fight state): P2's controller set to null when the round starts, so Aotake stands still
-    INPUT: D (walk right) held from after tick 843
+    INPUT: D (walk right) held from after tick 829
 PASS [harness] P1 walked to punch range with the D key (gap 57.5 px, target <= 58.6) and stopped
     SETUP (not input): P2.health 100 -> 5, so one punch (8 damage) is a K.O.
-    INPUT: J (punch) pressed after tick 1002
-PASS [harness] the punch from the J key hit P2 ([{ "tick": 1008, "kind": "punch", "result": "hit" }])
+    INPUT: J (punch) pressed after tick 988
+PASS [harness] the punch from the J key hit P2 ([{ "tick": 994, "kind": "punch", "result": "hit" }])
 PASS [5] on the K.O. tick P2 is in 'ko' and hurt_amount is 0.0 ('ko', 0.0000)
 PASS [5] no flash at all: P2 never in hurt, hurt_amount 0.0 on all 107 ticks and 107 frames (no tail)
 
+== rule 5 (revision 7): a K.O. hit mid-fade, by SETUP through P2.receive_hit() ==
+PASS [harness] main's _physics_process is on and P1 is driven by its PlayerController
+    INPUT: Enter (title) pressed after tick 999
+PASS [harness] Enter on the title started round 1; the intro ran into the fight (phase fight)
+    HARNESS (writes no fight state): P2's controller set to null when the round starts, so Aotake stands still
+    INPUT: D (walk right) held from after tick 999
+PASS [harness] P1 walked to punch range with the D key (gap 57.5 px, target <= 58.6) and stopped
+    INPUT: J (punch 1) pressed after tick 1158
+PASS [harness] punch 1 from the J key hit P2 ([{ "tick": 1164, "kind": "punch", "result": "hit" }])
+PASS [harness] P2 is mid-fade in hurt from punch 1 (stun 10, hurt_amount 0.5556)
+    SETUP (not input): P2.health 92 -> 8, so the next 8-damage hit is a K.O.
+    SETUP (not input): on tick T1+13, P2 'hurt' stun 9: P2.receive_hit(P1, 8) then P2.flush_ko(), as check_hit() does
+PASS [harness] the SETUP hit ran inside a physics tick (tick 1177)
+    P2 on ticks T-1..T+2: ["\'hurt\' 0.5556", "\'ko\' 0.0000", "\'ko\' 0.0000", "\'ko\' 0.0000"]
+PASS [5] on the tick before, P2 was mid-fade in hurt ('hurt', 0.5556)
+PASS [5] on the K.O. tick P2 is in 'ko' and hurt_amount is 0.0 ('ko', 0.0000)
+PASS [5] no tail: hurt_amount 0.0 on all 31 ticks and 30 frames from the K.O. tick on (max 0.0000, 0.0000)
+
 == rule 6 over all scenarios ==
-PASS [6] P1's hurt_amount was 0.0 on all 690 frames and 690 ticks recorded, while P2 flashed on 154 frames (max P1 0.0000)
-58 checks, 4 failed
-WARNING: 12 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+PASS [6] P1's hurt_amount was 0.0 on all 821 frames and 821 ticks recorded, while P2 flashed on 154 frames (max P1 0.0000)
+69 checks, 0 failed
+WARNING: 8 ObjectDB instances were leaked at exit (run with `--verbose` for details).
    at: cleanup (core/object/object.cpp:2536)
-ERROR: 6 resources still in use at exit (run with --verbose for details).
+ERROR: 4 resources still in use at exit (run with --verbose for details).
    at: clear (core/io/resource.cpp:822)
