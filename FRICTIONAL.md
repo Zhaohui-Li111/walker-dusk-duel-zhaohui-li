@@ -804,3 +804,31 @@ None of this is committed yet; the brief must be committed first.
     it was missing); `test_runner.gd` 94 checks, 0 failed; `check_props3d.gd` 49, 0 failed; no
     SHADER/SCRIPT ERROR; `project.godot`, `godot/shaders/`, `scripts/` unchanged.
   - What this does not show: anything about rules 1–6 (step 2), or the priority order in a run.
+
+## 2026-10-29 — Step 2: the hurt-flash test, and two rules it disproves (recorded by Claude Code)
+
+- Zhaohui chose to revise rule 3 (brief Revision 6): unreachable through real input, checked by
+  moving the defender back into range as labelled setup. Claude wrote `prompt-2c-step2.txt` from
+  that decision.
+- **Session 2c** (`sessions/session-2c-step2.jsonl`): `success`, 30 turns. One denial (an `echo`
+  / `which` probe). It wrote `godot/tests/test_hurt_flash.gd` (531 lines), ran it at 30 fps three
+  times and **stopped at 30 fps with 4 failures**, as the prompt told it to, instead of changing
+  the test. It edited the test between runs; Claude diffed its first write against the final file:
+  the edits only fix fps detection (Godot consumes `--fixed-fps`, so fps is read from the frame
+  delta after 10 frames), split `return await` into two lines, and add a ticks-per-frame harness
+  check. **No assertion was weakened.** No other file changed; HEAD unchanged.
+- **Claude's own runs** of the committed test through the wrapper: 30, 60 and 144 fps all give
+  `58 checks, 4 failed`, exit 1, with the same four FAIL lines and no SHADER/SCRIPT ERROR.
+  Baseline unchanged: 94 / 49, 0 failed.
+- **Finding 1 — rule 4's time-scale prediction is wrong here.** Under `Engine.time_scale = 0.5`,
+  Godot 4.7.2 with `--fixed-fps` still ran 2 physics ticks per frame at 30 fps (1 at 60), so the
+  game — and the flash with it — took 22 ticks = 0.367 s of real time, not 0.733 s. The fight
+  steps by ticks and its frame data ignores delta, so time scale does not slow the fight. Whether a
+  normal windowed run behaves the same is not yet checked.
+- **Finding 2 — Revision 6's setup cannot reach rule 3.** Moving the defender back into range does
+  not help: the limit is the attacker's recovery. P1 is idle again at T+17, its second punch
+  connects at T+23 at the earliest, and P2 has left hurt at T+22 (T1+22/23 in the logs). The same
+  holds for rule 5's "hurt into K.O. mid-fade" case, which the test covers only as K.O. from idle.
+- Rules that pass at all three rates: parse, names, types, defaults (source text), wiring, rule 1,
+  rule 2 (ticks and frames), rule 4 pause, rule 5 (K.O. from idle), rule 6, and "the sampled frame
+  value equals the value set on that frame's last tick".
