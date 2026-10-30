@@ -23,7 +23,7 @@
 - **Texture sources and licences:** Poly Haven *Granite Wall*, https://polyhaven.com/a/granite_wall,
   Dimitrios Savva, CC0 (`godot/props3d/textures/ATTRIBUTION.md`); `_nor_gl` used. The hint-experiment
   PNG is written by `godot/hint_experiment/write_hint_png.gd`.
-- **Final film URL and filename:** *link to be added after upload to course media storage* · `claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev.mp4` ("Dusk Duel, Shaded", 5:35, 3840 × 2160, 30 fps, 26.4 MB)
+- **Final film URL and filename:** https://drive.google.com/file/d/1XPTY_w03okY8gLEg4A__CYZmh8PpySFP/view?usp=sharing · `claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev.mp4` ("Dusk Duel, Shaded", 5:35, 3840 × 2160, 30 fps, 26.4 MB)
 - **Final film SHA-256:** `e04cbc986b195d4cb0f3a45b8427f1de4660bdb699ee7d2469c524e7519d3143`
 - **Summary of my work:** I chose the effect and the colour, wrote the colour line, and typed all
   three shaders by hand (`hurt_flash`, `granite`, `hint_experiment`). I computed the pixel, hint and

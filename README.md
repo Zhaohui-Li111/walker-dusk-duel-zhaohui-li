@@ -196,7 +196,7 @@ godot --path godot --script res://tests/capture_a5.gd
     (MATERIALS.md findings 1–3).
 - **A5 film: "Dusk Duel, Shaded".** A Brutalist explainer made with the `godot-gamedev` skill in walker
   mode. 5:35, 3840 × 2160, 30 fps.
-  - **Link:** *to be added after upload*
+  - **Link:** https://drive.google.com/file/d/1XPTY_w03okY8gLEg4A__CYZmh8PpySFP/view?usp=sharing
   - **File name:** `claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev.mp4`
   - **SHA-256:** `e04cbc986b195d4cb0f3a45b8427f1de4660bdb699ee7d2469c524e7519d3143`
   - **Game source shown:** `godot/` at `043df17`.
