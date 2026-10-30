@@ -1042,3 +1042,13 @@ restored it; Claude only ran the test and checked the diff.
   `project.godot`; restored.
 - Found in the generated file: the normal map's sampler is `hint_roughness_normal` (line 19), not
   the `hint_normal` used in `granite.gdshader:5`. For LANGUAGE-NOTES; not explained here.
+
+## 2026-10-29 — Claude's wrong claim about hint_normal, caught while checking LANGUAGE-NOTES
+
+- In the audit review (MATERIALS.md finding 11) and in its prompt for LANGUAGE-NOTES question 4,
+  Claude said `hint_normal` is what makes the shader rebuild Z from an RG-packed normal map.
+  Zhaohui's draft answer repeated it. Checking the draft against the Godot 4.7.2 source showed
+  it is wrong: `drivers/gles3/shaders/scene.glsl:2359` rebuilds Z for every `NORMAL_MAP` write,
+  whatever the hint; `hint_normal` only supplies a flat default texture when none is bound
+  (`drivers/gles3/storage/material_storage.cpp:1029-1030`) and lets the importer detect a normal
+  map (`:953`). MATERIALS.md finding 11 corrected; Zhaohui to reword their answer.

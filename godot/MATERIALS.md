@@ -131,10 +131,15 @@ Project: `renderer/rendering_method="gl_compatibility"`, also for mobile (`proje
    `compress/normal_map` = 1, as planned (brief predicted failures 4 and 5 not seen).
 11. *Added in review (Claude, 2026-10-29):* **the normal map is imported as two channels,
     `FORMAT_RGTC_RG` (21).** With `compress/normal_map` = 1 (Enable,
-    `granite_wall_nor_gl_1k.png.import`), Godot keeps only X and Y and drops Z; the `hint_normal`
-    sampler (`granite.gdshader:5`) is what makes the shader rebuild Z from X and Y. The audit's
-    sampler table gave the import setting but not this consequence. Not a fault: it is why the
-    normal map must be sampled with `hint_normal` and not as a plain texture.
+    `granite_wall_nor_gl_1k.png.import`), Godot keeps only X and Y and drops Z. The audit's
+    sampler table gave the import setting but not this consequence. Not a fault.
+    *Corrected 2026-10-29 (Claude):* this finding first said that `hint_normal` makes the shader
+    rebuild Z. That was wrong. In Godot 4.7.2's Compatibility scene shader, Z is rebuilt for
+    **every** `NORMAL_MAP` write whatever the hint (`drivers/gles3/shaders/scene.glsl:2359`,
+    "always ignore Z, as it can be RG packed"). What `hint_normal` (`granite.gdshader:5`) does
+    there is give a flat default normal texture when none is bound
+    (`drivers/gles3/storage/material_storage.cpp:1029-1030`) and let the importer detect the file as
+    a normal map (`:953`).
 10. **No inconsistencies** with the brief in the uniform names, types, hints, defaults or groups,
     the five import rows, the tint (#6E6680 exactly), the shared shader path, or the
     `material_override` wiring (brief predicted failure 7 not seen in the current import cache;
