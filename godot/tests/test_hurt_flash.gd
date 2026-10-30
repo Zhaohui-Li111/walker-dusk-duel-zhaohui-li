@@ -1,15 +1,18 @@
 extends SceneTree
 ## A5 step 2: headless checks of the hurt flash against CHANGE-BRIEF.md (Assignment 5, observable
-## rules 1-6; rule 3 as revised in revision 6). Run from the repo root, through the wrapper:
+## rules 1-6; rules 3, 4 and 5 as revised in revision 7). Run from the repo root, through the wrapper:
 ##   scripts/run-test.sh test_hurt_flash.gd 30      (and 60, 144)
 ## Unlike test_runner.gd, main's _physics_process stays on: the fight runs in the real loop at the
 ## wrapper's --fixed-fps, and P1 is driven by key events read by its PlayerController. The only
-## writes to fight state are the two SETUP steps revision 6 allows (rule 3: move the defender back
-## into range while it is in hurt; rule 5: lower its health first); each is printed as SETUP.
+## writes to fight state are the SETUP steps revision 7 allows (lower P2's health; a second hit
+## through the game's own P2.receive_hit() + P2.flush_ko() while P2 is in hurt); each is printed
+## as SETUP. The second hit runs inside a physics tick, from SetupHit, as check_hit() would.
 ## Two recorder nodes only read:
 ##   Sampler  _process,         process_priority 1000: once per frame, after every other _process
 ##   TickLog  _physics_process, process_physics_priority 1000: once per tick, after main (0) and
 ##            the driver (100)
+## SetupHit _physics_process, process_physics_priority 50: runs a queued SETUP call once, after main
+##            has stepped the fighters and before the driver reads them
 ## Durations: game seconds = physics ticks / 60, real seconds = frames / fps. Under --fixed-fps
 ## every frame advances a fixed delta, so wall-clock time is used only by the watchdog.
 
@@ -25,6 +28,7 @@ var fps := 0
 var main: Node
 var sampler: Sampler
 var ticklog: TickLog
+var setup_hit: SetupHit
 var results := []                    # P1's attack_resolved: {tick, kind, result}
 var p1_max := 0.0                    # rule 6, over every scenario
 var p1_frames := 0
@@ -81,6 +85,23 @@ class TickLog extends Node:
 		order.append(last_tick)
 
 
+## Runs one queued SETUP call inside a physics tick, between main (0) and the driver (100), the
+## same place in the tick where check_hit() calls receive_hit().
+class SetupHit extends Node:
+	var pending: Callable
+	var done_tick := -1
+
+	func _ready() -> void:
+		process_physics_priority = 50
+
+	func _physics_process(_delta: float) -> void:
+		if pending.is_valid():
+			var fn := pending
+			pending = Callable()
+			done_tick = Engine.get_physics_frames()
+			fn.call()
+
+
 func _initialize() -> void:
 	_run.call_deferred()
 
@@ -90,8 +111,10 @@ func _run() -> void:
 	ticklog = TickLog.new()
 	sampler.ticklog = ticklog
 	sampler.on_watchdog = _watchdog
+	setup_hit = SetupHit.new()
 	root.add_child(sampler)
 	root.add_child(ticklog)
+	root.add_child(setup_hit)
 	# Godot consumes --fixed-fps, so fps comes from the frame delta once it has settled (the first
 	# frames' delta is not 1/fps); the ticks-per-frame check in the first scenario confirms it.
 	for i in 10:
@@ -112,6 +135,7 @@ func _run() -> void:
 	await scenario_time_scale()
 	await scenario_retrigger()
 	await scenario_ko()
+	await scenario_ko_mid_fade()
 	print("\n== rule 6 over all scenarios ==")
 	check(p1_frames > 0 and p1_max == 0.0 and p2_flash_frames > 0, "6",
 			"P1's hurt_amount was 0.0 on all %d frames and %d ticks recorded, while P2 flashed on %d frames (max P1 %.4f)" % [
@@ -239,46 +263,81 @@ func scenario_time_scale() -> void:
 
 
 func scenario_retrigger() -> void:
-	if not await start_fight("rule 3 (revision 6): two punches, defender moved back into range by SETUP"):
+	if not await start_fight("rule 3 (revision 7): punch 1 by input, second hit by SETUP through P2.receive_hit()"):
 		await end_fight()
 		return
 	if not await walk_into_punch_range():
 		await end_fight()
 		return
 	await tap(KEY_J, "J (punch 1)")
-	await wait_until(func(): return results.size() >= 1, 30)
-	# the earliest P1 can start another attack is the tick after it returns to idle
-	await wait_until(func(): return results.size() >= 1 and main.p1.state == "idle", 40)
-	var t1 := hit_tick(0)
-	check(t1 >= 0, "harness", "punch 1 from the J key hit P2 (%s)" % [results])
+	var t1 := await second_hit_in_hurt(false)
 	if t1 < 0:
 		await end_fight()
 		return
-	var gap := punch_gap()
-	var x0: float = main.p2.position.x
-	main.p2.position.x = main.p1.position.x + gap
-	print("    SETUP (not input): after tick T1+%d, P2.position.x %.1f -> %.1f (gap %.1f px); P2 '%s', stun %d, hurt_amount %.4f" % [
-		ticklog.last_tick - t1, x0, main.p2.position.x, gap, main.p2.state, main.p2.stun, Sampler.amount(main.p2)])
-	await tap(KEY_J, "J (punch 2)")
-	await wait_until(func(): return results.size() >= 2, 40)
+	var t2 := setup_hit.done_tick
 	await wait_until(func(): return main.p2.state != "hurt", 60)
 	await wait_ticks(5)
-	print("    P1 results: %s; hurt from punch 1 ends at tick T1+%d" % [
-		results.map(func(r): return "%s %s at T1+%d" % [r["kind"], r["result"], r["tick"] - t1]), hurt_end_after(t1) - t1])
-	var r2: Dictionary = results[1] if results.size() >= 2 else {}
-	check(r2.get("result") == "hit", "3", "punch 2 (J pressed once P1 was back in idle) connects: %s" % [r2])
-	if r2.get("result") != "hit":
+	print("    tick trace (T2 = %d, the SETUP hit tick; punch 1 hit at T2-%d):" % [t2, t2 - t1])
+	for i in range(-1, 18 + 2):
+		var r := tk(t2 + i)
+		if not r.is_empty():
+			print("      T2%+3d  P2 %-5s stun %2d  hurt_amount %.4f" % [i, r["state"], r["stun"], r["p2"]])
+	var in_hurt: bool = tk(t2 - 1).get("state") == "hurt"
+	check(in_hurt, "3", "the SETUP hit lands while P2 is still in hurt from punch 1 (P2 '%s' on tick T2-1, T1+%d)" % [
+		tk(t2 - 1).get("state"), t2 - 1 - t1])
+	check(in_hurt and val(t2 - 1) < 1.0 and val(t2) == 1.0 and tk(t2).get("stun") == Fighter.HITSTUN, "3",
+			"hurt_amount jumps back to 1.0 on the SETUP hit tick (%.4f -> %.4f, stun %s)" % [
+			val(t2 - 1), val(t2), tk(t2).get("stun")])
+	var te2 := hurt_end_after(t2)
+	var bad := ""
+	for x in range(t2 + 1, te2 if te2 >= 0 else t2 + 1):
+		var want := float(tk(x).get("stun", -1)) / float(Fighter.HITSTUN)
+		if absf(val(x) - want) > 1e-6 and bad == "":
+			bad = ": tick T2+%d is %.4f, stun %s / 18 = %.4f" % [x - t2, val(x), tk(x).get("stun"), want]
+	check(te2 > t2 + 1 and bad == "", "3",
+			"on every following tick in hurt (T2+1..T2+%d) hurt_amount equals stun / HITSTUN%s" % [te2 - t2 - 1, bad])
+	print("    WHY no 4-tick hold: hitstop is set only when the attacker emits attack_resolved (main.gd:137-138);"
+			+ " receive_hit() alone does not emit it, so stun counts down from the next tick")
+	check(in_hurt and te2 - t2 == Fighter.HITSTUN and val(te2) == 0.0, "3",
+			"0.0 at 18 ticks after the SETUP hit, no hitstop hold: P2 leaves hurt at T2+%d with %.4f (ticks)" % [
+			te2 - t2, val(te2)])
+	await end_fight()
+
+
+## Rule 5 mid-fade (revision 7): punch 1 by input, then health lowered and the K.O. hit by SETUP.
+func scenario_ko_mid_fade() -> void:
+	if not await start_fight("rule 5 (revision 7): a K.O. hit mid-fade, by SETUP through P2.receive_hit()"):
 		await end_fight()
 		return
-	var t2: int = r2["tick"]
-	var in_hurt: bool = tk(t2 - 1).get("state") == "hurt"
-	check(in_hurt, "3", "punch 2 lands while P2 is still in hurt from punch 1 (P2 '%s' on tick T1+%d, the tick before)" % [
-		tk(t2 - 1).get("state"), t2 - 1 - t1])
-	check(in_hurt and val(t2 - 1) < 1.0 and val(t2) == 1.0 and tk(t2).get("stun") == 18, "3",
-			"hurt_amount jumps back to 1.0 on the retrigger (%.4f -> %.4f)" % [val(t2 - 1), val(t2)])
-	var te2 := hurt_end_after(t2)
-	check(in_hurt and te2 - t2 == FADE_TICKS and val(te2) == 0.0, "3",
-			"the 22 ticks start over from the retrigger: 0.0 at T2+%d (ticks)" % (te2 - t2))
+	if not await walk_into_punch_range():
+		await end_fight()
+		return
+	await tap(KEY_J, "J (punch 1)")
+	var t1 := await second_hit_in_hurt(true)
+	if t1 < 0:
+		await end_fight()
+		return
+	var t := setup_hit.done_tick
+	await wait_until(func(): return main.phase == "ko", 30)
+	await wait_ticks(30)
+	print("    P2 on ticks T-1..T+2: %s" % [range(-1, 3).map(func(i): return "'%s' %.4f" % [tk(t + i).get("state"), val(t + i)])])
+	check(tk(t - 1).get("state") == "hurt" and val(t - 1) > 0.0, "5",
+			"on the tick before, P2 was mid-fade in hurt ('%s', %.4f)" % [tk(t - 1).get("state"), val(t - 1)])
+	check(tk(t).get("state") == "ko" and val(t) == 0.0, "5",
+			"on the K.O. tick P2 is in 'ko' and hurt_amount is 0.0 ('%s', %.4f)" % [tk(t).get("state"), val(t)])
+	var later: Array = ticklog.order.filter(func(x): return x >= t)
+	var max_tick := 0.0
+	for x in later:
+		max_tick = maxf(max_tick, absf(val(x)))
+	var max_frame := 0.0
+	var later_frames := 0
+	for s in sampler.frames:
+		if s[1] >= t:
+			later_frames += 1
+			max_frame = maxf(max_frame, absf(s[3]))
+	check(later.size() >= 30 and max_tick == 0.0 and later_frames > 0 and max_frame == 0.0, "5",
+			"no tail: hurt_amount 0.0 on all %d ticks and %d frames from the K.O. tick on (max %.4f, %.4f)" % [
+			later.size(), later_frames, max_tick, max_frame])
 	await end_fight()
 
 
@@ -373,7 +432,12 @@ func check_durations(t: int, te: int, time_scale: float) -> void:
 		elif on >= 0 and s[3] == 0.0:
 			off = s[0]
 			break
-	var want := FADE_TICKS / TICKS_PER_SECOND / time_scale
+	# Revision 7: the fight steps by physics ticks with frame data that ignores delta, and under
+	# --fixed-fps Engine.time_scale does not change the ticks per frame, so the flash lasts 22 ticks
+	# = 0.367 s of real time at any time_scale.
+	var want := FADE_TICKS / TICKS_PER_SECOND
+	if time_scale != 1.0:
+		print("    expected real time 0.367 s, not 0.367 / %.1f (revision 7): the fight steps by ticks, and time_scale does not change the tick count" % time_scale)
 	var real := (off - on) / float(fps)
 	check(on >= 0 and off > on and absf(real - want) <= 1.0 / fps + 1e-9, rule,
 			"real time at time_scale %.1f: frames %d..%d = %d frames / %d fps = %.4f s, want %.3f ± %.4f s (frames)" % [
@@ -410,6 +474,7 @@ func start_fight(title: String) -> bool:
 func end_fight() -> void:
 	sampler.recording = false
 	ticklog.recording = false
+	setup_hit.pending = Callable()
 	for k in [KEY_D, KEY_J, KEY_P, KEY_ENTER]:
 		send_key(k, false)
 	Engine.time_scale = 1.0
@@ -437,6 +502,37 @@ func walk_into_punch_range() -> bool:
 	check(ok and idle, "harness", "P1 walked to punch range with the D key (gap %.1f px, target <= %.1f) and stopped" % [
 		main.p2.position.x - main.p1.position.x, gap])
 	return ok and idle
+
+
+## After punch 1 (input) hit P2: waits until P2 is mid-fade in hurt (hitstop over), then queues the
+## revision 7 SETUP: P2.receive_hit(P1, punch damage) and P2.flush_ko(), as check_hit() calls them.
+## With lower_health, P2.health is first set to the punch damage so that hit is a K.O.
+## Returns punch 1's hit tick, or -1; the SETUP tick is setup_hit.done_tick.
+func second_hit_in_hurt(lower_health: bool) -> int:
+	await wait_until(func(): return results.size() >= 1, 30)
+	var t1 := hit_tick(0)
+	check(t1 >= 0, "harness", "punch 1 from the J key hit P2 (%s)" % [results])
+	if t1 < 0:
+		return -1
+	var mid: bool = await wait_until(func(): return main.p2.state == "hurt" and main.p2.stun <= 10, 30)
+	check(mid, "harness", "P2 is mid-fade in hurt from punch 1 (stun %d, hurt_amount %.4f)" % [
+		main.p2.stun, Sampler.amount(main.p2)])
+	if not mid:
+		return -1
+	var damage: int = Fighter.ATTACKS["punch"]["damage"]
+	if lower_health:
+		var h0: int = main.p2.health
+		main.p2.health = damage
+		print("    SETUP (not input): P2.health %d -> %d, so the next %d-damage hit is a K.O." % [h0, damage, damage])
+	setup_hit.done_tick = -1
+	setup_hit.pending = func():
+		print("    SETUP (not input): on tick T1+%d, P2 '%s' stun %d: P2.receive_hit(P1, %d) then P2.flush_ko(), as check_hit() does" % [
+			Engine.get_physics_frames() - t1, main.p2.state, main.p2.stun, damage])
+		main.p2.receive_hit(main.p1, damage)
+		main.p2.flush_ko()
+	var ran: bool = await wait_until(func(): return setup_hit.done_tick >= 0, 10)
+	check(ran, "harness", "the SETUP hit ran inside a physics tick (tick %d)" % setup_hit.done_tick)
+	return t1 if ran else -1
 
 
 ## Origin distance at which P1's punch box overlaps P2's hurtbox, with 8 px to spare.
