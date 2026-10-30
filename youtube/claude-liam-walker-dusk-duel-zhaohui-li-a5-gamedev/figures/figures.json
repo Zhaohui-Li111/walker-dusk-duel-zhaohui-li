@@ -1,0 +1,30 @@
+{
+  "figures": {
+    "fig_clamp.png": "ee3cf835a80169b091a61255d9a1e3cfbd40e78e0f3502057841a6a8ce4e27c5",
+    "fig_controlled.png": "cbef798bcf97adc26b90fce2164f947d523dab116936b3e85c0693c5d104f17a",
+    "fig_generated.png": "cf7c2d807c7d3144892000484dd0a6938e92cb355307d938966b7c4c908a0cee",
+    "fig_hint.png": "ee893143f5d8209a004b35395123f29db39a7f551150b38dac1cbd259a44b4e5",
+    "fig_limits.png": "185de51d1ec025fd1376e3e5c3f4a0c2d0291d9f2e9602f399097605bd188e17",
+    "fig_materials.png": "2a9234094ca23f2223cae962eeb3f5609d9b1ac16427d7e71a75505bb0d1ec05",
+    "fig_mutations.png": "a6972f223c7e08855c87b573cb84e8e3274c23a99a8a59ae1ac9a06521a25c9b",
+    "fig_predict.png": "48efbd998a6938c3da38c497f982036993c35cdbb9560445dc48356e991b7f71",
+    "fig_sweep.png": "318d274d8f9dc46b496672b85a0e4b9b9754f07a98d8aaa938c7a5f25ddcc884",
+    "fig_tests.png": "87a2ab1779d11cc00a5434ba1713d808b4d4c3c14fad363f94f6c340102ef716"
+  },
+  "sources": {
+    "youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev/capture/evidence/a5/hurt_flash_0_0.png": "7e5b0b3f2cb4458556c606be643d4fc4aa0f8fa9c2dd33972183ff7e4661cba5",
+    "youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev/capture/evidence/a5/hurt_flash_0_5.png": "5a6cb0cee403c4b882914fb99e8fab420c6c32374ca5377d9fd26c69d2b1cf83",
+    "youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev/capture/evidence/a5/hurt_flash_1_0.png": "b24ec3af1b1b3ee151bbe4121a0aeea19297f42b65c505672a52cd6053c5d2ed",
+    "youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev/capture/evidence/a5/hurt_flash_grey_1_0.png": "2bd43b72df7405be0912cfe3d6599a622567b1151275c05983a943dc633fe39b",
+    "youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev/capture/evidence/a5/hurt_flash_grey_2_0.png": "3cd66855f6142d3c6aaaeab1e413d388d288f02d23141e454d4a019a2ffc1c54",
+    "youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev/capture/evidence/a5/granite_sweep_uv_scale_min.png": "e1daf365715ff260f16ddaed13e26155b2a7fe6e81ad005a086c7ec65cc46e38",
+    "youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev/capture/evidence/a5/granite_sweep_uv_scale_max.png": "9b210d4aad55dee1f58121f5689c83ec5d7b2ad8dc227f1bbd7d7b0f42c1a52d",
+    "youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev/capture/evidence/a5/granite_sweep_roughness_scale_min.png": "f77bcc158d33ee9b1c4f63aa9cff6e75a6a9dbd2e1ce0c651d1c4d4cb5ff59c8",
+    "youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev/capture/evidence/a5/granite_sweep_normal_strength_min.png": "0b6cc9e929e4d74107cc183c75b8372772bcada6497e8cae0597df599609efb6",
+    "youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev/capture/evidence/a5/granite_sweep_normal_strength_max.png": "7aa673c350202bc0e8d907e6d1fef0723474da93291c1f35ae570fdb00d01468",
+    "youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev/capture/evidence/a5/granite_sweep_tint_min.png": "70ba05178619e826d50cfecb9541d127633b1179c84f7ed5c42b9bcdd38a1203",
+    "youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev/capture/evidence/a5/granite_materials.png": "d0ac4cea532275adefcbcfe768abc24bb9ecee7f42ef81f3504fdf0c64cf6264",
+    "youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev/capture/evidence/a5/granite_one_material_changed.png": "66b745e18dadeaa3467f2eba12635081b3c0c8d056f9e2383859f33dca2e0a94",
+    "youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev/capture/evidence/a5/hint_experiment.png": "7b61986a3f923e7611d6dd4dbe2bd2d463aea65d464c25c43bffb166a705cb71"
+  }
+}
