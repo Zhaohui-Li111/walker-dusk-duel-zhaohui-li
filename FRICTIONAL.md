@@ -893,3 +893,25 @@ restored it; Claude only ran the test and checked the diff.
   `detail` (usage 64); `tint` Color; `uv_scale` 0.25–8.0; `roughness_scale` 0–1;
   `normal_strength` 0–2. `project.godot` unchanged this time.
 - Not yet shown: that the data textures are read as data on screen, or anything about the look.
+
+## 2026-10-29 — Granite materials and the plinth (recorded by Claude Code)
+
+- Zhaohui approved building them ("Build them"). Claude wrote
+  `godot/props3d/make_granite_materials.gd`, which saves `granite_floor.tres` and
+  `granite_plinth.tres` with `ResourceSaver`, so Godot assigns the resource ids and no UID is typed
+  by hand.
+- **First run wrote `roughness_scale = null` and `normal_strength = null`** in both files: the two
+  uniforms were left unset, and a headless run does not know shader defaults (CLAUDE.md, Headless
+  facts), so the saver wrote null instead of 1.0. Fixed by setting both to 1.0 explicitly in the
+  script, with a comment saying why; no `null` remains.
+- The saved `ext_resource` lines have a path but no `uid=`. They load; the editor may add uids on
+  its next save, so check `git status` after an editor session.
+- `prop_room.tscn`, edited by hand: two `ext_resource` lines, `material_override` on `Floor`, and a
+  new `StonePlinth` (BoxMesh 0.8 × 0.3 × 0.8 at x 1.0, y 0.15, z −1.0). No prop moved.
+  The floor's old embedded `StandardMaterial3D` (`Mat_floor`) is still on the BoxMesh and is now
+  hidden by the override — left for the audit to flag rather than removed silently.
+- Headless probe: both overrides point at their `.tres`, both use `res://shaders/granite.gdshader`
+  (one shader object, two material objects), same three textures with `_nor_gl`, uv_scale 6.0 vs
+  1.0, tint white vs (0.431, 0.4, 0.502); plinth bottom at y 0.000; both meshes have UVs.
+  `check_props3d.gd` 49 / 0 and `test_runner.gd` 94 / 0.
+- Not shown: how either material looks. That is the editor sweep and the side-by-side capture.
