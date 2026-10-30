@@ -1013,3 +1013,19 @@ restored it; Claude only ran the test and checked the diff.
   pixel alone. Seen in the capture: the stretched floor reads as horizontal planks.
 - TEST-REPORT.md A5 section drafted with the measured values; the HUMAN CHECK rows are left for
   Zhaohui.
+
+## 2026-10-29 — Step 4: an attempt to script the conversion, and why it cannot be (recorded by Claude Code)
+
+- Zhaohui's first conversion in the editor produced a file in the wrong place
+  (`godot/standard_generated.gdshader`, not `godot/shaders/`) and with **Bent Normal Map**
+  enabled instead of Normal Map (`texture_bent_normal`, `BENT_NORMAL_MAP` and no `NORMAL_MAP`).
+  The editor also dropped the `[physics]` lines from `project.godot` again. Claude deleted that
+  file and its `.uid` and restored `project.godot`, with Zhaohui's agreement.
+- Zhaohui asked Claude to generate it instead ("你做吧"). The editor's conversion
+  (`editor/scene/material_editor_plugin.cpp`, `MaterialEditor::make_shader_material`) is
+  `RS::shader_get_code(material->get_shader_rid())`. Claude's script failed: a headless run hung,
+  and a windowed run stopped with `SCRIPT ERROR: Nonexistent function 'get_shader_rid'`. In 4.7.2
+  `Material` binds only `inspect_native_shader_code`, and `RenderingServer` has no call that
+  returns a material's shader. **There is no script route; the editor menu is the supported one.**
+  The script was deleted, uncommitted (`logs/generate_standard_shader.log` kept).
+- So Step 4's conversion goes back to Zhaohui in the editor, as the handout describes.
