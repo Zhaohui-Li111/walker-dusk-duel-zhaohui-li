@@ -567,3 +567,31 @@ Zhaohui's decision, after the agent's plan and the probe (FRICTIONAL.md, 2026-10
   only the test does it, and the test labels the case as setup, not input. The other rules are
   checked through real input with no such setup, except the K.O. case (rule 5), whose setup
   lowers the defender's health first and is labelled the same way.
+
+## Revision 7 · 2026-10-29 · rules 3, 4 and 5 after the first test runs
+
+Zhaohui's decisions after `test_hurt_flash.gd` failed 4 of 58 checks at 30, 60 and 144 fps
+(FRICTIONAL.md, 2026-10-29). Each changed expectation below has its reason; no assertion is
+removed.
+
+- **Rule 3, how it is checked (replaces Revision 6's setup).** Moving the defender back into range
+  cannot produce a retrigger, because the attacker's recovery is the limit (P1's second punch
+  connects at T+23 at the earliest; P2 leaves hurt at T+22). The test now lands the **first hit
+  through real input** (J) and the **second hit as SETUP**: while P2 is still in `"hurt"`, the test
+  calls the game's own `P2.receive_hit(P1, damage)` and then `P2.flush_ko()`, as `check_hit()`
+  does (`fighter.gd:171-173`). This calls the real hit handler, not the driver. **Expected:**
+  `hurt_amount` is `1.0` on that tick, then follows `stun / HITSTUN`, reaching `0.0` **18 ticks**
+  later. There is no 4-tick hold, because hitstop is set only when the attacker emits
+  `attack_resolved` (`main.gd:137-138`), which `receive_hit()` alone does not do.
+- **Rule 5, the mid-fade K.O.** The same unreachability applies. The test also checks it with the
+  same SETUP: P2 in `"hurt"` with health lowered, then `receive_hit()` → `"ko"`, and `hurt_amount`
+  must be `0.0` on that tick. The K.O. from idle stays as it is.
+- **Rule 4, time scale (replaces the 0.733 s prediction).** Under `Engine.time_scale = 0.5`,
+  Godot 4.7.2 with `--fixed-fps` still runs 60 physics ticks per second of frames (2 per frame at
+  30 fps), and the fight steps by ticks with frame data that ignores delta, so **the whole fight
+  is not slowed, and the flash, which follows game state, still lasts 22 ticks = 0.367 s of real
+  time**. That is the intended behaviour: presentation follows state and never runs its own
+  clock. The duration is in physics ticks; `Engine.time_scale` does not change it. The assertion's
+  expected value becomes 0.367 s. *Human check still needed:* the same in a normal windowed run
+  (not `--fixed-fps`).
+- **Pause** is unchanged and already passes.
