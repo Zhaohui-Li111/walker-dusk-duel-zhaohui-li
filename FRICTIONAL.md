@@ -878,3 +878,18 @@ restored it; Claude only ran the test and checked the diff.
   final newline. The tests passed (69 / 0 at 30, 60, 144), but `git diff` still showed
   "No newline at end of file". Zhaohui fixed it; the diff is now empty and the file is
   byte-identical to `f13d617`. Final runs on that file: 69 / 0 at 30, 60 and 144 fps.
+
+## 2026-10-29 — Zhaohui's granite shader (recorded by Claude Code)
+
+- **Zhaohui wrote `godot/shaders/granite.gdshader` by hand** in VS Code, in three rounds: the
+  type line and three samplers, then the two `group_uniforms` groups, then `fragment()`. Claude
+  explained each part with generic patterns and an unrelated example (`METALLIC = …`), checked each
+  round by reading the file, and did not edit it. Sampler names were Claude's suggestion
+  (`albedo_texture`, `roughness_texture`, `normal_texture`); Zhaohui used them.
+- Every round was right the first time; nothing had to be corrected. The file was saved with CRLF
+  endings (VS Code's Windows default); git stores it with LF.
+- Check: `--import` exit 0, no SHADER ERROR (`logs/import_after_granite.log`). A read-only probe of
+  `get_shader_uniform_list(true)`: mode spatial; three `Texture2D` samplers; groups `surface` and
+  `detail` (usage 64); `tint` Color; `uv_scale` 0.25–8.0; `roughness_scale` 0–1;
+  `normal_strength` 0–2. `project.godot` unchanged this time.
+- Not yet shown: that the data textures are read as data on screen, or anything about the look.
