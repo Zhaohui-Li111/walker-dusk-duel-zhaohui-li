@@ -48,6 +48,10 @@ Samplers (import settings: `compress/mode`, `compress/normal_map`, `mipmaps/gene
 Not bound by any material: `granite_wall_nor_dx_1k.png`, 0 (Lossless), 2 (Disabled), false;
 calibration only, as the brief says.
 
+*Review (Claude, 2026-10-29), measured with `load(...).get_image().get_format()` after import:*
+diff and rough are `FORMAT_DXT1` (17), compressed, with mipmaps; nor_gl is `FORMAT_RGTC_RG` (21),
+compressed, with mipmaps; nor_dx is `FORMAT_RGB8` (4), uncompressed, no mipmaps.
+
 ### `shaders/hint_experiment.gdshader` (`shader_type spatial;`, `render_mode unshaded;`)
 
 | Uniform | Type | Hints as written | Default | `hint_as_color` binds / sets | `hint_as_data` binds / sets | Import settings | Line |
@@ -98,7 +102,8 @@ Project: `renderer/rendering_method="gl_compatibility"`, also for mobile (`proje
    the same stone. Only a capture can say whether it matters.
 4. **Unused material on the floor mesh.** `Mesh_floor` still has `material =
    SubResource("Mat_floor")`, a StandardMaterial3D (`prop_room.tscn:9-11`, `:14`), which the
-   `material_override` hides. It costs nothing at draw time but is dead data, and CLAUDE.md's line
+   `material_override` hides. It is dead data (the audit's "costs nothing at draw time" was removed in review: nobody
+   measured it), and CLAUDE.md's line
    "Today the floor's material is an embedded `StandardMaterial3D`" is out of date: the override
    is now in place (`prop_room.tscn:43`).
 5. **Each hint material binds a sampler it never reads.** Both materials bind `hint_grey_3x1.png` to
@@ -107,22 +112,29 @@ Project: `renderer/rendering_method="gl_compatibility"`, also for mobile (`proje
    texture is bound under two different hints in the same draw. This audit has not checked whether
    GL Compatibility can decode one texture as sRGB on one sampler and not on the other; the
    window measurement answers that, and a result where A and B are the same would point here first.
-6. **The roughness map is stored as three VRAM-compressed channels and only `.r` is read**
-   (`granite.gdshader:20`; `granite_wall_rough_1k.png.import:19`, `:8` `s3tc_bptc`). Wasteful,
-   but it is what the brief's import table asks for.
+6. **The roughness map is stored as DXT1 (`get_format()` = 17, three channels) and only `.r` is
+   read** (`granite.gdshader:20`; `granite_wall_rough_1k.png.import:19`, `:8` `s3tc_bptc`).
+   Wasteful, but it is what the brief's import table asks for.
 7. **Desktop-only VRAM formats.** The three VRAM-compressed textures were imported for
    `s3tc_bptc` only (`.import:8` of each), while `project.godot:36` sets Compatibility for mobile
    as well. A mobile export would need ETC2/ASTC imports. Not a problem for this assignment, which
    runs on desktop.
-8. **Reflections come from the purple background.** `reflected_light_source` is left at Background
-   (0) in the prop room, so specular reflections take the #5A4766 background colour. This
-   matters at `roughness_scale` 0 ("glossy highlight" in the brief's uniform table): the highlight
-   will be tinted purple, not white.
+8. **Reflections are set to come from the purple background.** `reflected_light_source` is left at
+   Background (0) in the prop room (read from the loaded `Environment`), so specular reflections
+   are expected to take the #5A4766 background colour. *Review: this is a prediction, not a
+   measurement; no capture has been taken.* If it holds, it shows at `roughness_scale` 0 ("glossy
+   highlight" in the brief's uniform table) as a purple tint; the interface sweep checks it.
 9. **Normal maps are in the right convention.** Curl ratio (`tests/normal_map_check.gd`, files
    decoded with `Image.load_from_file` as RGB8, format 4, from 16-bit PNGs):
    `granite_wall_nor_gl_1k.png` 0.3545 as OpenGL, 1.6455 as DirectX; `granite_wall_nor_dx_1k.png`
    the other way round. The material binds the GL file to a `hint_normal` sampler with
    `compress/normal_map` = 1, as planned (brief predicted failures 4 and 5 not seen).
+11. *Added in review (Claude, 2026-10-29):* **the normal map is imported as two channels,
+    `FORMAT_RGTC_RG` (21).** With `compress/normal_map` = 1 (Enable,
+    `granite_wall_nor_gl_1k.png.import`), Godot keeps only X and Y and drops Z; the `hint_normal`
+    sampler (`granite.gdshader:5`) is what makes the shader rebuild Z from X and Y. The audit's
+    sampler table gave the import setting but not this consequence. Not a fault: it is why the
+    normal map must be sampled with `hint_normal` and not as a plain texture.
 10. **No inconsistencies** with the brief in the uniform names, types, hints, defaults or groups,
     the five import rows, the tint (#6E6680 exactly), the shared shader path, or the
     `material_override` wiring (brief predicted failure 7 not seen in the current import cache;

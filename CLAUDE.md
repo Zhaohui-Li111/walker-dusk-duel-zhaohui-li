@@ -24,12 +24,11 @@
   (`:55-69`), freezes them for `HITSTOP_FRAMES := 4` after a hit (`:16`, `:60-62`, `:137-138`) and
   stops stepping while `paused` (`:56-57`).
 - **3D object for the textured shader:** in `godot/props3d/prop_room.tscn`, the `Floor`
-  `MeshInstance3D` (BoxMesh 6 × 0.1 × 4, `:11-13`, `:35-37`) and a `StonePlinth` the brief
-  plans to add (`CHANGE-BRIEF.md:373-375`). Today the floor's material is an embedded
-  `StandardMaterial3D` sub-resource on the BoxMesh's `material` (`prop_room.tscn:7-13`). The brief
-  plans `material_override` → `godot/props3d/materials/granite_floor.tres` and
+  `MeshInstance3D` (BoxMesh 6 × 0.1 × 4) and the `StonePlinth` (BoxMesh 0.8 × 0.3 × 0.8), each
+  with `material_override` → `godot/props3d/materials/granite_floor.tres` and
   `granite_plinth.tres`, both ShaderMaterials of `godot/shaders/granite.gdshader`
-  (`CHANGE-BRIEF.md:376-383`). Textures: `godot/props3d/textures/granite_wall_*_1k.png`, credits
+  (`prop_room.tscn:43`, `:48`; audit in `godot/MATERIALS.md`). The floor's old embedded
+  `StandardMaterial3D` is still on the BoxMesh, hidden by the override (MATERIALS.md finding 4). Textures: `godot/props3d/textures/granite_wall_*_1k.png`, credits
   in `godot/props3d/textures/ATTRIBUTION.md`. BoxMesh UVs are a 3 × 2 grid; the top face uses
   UV (⅓–⅔, ½–1) (probe, `FRICTIONAL.md:724`).
 - **Tests** — run from the repo root, always through the wrapper
@@ -99,14 +98,10 @@
 
 ## Unconfirmed
 
-- Where the hurt-flash driver will live (a new node, or code in `fighter.gd`) and how each
-  fighter gets its own material; the brief leaves both open (`CHANGE-BRIEF.md:274-275`, `:292-293`).
-- The hurt-flash `render_mode`, the contrast ratio, the granite uniform table, the hint
-  experiment predictions and the short answers are still TO DO (`CHANGE-BRIEF.md:256-257`,
-  `:348`, `:356-362`, `:405`, `:443`).
-- `godot/shaders/` and `godot/props3d/materials/` do not exist yet; `StonePlinth` is not in
-  `prop_room.tscn`. The hint-experiment scene (`godot/hint_experiment/hint_experiment.tscn`) has
-  two quads with no material yet.
+- *Settled since the draft (review, 2026-10-29):* the driver is `godot/fighter/hurt_flash.gd`, a
+  node under each fighter's `Sprite2D` that builds its own material; the brief's TO DOs were
+  filled in Revisions 2–5; all three shaders, both granite materials, the `StonePlinth` and both
+  hint materials exist (`godot/MATERIALS.md`).
 - The sprite texel coordinates in the brief are to be "confirmed or corrected from the first
   capture" (`CHANGE-BRIEF.md:336`).
 - `blender/prop_taiko.blend` already had an uncommitted change before A5 began (git status at the
