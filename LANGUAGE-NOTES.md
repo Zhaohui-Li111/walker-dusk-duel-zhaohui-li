@@ -10,8 +10,8 @@ says so. Line references are to `godot/shaders/` unless a path is given.
 
 The shader Godot 4.7.2 wrote when Zhaohui converted a StandardMaterial3D (albedo texture, normal
 map and roughness texture: the granite files) with **Convert to ShaderMaterial** in the editor.
-*Line numbers listed by Claude and checked against the file with a script (`sed -n`); Zhaohui's
-own check is still to do.*
+*Line numbers listed by Claude and checked against the file with a script (`sed -n`); checked
+again by Zhaohui against the open file (2026-10-29).*
 
 | Item | Line | The line |
 |---|---|---|
