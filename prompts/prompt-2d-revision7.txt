@@ -1,0 +1,36 @@
+Read CLAUDE.md first, then CHANGE-BRIEF.md Revision 7, which replaces
+Revision 6's setup for rule 3 and the 0.733 s prediction for rule 4.
+The shader in godot/shaders/ is hand-written by me: do not edit any
+.gdshader file.
+
+Your test godot/tests/test_hurt_flash.gd is committed (58 checks, 4
+failed at 30, 60 and 144). Change only that file, and only these parts:
+
+1. Rule 3: keep punch 1 through real input (J). Replace the "move the
+   defender back into range" setup and punch 2 with Revision 7's setup:
+   while P2 is still in "hurt", call P2.receive_hit(P1, <punch damage>)
+   and then P2.flush_ko(), printed as SETUP. Assert hurt_amount is 1.0
+   on that tick, equals stun / HITSTUN on every following tick, and is
+   0.0 at 18 ticks after it (no hitstop hold; say why in the output).
+2. Rule 5: add the mid-fade case with the same setup: P2 in "hurt",
+   health lowered (SETUP), receive_hit() -> "ko", hurt_amount 0.0 on
+   that tick and on every later tick. Keep the K.O.-from-idle case.
+3. Rule 4, time scale: change only the expected real-time duration from
+   0.733 s to 0.367 s (22 ticks), with the same per-fps tolerance, and
+   print the reason (Revision 7: the fight steps by ticks, time_scale
+   does not change the tick count). Keep the tick assertion and the
+   ticks-per-frame harness check as they are.
+
+Do not change, weaken or remove any other assertion. Do not call the
+driver (hurt_flash.gd) or main.step() directly. Do not edit any other
+file.
+
+Run each command on its own:
+  ./scripts/run-test.sh test_hurt_flash.gd 30
+  ./scripts/run-test.sh test_hurt_flash.gd 60
+  ./scripts/run-test.sh test_hurt_flash.gd 144
+  ./scripts/run-test.sh test_runner.gd 60
+  ./scripts/run-test.sh check_props3d.gd 60
+Show the real final lines of each, including any SHADER ERROR or
+SCRIPT ERROR, and the diff of the test. If any frame rate fails, report
+it and stop without changing assertions to make it pass. Do not commit.
