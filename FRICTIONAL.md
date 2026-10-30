@@ -941,3 +941,22 @@ restored it; Claude only ran the test and checked the diff.
   adjustments off; the imported texture is 3 × 1, RGB8, no mipmaps, texels [64, 128, 192].
 - Not shown: the displayed band values. That needs a windowed capture, sampled by Zhaohui, beside
   the Revision 2 predictions.
+
+## 2026-10-29 — The materials audit and its review (recorded by Claude Code)
+
+- Zhaohui asked for the audit ("Run the audit"). prompt-3 was run verbatim
+  (`sessions/session-3-audit.jsonl`): `success`, 35 turns. Writes to `.gdshader`, `.tres`,
+  `.tscn` and `.import` were disallowed on top of the prompt's instruction; none changed. **Six
+  denials**: shell loops with `cd … &&`, and two PowerShell calls (`$env:GODOT`, `Get-Command`),
+  all outside the allowed list. Its draft was committed unedited (`31caccb`); Claude's own run of
+  `test_materials.gd`: 96 checks, 0 failed.
+- **Review (Claude, approved by Zhaohui):** every line reference checked, and every enum and
+  numeric claim checked against a headless probe — all correct, unlike the audit in the handout
+  (no ACES/AGX mix-up). Corrections: the roughness format stated from `get_format()` (DXT1, 17);
+  a **missed fact** added: the normal map is imported as two channels, `RGTC_RG` (21), which is
+  why it needs `hint_normal`; finding 8 ("purple highlight") relabelled as an unmeasured
+  prediction; "costs nothing at draw time" removed because nobody measured it.
+- The audit found two real problems Claude had made: the BoxMesh UV stretch (2.25 : 1 on the
+  floor, 4 : 1 on the plinth sides), and the brief's "plinth about once", which contradicts its own
+  UV note. Brief Revision 8 corrects it; no material or shader change until the look is checked.
+- CLAUDE.md's floor line and four Unconfirmed items were stale; updated in the review commit.
