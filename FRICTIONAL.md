@@ -1091,3 +1091,10 @@ Zhaohui's answers, word for word, now in TEST-REPORT: 1 hurt-flash captures "能
 edit "变了". After item 6, `git status` was clean (shader identical to `25e6dd8`, `project.godot`
 unchanged). The OS-screenshot comparison was not done and is recorded as not done. Claude added
 the A5 inspect-and-revise cycles, agent mistakes and limitations to TEST-REPORT.
+
+## 2026-10-29 — The A5 film, watched by Zhaohui (recorded by Claude Code)
+
+- Zhaohui watched the exported master (`claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev.mp4`,
+  SHA-256 `e04cbc98…3143`) and said: "我看了，没问题" (I watched it; no problems).
+- Before the deadline, tag `a5` (`532e0eb`) was pushed while the film was still exporting, at
+  Zhaohui's request; the film's hash followed in the documentation-only commit `a6946db`.
