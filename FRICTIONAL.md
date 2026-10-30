@@ -927,3 +927,17 @@ restored it; Claude only ran the test and checked the diff.
   two `Texture2D` samplers, `read_as_color` bool.
 - With this, all three hand-written shaders exist: `hurt_flash` (`f13d617`), `granite`
   (`25e6dd8`) and `hint_experiment`. No agent session has changed `godot/shaders/`.
+
+## 2026-10-29 — Hint experiment materials on the quads (recorded by Claude Code)
+
+- Zhaohui approved ("Make them"). Claude wrote `godot/hint_experiment/make_hint_materials.gd`,
+  which saves `hint_as_color.tres` (`read_as_color = true`, quad A) and `hint_as_data.tres`
+  (`false`, quad B) with `ResourceSaver`. Both bind `hint_grey_3x1.png` to both samplers.
+  `read_as_color` is written for both materials, having learned from the granite materials that a
+  headless save writes `null` for an unset parameter. No `null` in either file.
+- `hint_experiment.tscn`: two `ext_resource` lines and a `material_override` on each quad.
+- Headless probe: each quad's override is its own `.tres`, both use
+  `res://shaders/hint_experiment.gdshader`; Linear tonemap (0), exposure 1.0, glow, fog and
+  adjustments off; the imported texture is 3 × 1, RGB8, no mipmaps, texels [64, 128, 192].
+- Not shown: the displayed band values. That needs a windowed capture, sampled by Zhaohui, beside
+  the Revision 2 predictions.
