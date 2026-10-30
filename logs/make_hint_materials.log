@@ -1,0 +1,4 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+res://hint_experiment/hint_as_color.tres err=0 read_as_color=true
+res://hint_experiment/hint_as_data.tres err=0 read_as_color=false

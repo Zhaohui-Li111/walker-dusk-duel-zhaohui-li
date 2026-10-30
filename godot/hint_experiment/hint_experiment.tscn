@@ -1,4 +1,7 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Material" path="res://hint_experiment/hint_as_color.tres" id="1_as_color"]
+[ext_resource type="Material" path="res://hint_experiment/hint_as_data.tres" id="2_as_data"]
 
 [sub_resource type="Environment" id="Env_linear"]
 background_mode = 1
@@ -29,10 +32,12 @@ size = 2.0
 [node name="QuadA_source_color" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 mesh = SubResource("Quad")
+material_override = ExtResource("1_as_color")
 
 [node name="QuadB_no_hint" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0)
 mesh = SubResource("Quad")
+material_override = ExtResource("2_as_data")
 
 [node name="LabelA" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.85, 0.4, 0)

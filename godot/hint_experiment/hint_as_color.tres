@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://shaders/hint_experiment.gdshader" id="1_26wyr"]
+[ext_resource type="Texture2D" path="res://hint_experiment/hint_grey_3x1.png" id="2_nrui5"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_26wyr")
+shader_parameter/grey_as_color = ExtResource("2_nrui5")
+shader_parameter/grey_as_data = ExtResource("2_nrui5")
+shader_parameter/read_as_color = true
