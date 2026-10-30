@@ -129,6 +129,73 @@ timeout 120 godot --headless --path godot --script res://tests/check_props3d.gd 
 - Opening the project in the Godot editor re-saves `godot/project.godot` and drops the
   `[physics]` lines (60 is the default value). Run `git status` after an editor session.
 
+## Assignment 5: shaders and materials
+
+Two hand-written shaders and the materials that use them, plus a hint experiment. **Every
+`.gdshader` file in `godot/shaders/` was typed by Zhaohui**; no agent session changed that
+folder (`git log -- godot/shaders/` shows only Zhaohui's commits).
+
+- **Shader from code — the hurt flash.** `godot/shaders/hurt_flash.gdshader` (canvas_item) tints a
+  fighter's sprite red while that fighter is in `"hurt"`: `COLOR.rgb = mix(COLOR.rgb,
+  flash_color.rgb, hurt_amount);`. The driver `godot/fighter/hurt_flash.gd` gives each fighter
+  its own material and sets `hurt_amount = stun / HITSTUN` every physics tick, so the flash
+  follows game time (0.367 s) at any frame rate.
+- **Textured shader — granite.** `godot/shaders/granite.gdshader` (spatial) samples a colour texture
+  with `source_color`, and a roughness map and an OpenGL normal map as data, with four uniforms in
+  the groups `surface` and `detail`. Two materials use it in `godot/props3d/prop_room.tscn`: the
+  floor (`granite_floor.tres`) and a new stone plinth (`granite_plinth.tres`). The A3 props have no
+  UVs, which is why the floor and the plinth carry it.
+- **Hint experiment.** `godot/hint_experiment/hint_experiment.tscn`: one 3 × 1 grey PNG (written by
+  `write_hint_png.gd`) read by two samplers of `godot/shaders/hint_experiment.gdshader`, with and
+  without `source_color`, on two unshaded quads.
+- **Documents:** [CHANGE-BRIEF.md](CHANGE-BRIEF.md) (Assignment 5 and Revisions 2–8) ·
+  [CLAUDE.md](CLAUDE.md) · [godot/MATERIALS.md](godot/MATERIALS.md) ·
+  [TEST-REPORT.md](TEST-REPORT.md) (Assignment 5) · [FRICTIONAL.md](FRICTIONAL.md) ·
+  texture credits in [godot/props3d/textures/ATTRIBUTION.md](godot/props3d/textures/ATTRIBUTION.md).
+- **Controls added:** none. Play as before; the flash shows on whichever fighter is hit.
+
+Run the A5 checks through the wrapper (set `GODOT` to the console build if `godot` is not on
+PATH; run `--import` once after cloning):
+
+```bash
+./scripts/run-test.sh test_hurt_flash.gd 30
+```
+
+```bash
+./scripts/run-test.sh test_hurt_flash.gd 60
+```
+
+```bash
+./scripts/run-test.sh test_hurt_flash.gd 144
+```
+
+```bash
+./scripts/run-test.sh test_materials.gd 60
+```
+
+```bash
+./scripts/run-test.sh calibrate_normal_map.gd 60
+```
+
+Expected: 69 / 0 at each rate, 96 / 0, and exit 0. The earlier suites stay at 94 / 0
+(`test_runner.gd`) and 49 / 0 (`check_props3d.gd`). In-engine captures need a window:
+
+```bash
+godot --path godot --script res://tests/capture_a5.gd
+```
+
+- **A5 known limitations:**
+  - The headless tests prove that the shaders parse and are driven and wired as specified, not
+    how anything looks; the look is the human checks in TEST-REPORT.
+  - A second hit cannot land during hurt in real play, so the retrigger rule is checked only with
+    labelled test setup (CHANGE-BRIEF Revisions 6–7).
+  - `Engine.time_scale` does not slow the fight or the flash (Revision 7).
+  - In the Compatibility renderer the hint experiment shows the same values on both quads; the
+    Forward+ prediction does not apply (TEST-REPORT).
+  - The BoxMesh UVs stretch the granite (2.25 : 1 on the floor), so it reads as planks
+    (MATERIALS.md findings 1–3).
+- **A5 film:** *to be added.*
+
 ## Final film
 
 **"Dusk Duel, Generated"**: a Brutalist explainer made with the `godot-gamedev` skill in walker

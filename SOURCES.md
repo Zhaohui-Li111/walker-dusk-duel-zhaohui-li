@@ -58,6 +58,42 @@ installed Blender and enabled the add-on, chose the makiwara rope shape, and did
 look check in the Godot editor. Claude Code drafted the brief, set up the MCP on Windows, built and
 checked the meshes, exported them, and wrote the Godot scene and scripts.
 
+## Assignment 5: textures, tools and who did what
+
+**Textures:** Poly Haven *Granite Wall*, https://polyhaven.com/a/granite_wall, by Dimitrios Savva
+(all roles), CC0, 1k PNG (diffuse, roughness, `_nor_gl` used; `_nor_dx` for calibration only),
+downloaded and checked 2026-10-26. File hashes in `godot/props3d/textures/ATTRIBUTION.md`.
+`godot/hint_experiment/hint_grey_3x1.png` is written by code in this repository. No generative
+model made any A5 asset.
+
+**Tools:** Godot 4.7.2 stable (Compatibility); Claude Code 2.1.237, then 2.1.311 (Opus 5.5) for
+the `claude -p` sessions; Godot 4.7.2-stable engine source on GitHub, read (not copied) to look up
+import enums and the Compatibility colour pipeline. The curl check `godot/tests/normal_map_check.gd`
+is copied unchanged from the course handout.
+
+**Who did what in A5:**
+- **Zhaohui Li:**
+  - Chose the effect (hurt flash), kept the Compatibility renderer, chose red, and chose the
+    lantern (later the floor and plinth, after the missing UVs).
+  - **Wrote all three shaders by hand**: `hurt_flash.gdshader`, `granite.gdshader`,
+    `hint_experiment.gdshader`. Claude explained the parts with unrelated examples and checked
+    each file, but did not edit them.
+  - Wrote the colour line and computed by hand, with a calculator, the six pixel predictions, the
+    hint-experiment predictions, the contrast ratio and the frame-count answer (Q5); predicted Q7.
+  - Made the three shader mutations and restored the first two.
+  - Decided every brief revision (rules 3, 4 and 5, the plinth), and approved each agent step.
+- **Claude Code (Opus 5.5):**
+  - Drafted the A5 brief sections and revisions from Zhaohui's decisions, the short answers Q1–Q4
+    and Q6 (marked as Claude's in the brief), and every FRICTIONAL entry.
+  - Through `claude -p` sessions: CLAUDE.md, the driver `hurt_flash.gd`, `test_hurt_flash.gd`,
+    the materials audit (`godot/MATERIALS.md`, `test_materials.gd`), each committed unedited and
+    then reviewed. Claude wrote the prompts after the plan step from Zhaohui's approvals.
+  - Directly: `scripts/run-test.sh` (the handout's, with a `GODOT` variable), the texture
+    downloads and import settings, `calibrate_normal_map.gd`, `write_hint_png.gd`,
+    `make_granite_materials.gd`, `make_hint_materials.gd`, `capture_a5.gd`, the plinth and quad
+    wiring, the CLAUDE.md and audit reviews, and the TEST-REPORT measurements.
+  - Restored `granite.gdshader` after the third mutation with `git checkout` of Zhaohui's commit.
+
 ## References consulted (not copied)
 
 - GDQuest, godot-4-hitbox-hurtbox demo: https://github.com/gdquest-demos/godot-4-hitbox-hurtbox
@@ -103,9 +139,11 @@ See [ASSET-LOG.md](ASSET-LOG.md) and `asset_log.csv`: one row per generation, in
 | Python tools and notebooks (`tools/`, `notebooks/`) | 0 % | about 100 % |
 | Film tools (`youtube/*/tools/`) | 0 % | about 100 % |
 | Blender Python, A3 (`tools/blender/`) | 0 % | 100 % (run through the MCP; the required hand edit in Blender is to be done by Zhaohui with the mouse, not in code) |
+| Shaders, A5 (`godot/shaders/*.gdshader`, three files, 46 lines) | **100 %** | 0 % (explained the parts and checked the files; edited none) |
 
 Zhaohui's contribution is the specification, the decisions and the verification, not lines of
-code. This is the course's intended division of work.
+code. This is the course's intended division of work. A5 is the exception the course requires: the
+three shaders are Zhaohui's own lines.
 
 ## Style guides
 
