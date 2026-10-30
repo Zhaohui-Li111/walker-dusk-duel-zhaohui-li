@@ -330,8 +330,9 @@ With the red flash both 1.0 and 2.0 saturate to (254, 0, 0), so a second check u
 which is `mix()` extrapolated (222 + 2 × (128 − 222) = 34; 89 + 2 × 39 = 167). **Not clamped**;
 Zhaohui's prediction ("No") holds.
 
-**HUMAN CHECK (Zhaohui): do the captures look like the predicted colours? Compare one in-engine
-capture with an OS screenshot once, and say which you trust and why.** — *to do*
+**HUMAN CHECK (Zhaohui), 2026-10-29:** looking at `hurt_flash_0_0/0_5/1_0.png`: "能看出来" (the
+change from normal to red can be seen). *The comparison of one in-engine capture with an OS
+screenshot was not done.*
 
 ## Time scale in a normal windowed run (no --fixed-fps)
 
@@ -354,7 +355,7 @@ whatever the sampler's hint, and `:2798` encodes once on output, so both quads g
 encode. The prediction followed the Forward+/Mobile pipeline. *Zhaohui's explanation goes in
 LANGUAGE-NOTES.md.*
 
-**HUMAN CHECK (Zhaohui): look at the capture and confirm the two quads look the same.** — *to do*
+**HUMAN CHECK (Zhaohui), 2026-10-29:** the two quads look the same: "一样".
 
 ## Interface sweep (floor material, in memory; `evidence/a5/granite_sweep_*.png`)
 
@@ -372,16 +373,17 @@ Claude in `granite_materials.png`: **the stretched floor reads as horizontal pla
 granite** (the 2.25 : 1 stretch, MATERIALS.md finding 1). The tint-black row shows (26, 26, 26),
 not black: the ambient or reflected light still adds a little.
 
-**HUMAN CHECK (Zhaohui): look through the sweep images; what changed, and which setting breaks the
-look?** — *to do*
+**HUMAN CHECK (Zhaohui), 2026-10-29:** "tint全黑不好看" — the tint at black breaks the look.
 
 ## One shader, two materials
 
 - One value in one material (Claude, in memory): floor `tint` → (0.4, 0.8, 0.4) changed the floor
   pixel to (50, 78, 34); the plinth stayed (10, 4, 6). Only the floor changed.
-- **HUMAN CHECK (Zhaohui): edit one line of `granite.gdshader`, see both objects change, restore
-  it.** — *to do*
-- **HUMAN CHECK (Zhaohui): side-by-side look at `evidence/a5/granite_materials.png`.** — *to do*
+- **HUMAN CHECK (Zhaohui), 2026-10-29:** edited one line of `granite.gdshader` (Claude suggested
+  removing `* tint.rgb` on line 19) and restored it: both objects "变了" (changed). Afterwards
+  `git status` was clean: the shader matches `25e6dd8` and `project.godot` is unchanged.
+- **HUMAN CHECK (Zhaohui), 2026-10-29:** side by side in `granite_materials.png`, the granite
+  "像木板" (looks like wooden planks), agreeing with MATERIALS.md finding 1. Not fixed in A5.
 
 ## Material wiring and texture data
 
@@ -392,5 +394,44 @@ look?** — *to do*
 
 ## In play
 
-**HUMAN CHECK (Zhaohui): play several rounds with both buses muted; is a hit on Akaken readable
-(failure case 8)? Do the boundaries hold?** — *to do*
+**HUMAN CHECK (Zhaohui), 2026-10-29:** played with both buses muted: "可以看出" — who was hit can
+be seen, so predicted failure case 8 (a weak flash on Akaken) was not seen in play. Boundaries: no
+change to fight behaviour was reported; the headless baseline stays 94 / 0.
+
+## Inspect-and-revise cycles (A5)
+
+1. **Observation:** the first `test_hurt_flash.gd` runs failed 4 of 58 at 30, 60 and 144 fps.
+   **Inspection:** the frame data makes a second hit during hurt impossible (T+23 vs T+22), and
+   `time_scale` does not change the tick count. **Revision:** brief Revisions 6–7 (rules 3, 4, 5),
+   decided by Zhaohui; the test's expectations changed with reasons, no assertion removed; 69 / 0.
+2. **Observation:** the first capture run sampled every 3D pixel as background. **Inspection:**
+   looking at the PNGs showed the images were right and the coordinates wrong (640 × 360 viewport
+   vs 1280 × 720 capture). **Revision:** scaled coordinates; rerun.
+3. **Observation:** quad B measured 64 / 128 / 192, not the predicted 137 / 188 / 224.
+   **Inspection:** a separate texture object for B changed nothing; the GLES3 scene shader decodes
+   every `ALBEDO` and encodes on output. **Revision:** the explanation in LANGUAGE-NOTES Q4; the
+   prediction stays as written in the brief, beside the measurement here.
+4. **Observation:** the granite floor reads as wooden planks (Zhaohui, and the capture).
+   **Inspection:** MATERIALS.md findings 1–3 (BoxMesh UV stretch). **Revision:** brief Revision 8
+   corrected the plan's text; the look itself is not fixed in A5 (a known limitation).
+
+## What the agent got wrong (A5)
+
+- The `claude -p` CLI was too old: exit 0 and `subtype: success`, but `is_error: true` and no
+  CLAUDE.md. Caught by reading the result event.
+- Agent sessions ran commands outside `--allowedTools` without a recorded denial (`wc -l`,
+  `git show`), and tried to execute a probe during a plan-only step (denied).
+- The first materials script saved two uniforms as `null` (a headless save does not know shader
+  defaults). Caught by reading the `.tres`.
+- The audit stated an unmeasured "costs nothing at draw time" and missed the RG-only normal map.
+- **Claude's own wrong claim** that `hint_normal` rebuilds Z (MATERIALS.md finding 11), repeated
+  into a draft answer; caught by reading the engine source while checking LANGUAGE-NOTES.
+- Claude's capture script sampled 3D pixels at the wrong scale (cycle 2 above).
+
+## Honest limitations (A5)
+
+- The headless suites prove parsing, uniform names and types, driving and wiring, not looks; the
+  look is the human checks above, which Zhaohui reported in a few words each.
+- The OS-screenshot comparison was not done.
+- The retrigger and the mid-fade K.O. are reachable only by labelled test setup.
+- The granite looks like planks on this BoxMesh.

@@ -1083,3 +1083,11 @@ restored it; Claude only ran the test and checked the diff.
   Zhaohui's sentence as written and added a separate, labelled correction beneath it, rather than
   replacing Zhaohui's words.
 - LANGUAGE-NOTES is now complete: questions 1–8 and Part 1.
+
+## 2026-10-29 — Zhaohui's human checks (recorded by Claude Code)
+
+Zhaohui's answers, word for word, now in TEST-REPORT: 1 hurt-flash captures "能看出来"; 2 hint quads
+"一样"; 3 sweep "tint全黑不好看"; 4 granite "像木板"; 5 muted play "可以看出"; 6 one-line shader
+edit "变了". After item 6, `git status` was clean (shader identical to `25e6dd8`, `project.godot`
+unchanged). The OS-screenshot comparison was not done and is recorded as not done. Claude added
+the A5 inspect-and-revise cycles, agent mistakes and limitations to TEST-REPORT.
