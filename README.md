@@ -194,7 +194,14 @@ godot --path godot --script res://tests/capture_a5.gd
     Forward+ prediction does not apply (TEST-REPORT).
   - The BoxMesh UVs stretch the granite (2.25 : 1 on the floor), so it reads as planks
     (MATERIALS.md findings 1–3).
-- **A5 film:** *to be added.*
+- **A5 film: "Dusk Duel, Shaded".** A Brutalist explainer made with the `godot-gamedev` skill in walker
+  mode. 5:35, 3840 × 2160, 30 fps.
+  - **Link:** *to be added after upload*
+  - **File name:** `claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev.mp4`
+  - **SHA-256:** `e04cbc986b195d4cb0f3a45b8427f1de4660bdb699ee7d2469c524e7519d3143`
+  - **Game source shown:** `godot/` at `043df17`.
+  - **Film source and evidence:** [youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev/](youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev/)
+    (start with BUILD-LOG.md, FACTCHECK.md and SOURCES.md).
 
 ## Final film
 

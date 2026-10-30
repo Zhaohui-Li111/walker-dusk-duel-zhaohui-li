@@ -23,8 +23,8 @@
 - **Texture sources and licences:** Poly Haven *Granite Wall*, https://polyhaven.com/a/granite_wall,
   Dimitrios Savva, CC0 (`godot/props3d/textures/ATTRIBUTION.md`); `_nor_gl` used. The hint-experiment
   PNG is written by `godot/hint_experiment/write_hint_png.gd`.
-- **Final film URL and filename:** *to be added after upload* · `claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev.mp4`
-- **Final film SHA-256:** *to be added after export*
+- **Final film URL and filename:** *link to be added after upload to course media storage* · `claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev.mp4` ("Dusk Duel, Shaded", 5:35, 3840 × 2160, 30 fps, 26.4 MB)
+- **Final film SHA-256:** `e04cbc986b195d4cb0f3a45b8427f1de4660bdb699ee7d2469c524e7519d3143`
 - **Summary of my work:** I chose the effect and the colour, wrote the colour line, and typed all
   three shaders by hand (`hurt_flash`, `granite`, `hint_experiment`). I computed the pixel, hint and
   contrast predictions with a calculator, made the three shader mutations, decided every brief
@@ -47,3 +47,9 @@
 `test_materials.gd` 60 → 96 / 0; `calibrate_normal_map.gd` 60 → PASS. No log contains SHADER ERROR or
 SCRIPT ERROR. The counts match TEST-REPORT.md. (Run on the local clone; the GitHub copy is checked
 after the push.)
+
+## Film documentation added after the tag
+
+The film was exported after tag `a5` (`532e0eb`). Its hash and this note were added in a later
+commit, a documentation-only revision: `godot/` is unchanged, so the film shows the game source of `a5`
+(`043df17`).

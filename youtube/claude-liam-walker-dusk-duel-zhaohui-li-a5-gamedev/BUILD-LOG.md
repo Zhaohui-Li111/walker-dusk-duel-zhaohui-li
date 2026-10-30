@@ -73,3 +73,17 @@ ffmpeg 9.0.2 · Kokoro `am_onyx` (local, free) · faster-whisper `base.en`.
   excerpts, 4 code-then-result pairs. It checks hashes, inventory and lines, not explanatory truth.
 - `./art` needs `python3`; on this machine that is the Microsoft Store alias, so a shim pointing to
   Python 3.12 was put first on `PATH` (as the A3 build prompt says).
+
+## 7. Final export
+
+- The first `./art final` was blocked by GATE T: B15's figure contains the engine capture of the
+  hint quads, and the checker read the dark 64-grey band on the 0.1 background as low-contrast text.
+  B15 was marked STILL (its picture is diegetic engine output), as the A3 reel does; its labels were
+  checked on the masked copy (`_qc/typecheck-masked`, B05/B08/B12/B13/B15 re-rendered with the
+  pictures blanked). The second run passed GATE T.
+- Master: `exports/landscape/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev.mp4`, 335.3 s,
+  3840 × 2160, 30 fps, H.264 + AAC, 26,444,158 bytes,
+  SHA-256 `e04cbc986b195d4cb0f3a45b8427f1de4660bdb699ee7d2469c524e7519d3143`.
+- Tag `a5` (`532e0eb`) was pushed before the export finished, at Zhaohui's request near the
+  deadline; this hash is recorded in a later documentation-only commit.
+- **Not done by Claude:** watching the master end to end with sound. That is Zhaohui's check.
