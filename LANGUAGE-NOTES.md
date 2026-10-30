@@ -8,7 +8,25 @@ says so. Line references are to `godot/shaders/` unless a path is given.
 
 ## Part 1 — the generated shader (`standard_generated.gdshader`)
 
-*To do.*
+The shader Godot 4.7.2 wrote when Zhaohui converted a StandardMaterial3D (albedo texture, normal
+map and roughness texture: the granite files) with **Convert to ShaderMaterial** in the editor.
+*Line numbers listed by Claude and checked against the file with a script (`sed -n`); Zhaohui's
+own check is still to do.*
+
+| Item | Line | The line |
+|---|---|---|
+| `shader_type` | 3 | `shader_type spatial;` |
+| `render_mode` | 4 | `render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx;` |
+| Inspector albedo colour | 6 | `uniform vec4 albedo : source_color;` |
+| Inspector normal-map strength | 20 | `uniform float normal_scale : hint_range(-16.0, 16.0);` |
+| Albedo sampler and its hints | 7 | `uniform sampler2D texture_albedo : source_color, filter_linear_mipmap, repeat_enable;` |
+| Normal-map sampler and its hints | 19 | `uniform sampler2D texture_normal : hint_roughness_normal, filter_linear_mipmap, repeat_enable;` |
+| Writes `ALBEDO` | 35 | `ALBEDO = albedo.rgb * albedo_tex.rgb;` |
+| Writes `ROUGHNESS` | 43 | `ROUGHNESS = roughness_tex * roughness;` |
+| Writes `NORMAL_MAP` | 46 | `NORMAL_MAP = texture(texture_normal, base_uv).rgb;` |
+
+**Annotations (Zhaohui, in my own words):** *to do — two lines of the generated shader explained
+beside their equivalents in `granite.gdshader`.*
 
 ## Part 2 — questions
 
