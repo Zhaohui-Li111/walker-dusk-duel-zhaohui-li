@@ -974,3 +974,17 @@ restored it; Claude only ran the test and checked the diff.
   Predicted failure 7 (material saved embedded / lost on reimport) not seen.
 - Still to do in Step 3: the `source_color` mutation (Zhaohui edits the shader), and the human
   checks.
+
+## 2026-10-29 — The source_color mutation (recorded by Claude Code)
+
+- **Zhaohui deleted `source_color, ` from `albedo_texture`** (`granite.gdshader:3`) in VS Code.
+  `test_materials.gd` at 60 fps: **exit 1, 96 checks, 1 failed, no SHADER ERROR**
+  (`logs/mutation3_source_color_60fps.log`). The one failure is the hint assertion read from the
+  source text: expected `source_color, repeat_enable`, found `repeat_enable`.
+- So the three mutations are each caught by a different mechanism: the semicolon by an empty
+  uniform list (and the wrapper's SHADER ERROR scan), the rename by the uniform-list names, and
+  `source_color` by the hints read from the source text. The last two parse cleanly.
+- **The restore was done by Claude, at Zhaohui's request** ("你剩下的事情能不能都自己做完呢"):
+  `git checkout 25e6dd8 -- godot/shaders/granite.gdshader`, which writes back the file exactly as
+  Zhaohui committed it. No content was written by Claude; `git diff HEAD -- godot/shaders/` is
+  empty and `test_materials.gd` is back to 96 / 0.
