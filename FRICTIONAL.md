@@ -1071,3 +1071,15 @@ restored it; Claude only ran the test and checked the diff.
   assistant answering ("把那张表发给我，我可以逐项核对"). Claude asked whether any answers came from
   another tool. **Zhaohui said they wrote them themselves.** Recorded here as both said it.
 - Part 1 (the generated shader's line list) is still open.
+
+## 2026-10-29 — LANGUAGE-NOTES Part 1 annotations (recorded by Claude Code)
+
+- Zhaohui checked the Part 1 line list against the file ("我核对过了") and wrote two annotations
+  in Chinese (generated line 7 vs. `granite.gdshader:3`; line 19 vs. `:5`). Claude translated them.
+- Annotation 2 said `hint_roughness_normal` suits a texture holding roughness and normal data.
+  Checked against `material_storage.cpp:953-967`: the texture holds only normal data; the hint
+  also lets the editor use it as the roughness texture's `roughness/src_normal`. Claude asked for a
+  rewrite; Zhaohui asked Claude to finish it instead ("怎么还有，你能不能自己做呢"). Claude kept
+  Zhaohui's sentence as written and added a separate, labelled correction beneath it, rather than
+  replacing Zhaohui's words.
+- LANGUAGE-NOTES is now complete: questions 1–8 and Part 1.

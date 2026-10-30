@@ -25,8 +25,26 @@ again by Zhaohui against the open file (2026-10-29).*
 | Writes `ROUGHNESS` | 43 | `ROUGHNESS = roughness_tex * roughness;` |
 | Writes `NORMAL_MAP` | 46 | `NORMAL_MAP = texture(texture_normal, base_uv).rgb;` |
 
-**Annotations (Zhaohui, in my own words):** *to do — two lines of the generated shader explained
-beside their equivalents in `granite.gdshader`.*
+**Annotations** *(Zhaohui's Chinese, below in the appendix, translated by Claude)*:
+
+1. **Generated line 7 vs. my `granite.gdshader:3`.** `source_color` means this texture is read as a
+   colour texture, with the matching colour-space handling. Both lines have `source_color` and
+   `repeat_enable`, but the generated shader also uses `filter_linear_mipmap`, which means
+   sampling uses linear filtering and mipmaps; my shader does not specify this filter mode.
+2. **Generated line 19 vs. my `granite.gdshader:5`.** `hint_roughness_normal` means this texture is
+   used for roughness- and normal-related data processing, suited to a texture that contains
+   roughness and normal information; my `hint_normal` explicitly marks the texture as a normal
+   map. The difference is the purpose of the hint: the generated shader uses the more specialised
+   roughness-normal hint, while my shader only uses the normal hint.
+
+   *Correction by Claude (Zhaohui asked Claude to finish this item):* the texture under
+   `hint_roughness_normal` holds only normal data, not roughness. In Godot 4.7.2 (editor only,
+   `drivers/gles3/storage/material_storage.cpp:953-967`) it does what `hint_normal` does — lets the
+   importer detect a normal map — and also registers this normal map so that, when the material has
+   a roughness texture with a `hint_roughness_*` hint (generated line 14), the editor sets that
+   roughness texture's `roughness/src_normal` import option to it (the roughness limiter). This
+   project's roughness import sets `roughness/mode=1` (Disabled) explicitly, so that did not
+   happen here: no `.import` file changed after the conversion.
 
 ## Part 2 — questions
 
@@ -133,7 +151,15 @@ yourself as in plain GLSL. It also provides Inspector hints such as `hint_range`
 developer to access rendering data and control the material. (hurt_flash.gdshader:1, 3, 4;
 granite.gdshader:18, 19)
 
-## Appendix — Zhaohui's original Chinese for questions 6–8
+## Appendix — Zhaohui's original Chinese for the Part 1 annotations and questions 6–8
+
+- **Annotation 1.** Generated line 7 vs. my line 3：source_color 表示这张纹理会按颜色纹理读取，并进行相应
+  的颜色空间处理。两者都有 source_color 和 repeat_enable，但生成的 shader 额外使用了
+  filter_linear_mipmap，表示采样时使用线性过滤和 mipmap；我的 shader 没有指定这个过滤方式。
+- **Annotation 2.** Generated line 19 vs. my line 5：hint_roughness_normal 表示这张纹理用于粗糙度和法线
+  相关的数据处理，适合包含粗糙度与法线信息的纹理；我的 hint_normal 则明确将纹理标记为法线贴图。两者的
+  区别在于提示用途不同，生成的 shader 使用更专门的 roughness-normal 提示，而我的 shader 只使用
+  normal 提示。
 
 - **6.** 生成的 shader 中，第 7 行的 source_color 让 Albedo 纹理按颜色处理，第 19 行的
   hint_roughness_normal 用于法线纹理。我的 granite.gdshader 中对应的是第 3 行和第 5 行，不过我使用的
