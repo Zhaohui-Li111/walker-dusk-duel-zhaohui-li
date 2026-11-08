@@ -248,7 +248,7 @@ set `GODOT` to the console build if `godot` is not on PATH; run `--import` once 
 ./scripts/run-test.sh cost_effects.gd 60 300
 ```
 
-Expected: 69 / 0, 57 / 0, 85 / 0, 36 / 0, and 24 / 0. The earlier suites keep their counts
+Expected: 69 / 0, 57 / 0, 85 / 0, 38 / 0, and 24 / 0. The earlier suites keep their counts
 (94, 49, 69 at 30/60/144, 96, PASS). Strips need a window, for example:
 
 ```bash
