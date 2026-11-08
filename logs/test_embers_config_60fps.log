@@ -1,14 +1,6 @@
 Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
 
 -- scene
-ERROR: Resource file not found: res://effects/embers_soft.png (expected type: Texture2D)
-   at: _load (core/io/resource_loader.cpp:325)
-   GDScript backtrace (most recent call first):
-       [0] _run (res://tests/test_embers_config.gd:64)
-ERROR: res://effects/embers.tscn:26 - Parse Error: [ext_resource] referenced non-existent resource at: res://effects/embers_soft.png.
-   at: _printerr (scene/resources/resource_format_text.cpp:41)
-   GDScript backtrace (most recent call first):
-       [0] _run (res://tests/test_embers_config.gd:64)
 PASS: res://effects/embers.tscn loads as a PackedScene
 PASS: scene has one node, the emitter (node count 1)
 PASS: root node type is CPUParticles2D (got CPUParticles2D)
@@ -85,8 +77,11 @@ PASS: scale_amount_curve point 1 = (0.2, 1.0) (brief (0.2, 1.0))
 PASS: scale_amount_curve point 2 = (1.0, 0.7) (brief (1.0, 0.7))
 PASS: scale_amount_curve(0.10) = 0.8750, linear between points 0.8750 (Claude Code's tangent choice)
 PASS: scale_amount_curve(0.60) = 0.8500, linear between points 0.8500 (Claude Code's tangent choice)
-FAIL: texture is res://effects/embers_soft.png (got null; run effects/make_textures.gd, then --import)
-PASS: material is a CanvasItemMaterial (got (res://effects/embers.tscn::CanvasItemMaterial_mix):<CanvasItemMaterial#-9223372009424026129>)
+PASS: texture is res://effects/embers_soft.png (got res://effects/embers_soft.png)
+PASS: texture is 4 x 4 (got 4 x 4)
+PASS: texture is white in every pixel (colour comes from the ramps)
+PASS: texture is a soft dot: centre alpha 0.66 > edge 0.13-0.13 > corner 0.01 (< 0.10)
+PASS: material is a CanvasItemMaterial (got (res://effects/embers.tscn::CanvasItemMaterial_mix):<CanvasItemMaterial#-9223372009289808398>)
 PASS: CanvasItemMaterial.blend_mode exists
 PASS: blend_mode = BLEND_MODE_MIX, normal (got 0)
 -- the feature Effect A doesn't use
@@ -95,4 +90,4 @@ PASS: rectangle emission: Effect B 3, Effect A 0 (RECTANGLE = 3)
 PASS: preprocess: Effect B 1.50 s, Effect A 0.00 s
 -- in the tree
 PASS: still not emitting after 5 frames in the tree (rule 5)
-82 checks, 1 failed
+85 checks, 0 failed
