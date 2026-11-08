@@ -21,10 +21,6 @@ func _ready() -> void:
 		slots.append(slot)
 		busy.append(false)
 		started.append(-1)
-		if slot.has_signal("finished"):
-			slot.finished.connect(_on_slot_finished.bind(i))
-		else:
-			push_error("hit_spark_pool: CPUParticles2D has no 'finished' signal; slots never become free")
 	for f in [main.get_node("P1"), main.get_node("P2")]:
 		f.attack_resolved.connect(_on_attack_resolved)
 	main.round_started.connect(_on_round_started)
@@ -39,6 +35,11 @@ func _physics_process(_delta: float) -> void:
 func _on_attack_resolved(_f: Node, _kind: String, result: String, point: Vector2) -> void:
 	if result != "hit":
 		return
+	# A slot is busy while its one-shot burst is still emitting (4.7.2 turns `emitting` false when
+	# the lifetime ends). Read from the emitters, not from `finished`: after a round reset each
+	# slot sends a late `finished` that could mark a new burst free (state test, 2026-11-08).
+	for k in slots.size():
+		busy[k] = slots[k].emitting
 	var i := busy.find(false)
 	if i < 0:
 		i = started.find(started.min())
@@ -48,10 +49,6 @@ func _on_attack_resolved(_f: Node, _kind: String, result: String, point: Vector2
 	busy[i] = true
 	started[i] = _next
 	_next += 1
-
-
-func _on_slot_finished(i: int) -> void:
-	busy[i] = false
 
 
 ## Rule 5: the game's pause and hitstop do not pause the tree, so the emitters are frozen here.
