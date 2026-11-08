@@ -1,0 +1,33 @@
+Read CLAUDE.md first. Effect B's intent and settings are in
+CHANGE-BRIEF.md.
+
+Build Effect B as a scene file in godot/effects/, using Godot 4 class
+and property names for the version CLAUDE.md pins. If you are unsure a
+property exists in this version, say so instead of guessing. Configure
+it in the scene file, not in code. If the brief layers several
+emitters, put them under one root node.
+
+Then add:
+- a configuration test, godot/tests/test_embers_config.gd, that
+  loads the scene and reads back every setting the brief names from the
+  loaded resources, using the brief's values as the expected values;
+- a preview scene, godot/previews/embers_preview.tscn, that holds the
+  effect at in-game camera scale over the background the brief names,
+  starts the condition at frame 10 and ends it at the frame the brief
+  gives.
+
+Run the configuration test with ./scripts/run-test.sh at 60 and show
+the real output. Then give me the capture command for the preview, and
+stop. Do not wire the effect into gameplay, do not edit any .gdshader
+file, and do not commit.
+
+Project notes from Claude Code (Zhaohui delegated the remaining steps,
+2026-11-08): the process or draw feature Effect A doesn't use (rect
+emission shape, preprocess) must be in the configuration test. Textures
+are drawn once by godot/effects/make_textures.gd and saved as PNG
+(CLAUDE.md, "Textures"); keep hit_spark_star.png byte-identical. This
+session cannot run Godot except through ./scripts/run-test.sh: do not
+route a non-test script through the wrapper; if a texture must be
+generated or imported, write the generator change and say so, and
+Claude Code will run it. Run each command on its own, without "; echo".
+In the preview, set use_fixed_seed on the preview's instance only.

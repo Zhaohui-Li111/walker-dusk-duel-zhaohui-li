@@ -1,0 +1,47 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://effects/embers_soft.png" id="1_soft"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_mix"]
+blend_mode = 0
+
+[sub_resource type="Curve" id="Curve_scale"]
+_data = [Vector2(0, 0.75), 0.0, 1.25, 0, 1, Vector2(0.2, 1), 1.25, -0.375, 1, 1, Vector2(1, 0.7), -0.375, 0.0, 1, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_initial"]
+offsets = PackedFloat32Array(0, 1)
+colors = PackedColorArray(0.772549, 0.541176, 0.333333, 1, 0.909804, 0.768627, 0.603922, 1)
+
+[sub_resource type="Gradient" id="Gradient_life"]
+offsets = PackedFloat32Array(0, 0.2, 0.75, 1)
+colors = PackedColorArray(0.772549, 0.541176, 0.333333, 0, 0.772549, 0.541176, 0.333333, 0.28, 0.909804, 0.768627, 0.603922, 0.2, 0.909804, 0.768627, 0.603922, 0)
+
+[node name="Embers" type="CPUParticles2D"]
+process_mode = 0
+material = SubResource("CanvasItemMaterial_mix")
+position = Vector2(320, 215)
+emitting = false
+amount = 48
+texture = ExtResource("1_soft")
+lifetime = 2.5
+one_shot = false
+preprocess = 1.5
+speed_scale = 1.0
+explosiveness = 0.0
+local_coords = false
+emission_shape = 3
+emission_rect_extents = Vector2(280, 90)
+spread = 180.0
+gravity = Vector2(0, -2)
+initial_velocity_min = 4.0
+initial_velocity_max = 14.0
+damping_min = 1.0
+damping_max = 3.0
+angle_min = 0.0
+angle_max = 360.0
+scale_amount_min = 0.6
+scale_amount_max = 1.2
+scale_amount_curve = SubResource("Curve_scale")
+color_ramp = SubResource("Gradient_life")
+color_initial_ramp = SubResource("Gradient_initial")
