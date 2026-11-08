@@ -56,6 +56,45 @@ Where the strip and the intent disagree, as Claude reads it:
 3. **Timing matches the settings:** the whole burst lasts 18 frames (0.6 s) and frames 40 and 50
    are empty. This does not match "about 5 s" in Zhaohui's first look above.
 
+## Effect B — courtyard embers
+
+### r0 — first look (before Claude reads any strip)
+
+Strips (fixture captures): `captures/embers/r0/` (as in play: `emitting` on at frame 10, off at
+frame 100), `captures/embers/r0-restart/` (control: `restart()` at frame 10, for the open
+`preprocess` question). Frames to read: 10, 25, 55, 100, 115, 145, 175.
+
+What I saw (preview window, 1280 × 720, 2026-11-08): Zhaohui asked Claude Code to write this
+entry; Claude Code declined to write the verdict and asked three multiple-choice questions
+instead. Zhaohui's answers, as chosen:
+- When it started: **already filled** (a field of embers appeared at once).
+- Against the courtyard: **too faint** (hard to see at all).
+- After it stopped: **faded out slowly** over a couple of seconds.
+
+### Claude's reading of r0 (a claim, not a verdict; 2026-11-08, after the first look above)
+
+Read from full frames 9, 10, 25, 55, 100, 115, 145, 175 of both strips, a 1:1 crop of frame 55,
+and the count of capture pixels that differ from frame 0 by more than 8 levels (of 921 600).
+
+| Frame | Intent (brief) | Changed px r0 / r0-restart | What the strip shows | Match |
+|---|---|---|---|---|
+| 9 | before the condition | 0 / 0 | the bare courtyard | yes |
+| 10 | preprocessed field already populated | 168 / 168 | particles present at once, inside y 125–305 (viewport) as the rect says | yes, but barely visible |
+| 25 | slow movement | 230 / 230 | a few faint dots | partly |
+| 55 | steady ambience | 215 / 215 | at 1:1 only two or three dim specks are findable on the door | **no: it does not read** |
+| 100 | emission stops | 274 / 274 | same faint field | — |
+| 115 | particles begin clearing | 237 / 237 | still the faint field | yes |
+| 145 | few particles left | 62 / 179 | fewer | yes |
+| 175 | none left | 0 / 0 | bare courtyard | yes |
+
+- **Preprocess (open question 3):** both strips have the field on frame 10 and are identical up to
+  frame 115, so in round 1 setting `emitting = true` already runs `preprocess`; `restart()` changes
+  nothing at the start. (Round 2 and later are not covered by this preview.)
+- **Visibility:** about 200 changed pixels out of 921 600: the field is almost invisible. Likely
+  causes: alpha peaks at only 0.28; the particles are 4 × 4 px at 0.6–1.2 scale on a dark wall; and,
+  if `color_initial_ramp` multiplies `color_ramp` (open question 5), the amber comes out darker
+  still. This agrees with Zhaohui's "too faint".
+
 <!-- Revision template (copy for each revision):
 
 ## <date> — Effect A, revision r<N+1>
