@@ -47,7 +47,7 @@ PASS [1] scene: emitting == (phase == "fight") on all 1362 recorded ticks
 PASS [2] scene: speed_scale 0 on every tick with main.paused or main.hitstop > 0 (52 hitstop ticks), 1 on the rest, over 1302 ticks with the tree running
 PASS [no feedback loop] scene: amount stayed 48 on every tick
 
-== F: SETUP visible = false in the fight, K.O. by punches while hidden (rule 4, observation) ==
+== F: SETUP visible = false in the fight, K.O. by punches while hidden, then shown (rule 4, revised) ==
 PASS [harness] main's _physics_process is on and P1 is driven by its PlayerController
     INPUT: Enter (title) pressed after tick 2923
 PASS [harness] Enter on the title started round 1; the intro ran into the fight (phase fight)
@@ -58,14 +58,18 @@ PASS [4] hidden in the fight for 60 ticks: still emitting, can_process() and is_
 PASS [harness] the punches ended the fight in a K.O. (phase ko, P2 health 0)
 PASS [4, 1] while hidden, the phase still decides: emitting turned off on the K.O. tick 4139
     OBSERVE (F): is_processing_internal() went false -1 ticks after the stop tick
-PASS [4] the controller never set visible (still false after the fade)
+PASS [4] while hidden the stopped field did not finish within 600 ticks (the plain fade takes ~153): frozen
+PASS [4] the controller never set visible (still false after the wait)
     SETUP (not input): Embers.visible = true after tick 4758
-PASS [1] scene: emitting == (phase == "fight") on all 1836 recorded ticks
-PASS [2] scene: speed_scale 0 on every tick with main.paused or main.hitstop > 0 (52 hitstop ticks), 1 on the rest, over 1836 ticks with the tree running
+    OBSERVE (F after showing again): is_processing_internal() went false 151 ticks after the stop tick
+PASS [4] after showing again the fade continued and ended 151 ticks later (<= 160: at most one 2.5 s lifetime plus slack)
+PASS [1] scene: emitting == (phase == "fight") on all 1987 recorded ticks
+PASS [2] scene: speed_scale 0 on every tick with main.paused or main.hitstop > 0 (52 hitstop ticks), 1 on the rest, over 1987 ticks with the tree running
 PASS [no feedback loop] scene: amount stayed 48 on every tick
 
 == OBSERVATION (printed, not asserted): ticks from the stop tick until is_processing_internal() is false ==
     C: plain stop after a K.O.: 153
     E: tree paused 60 ticks during the fade: 215
     F: hidden for the whole fade: -1
-36 checks, 0 failed
+    F: after showing again: 151
+38 checks, 0 failed

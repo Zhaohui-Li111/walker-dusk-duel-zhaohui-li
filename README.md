@@ -257,8 +257,8 @@ godot --path godot res://previews/hit_spark_preview.tscn --write-movie "$PWD/cap
 
 - **A6 known limitations:**
   - Headless runs see node state, never particles: the look is the strips and the human checks.
-  - Effect B rule 4 (hidden) appears not to hold in Godot 4.7.2: a hidden `CPUParticles2D` seems
-    to stop ageing its particles (TEST-REPORT, open finding).
+  - A hidden `CPUParticles2D` freezes its particles in Godot 4.7.2, so Effect B's rule 4 was
+    revised to say so (CHANGE-BRIEF Revision 4); the evidence is indirect (node flags over time).
   - The all-four-busy fallback of Effect A's pool was never reached in a test.
   - Rule 6 (a round reset clears live bursts) is reachable only with labelled test setup.
   - The hit spark has no impact direction (`spread` 180°).

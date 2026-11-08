@@ -476,14 +476,15 @@ effect still fires; only the read-back of the brief's value catches it. (The God
 | Test | Mode | Result | What it covers |
 |---|---|---|---|
 | `test_hit_spark_state.gd` | 60 | 57 checks, 0 failed | Effect A rules 1-6: no burst on load; one burst per "hit", none on blocked / whiff / interrupted (a full round vs the CPU: 16 hits, 16 bursts, 31 other results, 0 bursts); at `point`; two hits 23 ticks apart use two slots and the first is not restarted; frozen during pause and hitstop; rule 6 via SETUP `main.start_fight_now()` mid-burst. Not exercised: the all-four-busy fallback. |
-| `test_embers_state.gd` | 60 | 36 checks, 0 failed | Effect B rules 1-3 and 5: `emitting == (phase == "fight")` on every tick, off at K.O., on again in round 2; `speed_scale` 0 on every paused and hitstop tick; tree pause (SETUP) stops node and controller; `amount` stays 48. |
+| `test_embers_state.gd` | 60 | 36 checks, 0 failed; after Revision 4, **38 checks, 0 failed** | Effect B rules 1-3 and 5: `emitting == (phase == "fight")` on every tick, off at K.O., on again in round 2; `speed_scale` 0 on every paused and hitstop tick; tree pause (SETUP) stops node and controller; `amount` stays 48. |
 
 **Open finding, Effect B rule 4 (hidden).** Ticks from the stop until `is_processing_internal()`
 turns false: 153 after a plain stop, 215 with a 60-tick tree pause, never within 600 while
 `visible = false`. In Godot 4.7.2 the CPU particles appear to stop aging while hidden, against
 rule 4 and short answer 5. The test's rule-4 PASS checks node flags only and is not evidence for
-rule 4. Indirect: no headless run sees particles. To be decided by Zhaohui (dated brief
-revision) after a windowed look.
+rule 4. Indirect: no headless run sees particles. **Decided (Revision 4, Zhaohui):** rule 4
+now says the particles freeze while hidden and continue when shown. The test asserts it: hidden,
+the stopped field did not finish within 600 ticks; shown again, it finished 151 ticks later.
 
 All earlier suites after both effects were wired (Claude Code, 2026-11-08): `test_runner` 94/0,
 `test_hurt_flash` 30/60/144 69/0, `check_props3d` 49/0, `test_materials` 96/0,

@@ -226,7 +226,7 @@ func scenario_tree_pause_fade() -> void:
 
 
 func scenario_hidden() -> void:
-	print("\n== F: SETUP visible = false in the fight, K.O. by punches while hidden (rule 4, observation) ==")
+	print("\n== F: SETUP visible = false in the fight, K.O. by punches while hidden, then shown (rule 4, revised) ==")
 	open_main()
 	if not await enter_fight():
 		await close_main()
@@ -245,10 +245,20 @@ func scenario_hidden() -> void:
 	var t_ko := first_tick(func(r): return r["phase"] == "ko")
 	check(not tk(t_ko)["visible"] and not tk(t_ko)["emitting"] and tk(t_ko - 1)["emitting"], "4, 1",
 			"while hidden, the phase still decides: emitting turned off on the K.O. tick %d" % t_ko)
-	clocks["F: hidden for the whole fade"] = await watch_fade(t_ko, "F")
-	check(not embers.visible, "4", "the controller never set visible (still false after the fade)")
+	var hidden_fade := await watch_fade(t_ko, "F")
+	clocks["F: hidden for the whole fade"] = hidden_fade
+	# Rule 4 as revised (CHANGE-BRIEF Revision 4, Zhaohui, 2026-11-08): while hidden the particles
+	# freeze, and after showing again they continue from where they were. Edited by Claude Code.
+	check(hidden_fade == -1, "4",
+			"while hidden the stopped field did not finish within %d ticks (the plain fade takes ~153): frozen" % FADE_WAIT)
+	check(not embers.visible, "4", "the controller never set visible (still false after the wait)")
 	embers.visible = true
-	print("    SETUP (not input): Embers.visible = true after tick %d" % ticklog.last_tick)
+	var t_show: int = ticklog.last_tick
+	print("    SETUP (not input): Embers.visible = true after tick %d" % t_show)
+	var shown_fade := await watch_fade(t_show, "F after showing again")
+	clocks["F: after showing again"] = shown_fade
+	check(shown_fade > 0 and shown_fade <= 160, "4",
+			"after showing again the fade continued and ended %d ticks later (<= 160: at most one 2.5 s lifetime plus slack)" % shown_fade)
 	await close_main()
 
 

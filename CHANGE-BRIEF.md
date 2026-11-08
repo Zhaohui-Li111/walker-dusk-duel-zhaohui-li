@@ -448,3 +448,19 @@ Claude Code had offered that reason as an option.)
   21% of Akaken's height), inside the intent's 15–30 px. Kept by Zhaohui. TUNING.md, Effect A r1.
   The scene and `test_hit_spark_config.gd` already carry the value (commit 1a1e60e). Appended by
   Claude Code.
+
+## Revision 4 · 2026-11-08 · Effect B rule 4 (hidden) revised to what Godot 4.7.2 does
+
+Zhaohui's decision ("那就1吧", option 1 of two Claude Code laid out), after the embers state test
+found that a hidden `CPUParticles2D` stops ageing its particles (TEST-REPORT, open finding).
+
+- **Rule 4 is revised to:** *Hidden (`visible = false`): the particles freeze. Hiding stops both
+  drawing and the simulation; emission is still switched by the phase (rule 1). When the node is
+  shown again, the particles continue from where they were.* The original rule 4 above is kept as
+  written.
+- **Short answer 5, last part, is corrected the same way:** while hidden, the CPU particles do not
+  age; they resume when shown.
+- No code change: the controller never touches `visible`. `test_embers_state.gd` now asserts the
+  revised rule (a hidden stopped field does not finish within 600 ticks; once shown it finishes
+  within one lifetime, 151 ticks in the run). Appended by Claude Code.
+
