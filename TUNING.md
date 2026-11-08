@@ -75,10 +75,22 @@ Claude's prediction for r1 (same seed, so the same directions as r0):
 - 28 and 30: second burst as a filled cluster; 40 and 50 empty.
 - Still no impact direction: sparks still go all ways (that would need `spread` plus a per-hit
   direction in the pool code, a second change).
-Claude's comparison of r1 with its prediction: TO DO after the recapture.
-My verdict (running game or preview, 1280 × 720): TO DO (Zhaohui): kept | reverted, because
-Strips: captures/hit_spark/r0/, captures/hit_spark/r1/
-Commits: this commit (change)
+Claude's comparison of r1 with its prediction (zoomed crops and changed-pixel boxes, both strips):
+- 10: solid white disc, same as r0. Matches.
+- 12 and 15: a filled cluster with sparks in the centre, no hollow ring. **Matches the main
+  prediction.**
+- Outer extent: **smaller than predicted.** Frame 15 is about 27 px across (r0 31), frame 24
+  about 48 px (r0 58). I predicted the same edge because `initial_velocity_max` stayed 75, but
+  each spark's speed is drawn between min and max, so lowering the min slows almost every spark,
+  the fastest ones included. Radius at the widest is now about 24 px, about 21% of Akaken's
+  112 px, still inside the brief's 15–30 px.
+- 20–30: scattered sparks without an empty middle; second burst at 22 as before. Matches.
+- 40 and 50: empty. Matches. Lantern strip: the same changes at (510, 208).
+My verdict (Zhaohui, from two questions Claude Code asked after Zhaohui said "好了，你看着写吧"):
+Zhaohui saw the ring in r0 themself ("Yes, I saw it"), and keeps r1 ("Keep"). Recorded as
+**kept**. The comparison above is Claude Code's.
+Strips: captures/hit_spark/r0/, captures/hit_spark/r1/ (and the -lantern pairs)
+Commits: 1a1e60e (change), this commit (strip r1 and verdict)
 
 ## Effect B — courtyard embers
 

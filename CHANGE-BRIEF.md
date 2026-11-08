@@ -439,3 +439,12 @@ Claude Code had offered that reason as an option.)
   `test_embers_config.gd` already carry these values (commit 6f0c304). Appended by Claude Code.
 - **Fact correction (Claude Code's error in the project facts):** `phase` is declared at
   `godot/game/main.gd:24`, not `:25`.
+
+## Revision 3 · 2026-11-08 · Effect A tuning r1 kept
+
+- **Effect A `initial_velocity_min`** (settings table): 45 → **15** px/s; `initial_velocity_max`
+  stays 75. The burst read as a hollow ring at frames 12–15 (Zhaohui saw it in r0, also noted in
+  Claude's reading); r1 fills the centre. The burst's widest radius drops to about 24 px (about
+  21% of Akaken's height), inside the intent's 15–30 px. Kept by Zhaohui. TUNING.md, Effect A r1.
+  The scene and `test_hit_spark_config.gd` already carry the value (commit 1a1e60e). Appended by
+  Claude Code.
