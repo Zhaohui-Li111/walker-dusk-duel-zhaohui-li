@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://game/main.gd" id="1_main"]
 [ext_resource type="Script" path="res://game/stage.gd" id="2_stage"]
@@ -8,12 +8,16 @@
 [ext_resource type="Script" path="res://game/audio_director.gd" id="6_audio"]
 [ext_resource type="PackedScene" path="res://effects/hit_spark.tscn" id="7_hit_spark"]
 [ext_resource type="Script" path="res://effects/hit_spark_pool.gd" id="8_hit_spark_pool"]
+[ext_resource type="PackedScene" path="res://effects/embers.tscn" id="9_embers"]
+[ext_resource type="Script" path="res://effects/embers_controller.gd" id="10_embers_controller"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_main")
 
 [node name="Stage" type="Node2D" parent="."]
 script = ExtResource("2_stage")
+
+[node name="Embers" parent="." instance=ExtResource("9_embers")]
 
 [node name="P1" parent="." instance=ExtResource("3_fighter")]
 position = Vector2(220, 305)
@@ -38,6 +42,9 @@ script = ExtResource("4_effects")
 
 [node name="HitSparkPool" type="Node" parent="."]
 script = ExtResource("8_hit_spark_pool")
+
+[node name="EmbersController" type="Node" parent="."]
+script = ExtResource("10_embers_controller")
 
 [node name="HUD" type="CanvasLayer" parent="."]
 

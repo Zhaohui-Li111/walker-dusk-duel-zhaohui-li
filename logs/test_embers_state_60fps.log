@@ -1,0 +1,71 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+embers state test: Godot 4.7.2-stable (official), 60 physics ticks/s; headless dummy renderer, nothing is drawn
+
+== A-D: load -> title -> Enter -> fight, P pause, SETUP tree pause, K.O. by punches, Enter -> round 2 (rules 1, 2, 3, 5) ==
+PASS [5] first recorded tick after the scene loads (11): phase title, not emitting
+PASS [draw order] Embers is a child of Main right after Stage and before P1 (drawn behind the fighters; child 1)
+PASS [3] Embers' process_mode is INHERIT (0)
+PASS [harness] main's _physics_process is on and P1 is driven by its PlayerController
+    INPUT: Enter (title) pressed after tick 43
+PASS [harness] Enter on the title started round 1; the intro ran into the fight (phase fight)
+    HARNESS (writes no fight state): P2's controller set to null when the round starts, so Aotake stands still
+PASS [1, 5] not emitting on any of the 92 title and intro ticks before the fight
+PASS [1] emitting turned on on tick 103, the first tick with phase == "fight"
+    INPUT: P (pause) pressed after tick 123
+    INPUT: P (resume) pressed after tick 167
+PASS [2] speed_scale 0 and still emitting on all 44 paused ticks and 44 paused frames
+PASS [2] speed_scale back to 1 on the first tick after the pause (168)
+    SETUP (not input): get_tree().paused = true after tick 181, for 60 ticks
+    SETUP (not input): get_tree().paused = false after tick 241
+PASS [3] while the tree was paused (60 ticks) neither Embers nor its controller could process
+PASS [3] while the tree was paused, emitting (true) and speed_scale (1.0) did not change; phase stayed fight
+PASS [3] after the tree resumed, Embers processes again and is still emitting
+    INPUT: D held and J tapped every 24 ticks from after tick 246, until a K.O.
+PASS [harness] the punches ended the fight in a K.O. (phase ko, P2 health 0)
+PASS [1] emitting turned off on tick 1332, the first tick with phase == "ko" (on just before)
+    OBSERVE (C: plain stop after a K.O.): is_processing_internal() went false 153 ticks after the stop tick
+PASS [1] not emitting on any of the 154 ko and result ticks
+    INPUT: Enter (rematch on the result screen) pressed after tick 1485
+PASS [1] round 2: not emitting on any of the 59 intro ticks
+PASS [1] round 2: emitting on again on tick 1546, the first tick with phase == "fight" (restart())
+PASS [1] scene: emitting == (phase == "fight") on all 1546 recorded ticks
+PASS [2] scene: speed_scale 0 on every tick with main.paused or main.hitstop > 0 (52 hitstop ticks), 1 on the rest, over 1486 ticks with the tree running
+PASS [no feedback loop] scene: amount stayed 48 on every tick
+
+== E: K.O. by punches, then SETUP tree pause for 60 ticks while the embers fade (rule 3, observation) ==
+PASS [harness] main's _physics_process is on and P1 is driven by its PlayerController
+    INPUT: Enter (title) pressed after tick 1559
+PASS [harness] Enter on the title started round 1; the intro ran into the fight (phase fight)
+    HARNESS (writes no fight state): P2's controller set to null when the round starts, so Aotake stands still
+    INPUT: D held and J tapped every 24 ticks from after tick 1619, until a K.O.
+PASS [harness] the punches ended the fight in a K.O. (phase ko, P2 health 0)
+    SETUP (not input): get_tree().paused = true on tick K.O.+28, for 60 ticks
+PASS [3] after the stop, Embers could not process on any of the 60 tree-paused ticks, and stayed off
+    OBSERVE (E): is_processing_internal() went false 215 ticks after the stop tick
+PASS [1] scene: emitting == (phase == "fight") on all 1362 recorded ticks
+PASS [2] scene: speed_scale 0 on every tick with main.paused or main.hitstop > 0 (52 hitstop ticks), 1 on the rest, over 1302 ticks with the tree running
+PASS [no feedback loop] scene: amount stayed 48 on every tick
+
+== F: SETUP visible = false in the fight, K.O. by punches while hidden (rule 4, observation) ==
+PASS [harness] main's _physics_process is on and P1 is driven by its PlayerController
+    INPUT: Enter (title) pressed after tick 2923
+PASS [harness] Enter on the title started round 1; the intro ran into the fight (phase fight)
+    HARNESS (writes no fight state): P2's controller set to null when the round starts, so Aotake stands still
+    SETUP (not input): Embers.visible = false after tick 2993
+PASS [4] hidden in the fight for 60 ticks: still emitting, can_process() and is_processing_internal() true on every tick
+    INPUT: D held and J tapped every 24 ticks from after tick 3053, until a K.O.
+PASS [harness] the punches ended the fight in a K.O. (phase ko, P2 health 0)
+PASS [4, 1] while hidden, the phase still decides: emitting turned off on the K.O. tick 4139
+    OBSERVE (F): is_processing_internal() went false -1 ticks after the stop tick
+PASS [4] the controller never set visible (still false after the fade)
+    SETUP (not input): Embers.visible = true after tick 4758
+PASS [1] scene: emitting == (phase == "fight") on all 1836 recorded ticks
+PASS [2] scene: speed_scale 0 on every tick with main.paused or main.hitstop > 0 (52 hitstop ticks), 1 on the rest, over 1836 ticks with the tree running
+PASS [no feedback loop] scene: amount stayed 48 on every tick
+
+== OBSERVATION (printed, not asserted): ticks from the stop tick until is_processing_internal() is false ==
+    C: plain stop after a K.O.: 153
+    E: tree paused 60 ticks during the fade: 215
+    F: hidden for the whole fade: -1
+36 checks, 0 failed
