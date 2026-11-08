@@ -1,614 +1,431 @@
-# CHANGE-BRIEF — walker-dusk-duel asset slice
+# CHANGE-BRIEF — Assignment 6: particle effects
 
-> Version 1 · 2026-10-05 · written before any generation. Predictions are recorded here and checked
-> in TEST-REPORT.md; this file is appended to, not rewritten.
-
-## Asset list
-
-| ID | Asset | Category | Panels |
-|---|---|---|---|
-| CHAR-AK-REF | Akaken reference image (idle pose, solid green background), source of all poses | art (reference) | — |
-| CHAR-AK-IDLE / WALK / CROUCH / RISE / FALL / PUNCH / KICK / BLOCK / HURT / KO / WIN | Akaken, 11 static state images | art | 01–08 |
-| CHAR-AO-REF | Aotake reference image | art (reference) | — |
-| CHAR-AO-IDLE / KICK / BLOCK / HURT / KO | Aotake, 5 static state images | art | 01, 03–05, 07, 08 |
-| ENV-BG | Temple courtyard background at dusk (sky band, dark wall band, lanterns, floor) | art (environment) | all |
-| SFX-WHIFF | Strike that hits nothing: short air swish | sound | 03, 05 |
-| SFX-HIT | Strike that connects with a hurtbox: dry thud | sound | 04, 05, 08 |
-| SFX-BLOCK | Strike that connects with a blocking fighter: wood/cloth knock | sound | 03 |
-| SFX-KO | A fighter's health reaches 0: heavy low hit + gong | sound | 06, 08 |
-| MUS-LOOP | Taiko + wood-flute loop, cut at a bar boundary | music | 01–05, 07 |
-
-Hit spark, block flash, health bars and text are Claude-drawn/code UI, not counted as generated assets.
-
-## Event-to-sound map
-
-All sounds are played by an `AudioDirector` node that **only listens** to signals. Game state is
-decided by the fight code; a missing or muted sound changes nothing.
-
-| Sound | Exact triggering event | Double-trigger prevention |
-|---|---|---|
-| SFX-WHIFF | `attack_finished(attacker, connected=false)`, emitted once when an attack's active window closes with no contact | emitted from the attack state's exit, once per attack instance |
-| SFX-HIT | `hit_landed(attacker, defender)`, emitted when a hitbox first overlaps a non-blocking hurtbox | each attack instance keeps a `hit_targets` set; a defender already in it is ignored, so one swing hits once even if the boxes overlap for several frames |
-| SFX-BLOCK | `hit_blocked(attacker, defender)`, same overlap but defender is in `BLOCK` | same `hit_targets` set; a blocked swing cannot also hit |
-| SFX-KO | `fighter_ko(fighter)`, emitted when health crosses from >0 to ≤0 | guarded by `is_ko`, so it fires once per fighter per round; the final hit plays SFX-HIT and then SFX-KO (panel 8), each exactly once |
-
-Holding the attack button does **not** repeat attacks: a new attack starts only on `is_action_just_pressed`
-while the fighter is not already attacking.
-
-## Music behavior
-
-| Situation | Behavior |
-|---|---|
-| Fight running | MUS-LOOP plays on the `Music` bus, looping with no gap |
-| Pause (Esc / P) | Music bus ducks to −12 dB with a low-pass filter; SFX bus paused; resume restores both |
-| Failure (player KO) | Music stops immediately on `fighter_ko` |
-| Success (opponent KO) | Music stops immediately; stays stopped on the win screen |
-| Rematch | Music restarts from position 0 |
-| End of slice (Esc on win/KO screen) | Quit; nothing plays |
-| Mute | `M` toggles the Music bus, `N` toggles the SFX bus (separately) |
-
-## Predicted failure cases and how each will be checked
-
-1. **Generated poses drift from the reference** (arms longer, fists smaller, headband on the wrong
-   side, outfit color changes). *Check:* overlay each pose on its OpenPose skeleton at 50% opacity,
-   compare against consistency rules 1–8 in CHARACTER-SHEET.md; reject on any rule failure.
-2. **One swing plays SFX-HIT several times** because hitbox and hurtbox overlap across frames.
-   *Check:* automated test that scripts 20 punches, 10 kicks and a held punch button against a dummy
-   and asserts the counts of each signal and each sound call match the number of attacks.
-3. **Music loop clicks at the seam.** *Check:* cut at a zero crossing on a bar boundary, listen to at
-   least 3 repetitions in Godot, and inspect the waveform at the seam.
-4. **Fighters disappear against the background** (red gi on dusk stone). *Check:* in-engine
-   screenshot converted to grayscale, and the slice played at 1× from 2 m away; compare with the
-   palette contrast table.
-5. **The slice is unreadable muted.** *Check:* play a full round with both buses muted; confirm
-   whiff / hit / block / KO can each be told apart by sight alone.
-6. **Art does not line up with collision** (generated punch reaches further than the hitbox).
-   *Check:* debug-draw collision shapes in Godot over every state image and screenshot them.
-
-## Possible revisions already noted
-
-- Extend the hurtbox along an attacking limb so whiffs can be punished (CHARACTER-SHEET collision note).
-- A separate SFX-HURT for the player being hit, if playtesting shows SFX-HIT is ambiguous about who was hit.
-
----
-
-## Revision 2 · 2026-10-05 · during slice step 2 (no generation yet)
-
-- **Signals renamed and unified.** The three planned signals (`attack_finished`, `hit_landed`,
-  `hit_blocked`) became one: `attack_resolved(fighter, kind, result, point)`, emitted **exactly once
-  per attack** with `result` = `hit` / `blocked` / `whiff` / `interrupted`. SFX-HIT, SFX-BLOCK and
-  SFX-WHIFF map to the first three; `interrupted` (attacker hit during startup) plays nothing.
-  Whiff now fires when the active window ends, not after recovery, so the swish lines up with the
-  swing. `knocked_out(fighter)` is unchanged and drives SFX-KO and the music stop.
-- **Hitboxes cover the striking limb** (elbow→fist, knee→foot) instead of only the tip. Found by the
-  automated block test: at touching distance a tip-only kick box passed beyond the opponent's hurtbox
-  and whiffed. Regression test: `test_point_blank_attacks_connect`.
-- **Hurt image appears on the hit frame.** The 4-frame hitstop delayed the hurt image; found in the
-  flow capture (`evidence/flow/05_player_hurt.png`), fixed, and covered by `test_punch_hits_once`.
-- **Design consequence noted:** each blocked hit pushes the defender back ~6 px, so repeated attacks
-  on a blocker need the attacker to step in. Intentional (no infinite pressure), but to playtest.
-
-## Revision 3 · 2026-10-05 · during slice step 3 (no audio generated yet)
-
-- Music starts on the **title screen** (storyboard P1) and keeps playing into round 1; it restarts
-  from 0 only when a round starts after it was stopped (the rematch, P7). Pause, K.O. and result
-  behave as in the table above.
-- On the final hit the K.O. is now emitted **after** the hit result, so the order is SFX-HIT then
-  SFX-KO (P8). Before this change the K.O. signal fired first.
-- Sound requests are counted even when the audio file does not exist yet, so the event-to-sound map
-  is tested before any audio is generated. Real playback, loop seams and loudness still need
-  listening once the files exist.
-
----
-
-# Assignment 3 — three 3D props (Blender MCP → Godot)
-
-> **Version 1 · DRAFT · 2026-10-16.** Claude Code drafted this from Zhaohui's choice of assets
-> (stone lantern, makiwara, taiko drum). **Zhaohui: do the "Learn the window" session in Blender
-> first, then edit the numbers below and commit before anything is built.** After that commit this
-> section is only appended to, like the A2 brief above.
-
-## Scale and conventions
-
-- Dusk Duel is 2D, so these props live in a separate small 3D scene (`godot/props3d/prop_room.tscn`:
-  floor, one light, one camera). Later assignments reuse it. It is not wired into the 2D game yet.
-- **Scale reference:** Akaken stands 112 px on screen and Aotake 124 px (CHARACTER-SHEET.md). Taking
-  Akaken as **1.70 m** gives about 1.52 cm per pixel, so Aotake is about **1.88 m**. A 1.70 m reference box
-  goes into the 3D scene for the human look check.
-- 1 Blender unit = 1 m = 1 Godot unit. Blender is Z-up; the glTF exporter's **+Y Up** converts to
-  Godot's Y-up.
-- Each asset is built around the world origin with its base on Z = 0, in its own `.blend` file.
-  **Origin = centre of the underside** for all three, so placing a prop at floor height 0 in Godot
-  makes it stand on the floor.
-- Rotation and scale applied in Blender (rotation 0,0,0; scale 1,1,1) before export.
-- Flat Principled BSDF base colours, mostly from the A2 palette so the props match the 2D art.
-  Two are new (roof `#4E475C`, wood `#8A5A3B`) because A2 has no darker stone or wood tone.
-- **Tolerance for "matches the brief":** ±0.02 m on each dimension.
-
-## The three assets
-
-### 1. PROP-LANTERN — stone lantern (tōrō)
-
-- **In the game:** the courtyard in ENV-BG already shows lanterns (glowing paper ones in the
-  generated image). This is a stone version of the same idea, set at the edges of the arena.
-- **Size (W × D × H):** **0.60 × 0.60 × 1.40 m.** That's about shoulder height on Akaken (1.70 m),
-  so it frames a fighter without hiding one.
-- **Origin:** centre of the base, at floor level.
-- **Look (6 shapes):** an octagonal base (cylinder, 8 segments), an octagonal shaft (cylinder, 8), a
-  firebox (cube), a lit panel set into the firebox front (thin cube), a pyramid roof (cone, 6
-  segments) and a small cone finial on top. It reads as a lantern because of the wide roof over a
-  box sitting on a thin post.
-- **Colours:** stone `#6E6680` (the first proposed mid-tone stone in A2; rejected
-  for the 2D wall behind the fighters, but no contrast rule applies to a prop room), lit panel `#F5C542` (the belt accent,
-  flat colour, not emissive), roof a little darker `#4E475C` (new).
-- **Triangle budget: 150.** Estimate: 28 + 28 + 12 + 12 + 10 + 10 = 100. A default 32-segment
-  cylinder alone would cost 124, so the segment counts must be set low.
-
-### 2. PROP-MAKIWARA — wooden striking post
-
-- **In the game:** a training post for Akaken, whose fighting style is punching. It stands in the
-  prop room now and could be a target in a later tutorial or warm-up.
-- **Size (W × D × H):** **0.30 × 0.30 × 1.50 m.** The straw pad's centre is at about **1.20 m**,
-  roughly chest/fist height on a 1.70 m fighter.
-- **Origin:** centre of the base, at floor level.
-- **Look (5 shapes):** a square stone footing (cube 0.30 × 0.30 × 0.10), a tapered-looking post
-  (cube 0.12 × 0.08 × 1.40, on top of the footing), a straw pad on the front face (cube 0.16 × 0.06
-  × 0.30) and two rope bands around the pad (cylinders, 8 segments). It reads as a training post
-  because of the pad and its rope bands at fist height.
-- **Colours:** wood `#8A5A3B` (new), straw `#D8B676` (Aotake's hat colour), rope `#F2E6D0` (the hand-wrap
-  cream), footing `#6E6680`.
-- **Triangle budget: 120.** Estimate: 12 + 12 + 12 + 28 + 28 = 92.
-
-### 3. PROP-TAIKO — taiko drum on a stand
-
-- **In the game:** the music loop (MUS-LOOP) is taiko and wood flute, so the drum is the visible
-  source of the soundtrack. It would sit at the back of the courtyard.
-- **Size (W × D × H):** **0.70 × 0.55 × 0.95 m.** The drum is about **0.60 m across**, with heads
-  facing ±Y (front and back) and its centre at about 0.62 m. The top of the drum is at about hip
-  height on Akaken.
-- **Origin:** centre of the stand's footprint, at floor level.
-- **Look (6 shapes):** the drum body (cylinder, 12 segments, **rotated 90° about X** so the heads
-  face front and back), two drumheads (thin cylinders, 12 segments), two angled stand legs (cubes)
-  and a base bar (cube). It reads as a taiko because of the round red barrel with pale heads on a
-  low cradle.
-- **Colours:** lacquer body `#D9482B` (the gi red), heads `#F2E6D0`, stand `#1E1B22`.
-- **Triangle budget: 200.** Estimate: 44 + 44 + 44 + 12 + 12 + 12 = 168. This is the one asset that
-  needs a real rotation, so it tests "apply transforms".
-
-## Predicted failure cases and how each will be checked
-
-1. **The taiko arrives rotated or scaled in Godot,** because the 90° turn or a scale was left
-   unapplied. *Check:* Blender's N panel shows rotation 0,0,0 and scale 1,1,1 on every object before
-   export. The headless Godot script prints each node's scale and rotation and the AABB's tallest
-   axis, which should be Y for all three.
-2. **Wrong size, possibly by a factor of 10,** from a unit-scale or object-scale mistake. *Check:*
-   the N-panel dimensions against the table above, then the Godot AABB size against both, within
-   ±0.02 m.
-3. **Origin at the centre, so the prop sinks halfway into the floor** (Blender's default primitives
-   are centred on their origin). *Check:* the Godot AABB's minimum Y should be 0.00 ± 0.01, and each
-   prop placed at y = 0 should be seen standing on the floor, not floating or sunk.
-4. **Claude builds more detail than asked:** more than 6 shapes, default 32-segment cylinders or a
-   UV sphere (960 triangles). *Check:* Blender Scene Statistics (status bar), and the headless script
-   counts triangles per asset against the budget.
-5. **The MCP will not connect on Windows.** The course's commands are written for macOS, and the
-   add-on opens a socket that the firewall may prompt about. *Check:* `get_addon_status` and
-   `get_scene_info` from Claude. Every step and its exact error goes into FRICTIONAL.md, with a
-   2-hour time box before falling back to the script route.
-6. **Colours shift or disappear on export** (sRGB vs linear, or a material lost). *Check:* the
-   headless script prints each surface's albedo as hex to compare with the brief, and the human look
-   check under the scene's single light.
-7. **Missing or flipped faces** that only show from behind or below. *Check:* walk the camera around
-   and under each prop in Godot (human check). Backface culling on the import would hide them from
-   one side.
-
-## Build result (appended 2026-10-16)
-
-Zhaohui confirmed the numbers above as final, and this section was committed unchanged (`30513a4`)
-before anything was built. All three props match it: deviation 0.00 m on every dimension, origin
-at the underside centre, rotation and scale applied, 100 / 92 / 168 triangles, albedo hex exact
-after the glTF round trip. `godot/tests/check_props3d.gd` runs 43 checks, 0 failed. Zhaohui did
-the walk-around check in the Godot editor and found no problems.
-
-**Differences from the spec above:**
-- PROP-MAKIWARA's rope bands are chamfered 8-vertex rings (0.19 × 0.17 m), not round 8-segment
-  cylinders, so they sit close to the pad. Zhaohui chose this; the triangle count is unchanged.
-- The prop room adds a WorldEnvironment (ambient light only) next to the floor, the light and the
-  camera.
-
-Failure cases seen: **3** (taiko origin at Z 0.03 after the join; caught and fixed in Blender).
-Not seen: 1, 2, 4, 5, 6, 7. See FRICTIONAL.md, Assignment 3.
-
----
-
-# Assignment 5 — shaders and materials
-
-> **Version 1 · 2026-10-26.** Claude Code drafted the state, rules, boundaries, evidence
-> split and material plan from Zhaohui's choices (hurt flash, keep Compatibility, stone lantern;
-> the lantern was replaced by the floor and a plinth before commit, see the material plan).
-> Claude Code also filled the project facts (pixel coordinates and stored values read from the
-> sprite and background files, importer enum values read from the Godot 4.7.2 source).
-> **Every line marked TO DO (Zhaohui) is Zhaohui's to write: the colour line, the uniform defaults
-> Zhaohui wants, every hand-computed prediction and the short answers.** Edit anything else that is
-> wrong, then commit this section before writing either shader or sending prompt-1. After that
-> commit this section is only appended to, with dated revisions.
+> **Version 1 · DRAFT · 2026-11-08.** This file replaces the A5 brief, which stays in history at
+> tag `a5`. Zhaohui chose the two effects: **Effect A, a hit spark**, and **Effect B, courtyard
+> embers/dust (ambience)**. Claude Code drafted the structure and filled in the **project facts**
+> only (file references, measured hit heights, background luminance, which properties exist in
+> Godot 4.7.2). The intent, every setting value, the rules' choices, every prediction, the budgets
+> and the short answers are Zhaohui's. Commit this section before the first prompt. After that it
+> is only appended to, with dated revisions.
 >
-> **At commit (2026-10-26):** Zhaohui wrote the colour line, chose the red flash colour, and
-> computed the six pixel predictions by hand. Zhaohui chose to commit now with these still open:
-> the **hint-experiment predictions**, the **short answers**, the **contrast ratio**, and
-> confirming the hurt-flash `render_mode` and the granite uniform table. They will be added below
-> in a dated revision **before** the hint experiment is measured, before the driver is run, and
-> before either shader is written.
+> **Authorship (2026-11-08).** Zhaohui wrote the effect sections in two passes: a draft file
+> (asked whether it was written with another AI, Zhaohui answered "I wrote it"), then corrections
+> pasted in chat after Claude Code's review, in two rounds. The second round (spark speed and
+> damping, the price predictions and budgets, the hidden rule) was asked about the same way;
+> Zhaohui answered: "I wrote it myself". A third round (rotation ranges, Effect B's start colours,
+> the exact ramp, curve, rect and position values, Q1, and revised price predictions) was pasted
+> in chat the same way and was not asked about separately. Claude Code copied all of it in,
+> translated one Chinese passage (original kept), and made factual and consistency edits, each
+> marked inline as Claude Code's. Questions the build must answer are listed under
+> "Unconfirmed"; they are not decisions.
 
-## The state
+## Project facts both effects depend on (Claude Code, checked 2026-11-08)
 
-- **What it communicates:** "this fighter was just hit cleanly." The hurt image already changes the
-  pose, but in a fast exchange the player can miss which of the two fighters took the hit. A flash
-  on the hit fighter's sprite answers it in the first frame, even muted.
-- **Where it lives:** `Fighter.state == "hurt"` (`godot/fighter/fighter.gd`, `_set_state("hurt")`
-  in the hit handler), with `Fighter.stun` counting down from `HITSTUN = 18` physics ticks.
-  `main.gd` freezes both fighters for `HITSTOP_FRAMES = 4` ticks first, and stun does not count
-  down during hitstop. A K.O. hit goes to `"ko"`, never `"hurt"`, so it does not flash.
-- Two instances exist: `P1` (Akaken) and `P2` (Aotake) in `godot/game/main.tscn`, both from
-  `godot/fighter/fighter.tscn`, drawn by its `Sprite2D`.
+- **Engine and renderer:** Godot 4.7.2 stable, GL Compatibility (`godot/project.godot:35-36`).
+  Viewport 640 × 360, window 1280 × 720, `canvas_items` stretch (`godot/project.godot:23-27`).
+- **The game steps itself.** `main.gd` advances the fight in `step()` once per physics tick
+  (`godot/game/main.gd:51-58`). The game's pause (`main.paused`, Esc / P) and the 4-tick hitstop
+  only skip `step()` (`:56-57`, `:60-62`); **the scene tree is never paused** (`set_paused`,
+  `:105-116`). Particle nodes advance on the engine's own clock, so a particle node keeps moving
+  during the game's pause and hitstop unless the effect code changes its `speed_scale`.
+- **Phases** (`main.gd:3-4`, `:25`): `"title"` → `"intro"` → `"fight"` → `"ko"` → `"result"`.
+  `start_round()` resets both fighters, calls `effects.clear()` and emits `round_started`
+  (`:90-102`; the signal is declared at `:9`).
+- **Nothing is freed during play.** No `queue_free()` or `free()` exists in `godot/game/` or
+  `godot/fighter/`; the fighters and `Effects` live for the whole scene (`godot/game/main.tscn`).
+- **Existing code-drawn feedback.** `godot/game/effects.gd` already draws a white 8-line hit spark
+  (10 ticks) at the same event (`:31-35`), spawned from `main.gd:133-136`. It is out of scope
+  (`CLAUDE.md`, Out of scope).
+- **Scale.** Akaken stands 112 px and Aotake 124 px in the 640 × 360 viewport
+  (`CHARACTER-SHEET.md:8`, `:94`), so 224 px and 248 px in the 1280 × 720 window.
+- **Property check, Godot 4.7.2 (`ClassDB`, headless probe, 2026-11-08).** `GPUParticles2D` has
+  `amount_ratio`, `preprocess`, `local_coords`, `visibility_rect`, `use_fixed_seed`, `seed`,
+  `trail_enabled`, `speed_scale`. `CPUParticles2D` has `use_fixed_seed`, `seed`,
+  `emission_rect_extents`, `color_ramp`, `scale_amount_min` / `_max` / `_curve`, `damping_min` /
+  `_max`, `hue_variation_min`, `angle_min`, but **no `amount_ratio`, `alpha_curve`, `scale_min`,
+  `scale_max`, `turbulence_enabled`, `trail_enabled` or `sub_emitter`**. The class
+  `ParticlesMaterial` does not exist. **Unexpected:** `ParticleProcessMaterial`'s property list
+  also contains `initial_velocity` and `scale` (Godot 3 names). What they do is not known yet.
+- **Not yet confirmed:** how the effects look on Compatibility. The first frame strip shows it.
 
-## Effect specification — hurt flash
+---
 
-**The shader:** `godot/shaders/hurt_flash.gdshader`, `shader_type canvas_item;`, no render_mode
-(TO DO (Zhaohui): confirm, or name one). On a ShaderMaterial set as the `Sprite2D`'s `material`.
-No sampler uniforms; the sprite texture arrives in `COLOR`.
+## Effect A — hit spark
 
-| Uniform | Type | Hint | Default | Set by |
-|---|---|---|---|---|
-| `hurt_amount` | `float` | `hint_range(0.0, 1.0)` | `0.0` | the driver, every physics tick, from `stun` (below) |
-| `flash_color` | `vec4` | `source_color` | `vec4(1.0, 0.0, 0.0, 1.0)` (pure red, Zhaohui's choice: red reads as "hurt") | the material only; never code |
+### The job
 
-**The colour line** (inside `fragment()`), written by Zhaohui:
+- **What it tells the player:** The hit spark provides immediate visual confirmation that an
+  attack connected, making the exact contact point and impact strength easier to read. It
+  supplements the existing code-drawn spark with a short, brighter burst of particles that
+  communicates impact direction and energy.
+- **Event:** `Fighter.attack_resolved(fighter, kind, result, point)` with `result == "hit"`
+  (`godot/fighter/fighter.gd:19`, emitted in `_resolve()` at `:221-223`, called from
+  `check_hit()` at `:172`). `point` is the centre of the hitbox ∩ hurtbox overlap (`:170`), in
+  `Main`'s coordinates. `main.gd` already connects to this signal (`main.gd:42-43`, `:133`).
+- **Relation to the existing spark:** Keep both. The existing `effects.gd` spark remains the
+  immediate hit confirmation; the particle burst adds a second visual layer. This keeps
+  `effects.gd` out of scope.
 
-```glsl
-COLOR.rgb = mix(COLOR.rgb, flash_color.rgb, hurt_amount);
-```
+**Facts for the event (Claude Code, headless probe 2026-11-08):**
+- **Where hits land.** Hit `point.y` sits between about **224 and 254** in the viewport, i.e.
+  50–80 px above the ground line `GROUND_Y = 305` (`fighter.gd:26`): Akaken punch hitbox y
+  224.6–236.3, kick 235.3–254.4; Aotake kick 239.1–248.5 (Aotake has no punch hitbox). In a
+  3 000-tick CPU run, all 48 hits landed at y 243.8, x 148–227.
+- **How often a hit can repeat.** The same attacker lands its next hit **23 ticks (0.383 s) apart
+  at the earliest** (A5 probe, `logs/_probe_retrigger_direct.log`). The two fighters can also hit
+  each other on consecutive ticks. A K.O. hit emits `"hit"` first, then `knocked_out`
+  (`fighter.gd:172-173`).
 
-It blends each pixel's own colour toward `flash_color` by `hurt_amount`, and leaves `COLOR.a`
-alone, so transparent pixels stay transparent and the 254 alpha of the sprite is kept.
+### The intent block
 
-**The driver rule** (presentation only, reads state, never writes it):
-`hurt_amount = float(stun) / float(HITSTUN)` while `state == "hurt"`, else `0.0`.
+- **Timing phases:**
+  - First frame: a bright, compact flash appears immediately at the hit point.
+  - Outward phase: sparks travel outward during approximately the first 0.2 seconds, making the
+    impact direction and energy visible.
+  - Dissipation: sparks slow down, shrink, and fade over the remainder of the 0.6-second
+    lifetime.
+- **Contrast:** use a cool white/cyan colour. The hit band is dark on average, but the design must
+  remain distinguishable against the warm lantern at L = 0.2699. Approximate contrast for
+  `#EAFBFF` is about 13.1:1 *(Claude Code corrected 13.8 → 13.1: L ≈ 0.937, (0.937 + 0.05) /
+  (0.0256 + 0.05))* against the band mean and 3.0:1 against the brightest lantern pixel.
+- **Scale:** the burst has an overall visual radius of approximately 15–30 px, or about 13–27% of
+  Akaken's 112 px height. Individual particles remain small; the larger radius describes the full
+  burst footprint rather than the size of a single spark. *(Revised 2026-11-08 from 8–12 px.)*
+- **Change over life:** bright at birth, then gradually lower alpha and scale. The colour shifts
+  from near-white at birth toward pale cyan before fading.
+- **Variation:** randomize initial velocity, scale, and rotation so repeated hits do not look
+  identical.
+- **Emitters:** four pooled burst slots, each responsible for one independent hit event. Each
+  slot emits 20 particles.
+
+### The settings
+
+| Setting | Value | Why |
+|---|---|---|
+| Node type | `CPUParticles2D` | Chosen CPU implementation |
+| `amount` | 20 per slot | Keeps each burst readable |
+| `one_shot` | `true` | One burst per hit |
+| `explosiveness` | 1.0 | Emits the burst immediately |
+| `lifetime` | 0.60 s | Allows two events to overlap |
+| Emission shape | Point | Impact originates at the contact point |
+| `initial_velocity_min` / `_max` | 45 / 75 px/s *(revised from 75 / 155)* | Gives sparks visible outward motion |
+| `spread` | 180° | Full radial spread |
+| `gravity` | (0, 25) | Slight downward arc |
+| `damping_min` / `_max` | 28 / 40 *(revised from 18 / 32)* | Slows particles during dissipation |
+| `angle_min` / `angle_max` | −180° / 180° | Random spark rotation, so repeated bursts look natural |
+| `color_ramp` | 0.00 `#EAFBFF` α 1.00; 0.35 `#83DFF2` α 0.75; 1.00 `#83DFF2` α 0.00 | High contrast and clear impact feedback; the last stop keeps the cyan and only fades, so particles do not vanish abruptly |
+| Alpha | Defined in `color_ramp` | `CPUParticles2D` has no `alpha_curve` |
+| `scale_amount_min` / `_max` | 0.7 / 1.2 | Small variation in spark size |
+| `scale_amount_curve` | (0.00, 1.00), (0.70, 0.65), (1.00, 0.00) | Makes particles dissipate |
+| Texture | Code-drawn 8 × 8 eight-point star spark, wide at the centre with thin tips | Reads more like an impact spark than a round dot |
+| Draw material | `CanvasItemMaterial`, additive blend | Brightens the impact without a solid sprite |
+| `local_coords` | `true` | Particles remain in parent-local coordinates |
+| `visibility_rect` | Not applicable to this CPU design | GPU-specific visibility configuration is not used |
+| `preprocess` | 0 | A hit should appear at the event, not pre-exist |
+| `speed_scale` | 0 during game pause/hitstop; 1 otherwise | Scene tree is not paused by the game's custom pause |
+
+Godot property correction (Zhaohui): use `scale_amount_min`, `scale_amount_max` and
+`scale_amount_curve`. Put transparency into `color_ramp`; do not configure `alpha_curve`,
+`scale_min` or `scale_max`.
 
 ### Observable rules
 
-1. **Begin / end values.** `hurt_amount` is `1.0` on the tick the fighter enters `"hurt"` and
-   `0.0` on the tick it leaves (to `"idle"`, or to `"ko"` if hit again).
-2. **Duration.** Held at `1.0` for the 4 hitstop ticks, then falls by 1/18 per tick, reaching `0.0`
-   at tick 22 after the hit: 22 / 60 = **0.367 s of game time**, tolerance ± one frame period
-   (± 0.033 s at 30 fps, ± 0.017 s at 60, ± 0.007 s at 144). The same at 30, 60 and 144 fps,
-   because it counts physics ticks (`physics_ticks_per_second = 60`), not rendered frames.
-3. **Retrigger: restart.** A second hit during hurt sets `stun = HITSTUN` again (the hit handler
-   forces a fresh `"hurt"`), so `hurt_amount` jumps back to `1.0` and the 0.367 s starts over.
-4. **Time scale and pause.** Scaled: under `Engine.time_scale = 0.5` the flash lasts 0.733 s of
-   real time. The fight's pause (`main.paused`, Esc / P) stops stepping, so the value is frozen at
-   whatever it was; it resumes from there. The tree itself is never paused by the game.
-5. **State ends early.** If hurt ends before the fade finishes (hit into K.O.), the value is `0.0`
-   on that tick, with no tail.
-6. **Instances.** Each fighter gets its own ShaderMaterial instance (duplicated in code, or
-   `resource_local_to_scene`), so a hit on P2 changes only P2's `hurt_amount`; P1's stays `0.0`.
-
-### Boundaries
-
-Unchanged: collision boxes, movement, input, the state machine and every timing in `fighter.gd`
-and `main.gd`, `effects.gd`, `audio_director.gd`, the HUD, the background, the existing tests
-(`test_runner.gd` 94 checks, `check_props3d.gd` 49 checks) and their expectations. The driver may
-read `state`, `stun` and `HITSTUN`; it never writes them.
+1. **Fires on every hit, never otherwise.** Trigger only when `result == "hit"`; never on scene
+   load, `"blocked"`, `"whiff"` or `"interrupted"`.
+2. **At the event's position:** spawn at `point`, within 1 px in `Main` coordinates.
+3. **Retrigger rule: overlap.** A fixed pool of four one-shot `CPUParticles2D` slots × 20
+   particles = 80 particles maximum. A new event uses another available slot rather than
+   restarting an active burst. If all four are active, reuse the oldest slot as a bounded
+   fallback.
+4. **Freed parent:** parent the pooled emitters to the persistent `Main` scene root, not to either
+   fighter. If `Main` is freed, its child emitters and their particles are freed with it.
+5. **Game pause and hitstop:** set `speed_scale = 0` during both custom pause and hitstop; restore
+   it to 1 afterward, because neither state pauses the scene tree.
+6. **Round reset:** when `round_started` is emitted, the particle pool is reset by the
+   presentation/effects controller. All active burst slots are stopped and cleared before the
+   next round begins. This does not require modifying `effects.gd`, which remains out of scope.
+   The implementation listens to the round-start signal rather than assuming the particle pool
+   lives inside `effects.gd`.
 
 ### Evidence split
 
 | Rule | Check |
 |---|---|
-| Shader parses; uniform names and types | headless: `get_shader_uniform_list()`, not a set-then-get round trip |
-| Defaults | headless: read from the shader source text |
-| 1, 2, 3, 5 | headless: real hits through the real game loop and input, uniform sampled each frame from a high `process_priority` node, at 30, 60, 144 fps |
-| 4 | headless: the same test under `Engine.time_scale = 0.5`; pause: value unchanged across paused frames |
-| 6 | headless: P1's value stays 0.0 while P2 flashes |
-| The colour on screen | human: in-engine captures at the controlled values, sampled pixels vs the table below |
-| Reads in play | human: playtest, several hits each way, muted |
+| Settings | Headless: `test_hit_spark_config.gd` reads every configured property back. |
+| 1–6 | Headless tests assert the hit-only signal filter, event position, pool/retrigger behaviour, persistent parent, pause/hitstop freeze and round-reset clearing. |
+| Reads as intended | Running-game frame strip and visual inspection at both dark and lantern-lit hit locations. |
 
-### Controlled inputs and predicted values
+### The frame strip
 
-Background: the courtyard (`ENV-BG`, `godot/art/env/bg.png`, drawn 1:1 at 640 × 360 by
-`stage.gd`). The flash changes sprite pixels only; transparent pixels stay background.
-Compatibility renderer, `rendering/viewport/hdr_2d` not set, so 2D arithmetic is on the sRGB values
-as stored. Fighter sprites are unlit (no `Light2D` in `main.tscn`).
+- **Preview background:** the hit band y = 200–260, including the warm lantern crop around
+  x ≈ 510, y ≈ 208 and the dark sample around x ≈ 364, y ≈ 202.
+- **Triggers:** frame 10, and again at **frame 22**, 0.4 s after frame 10. This is within the
+  first burst's 0.6 s lifetime, and it respects the measured 0.383 s earliest repeat interval
+  for the same attacker.
+- **Frames to read, at 30 fps, and what each should show:**
+  - 10: new burst appears.
+  - 12: bright outward motion.
+  - 15: sparks spread.
+  - 20: first burst is slowing and fading.
+  - 22: second burst appears while the first is still alive.
+  - 24: both bursts are visible.
+  - 28: first burst reaches the end of its lifetime.
+  - 30: second burst is still dissipating.
+  - 40: second burst has disappeared.
+  - 50: nothing left (both bursts ended at frames 28 and 40). *(Claude Code added frame 50, which
+    the handout's list requires; the expected content follows from the 0.6 s lifetime above.)*
 
-**Capture setup:** Akaken in `idle` at the start of round 1 (`reset(220.0, 1)`), facing right. The
-sprite (`godot/art/akaken/idle.png`, 108 × 158, linear filter, lossless import) has its top-left
-at viewport (172.1, 156.0) = (220 − 369.55 × 0.1296, 305 − 1150 × 0.1296). The window is
-1280 × 720 with `canvas_items` stretch, so a capture is 1280 × 720 and viewport coordinates double.
-The two texels below were chosen where every neighbour in a 3 × 3 block is within 2 steps per
-channel, so bilinear filtering at the fractional position cannot move them by more than that.
 
-| Pixel | Texel in idle.png | Viewport (≈) | Capture (≈) | Sprite RGBA as stored | Background under it |
+---
+
+## Effect B — courtyard embers / dust (ambience)
+
+### The job
+
+- **What it tells the player:** The courtyard embers and dust establish a quiet, atmospheric
+  environment around the fight. Their slow, irregular movement adds depth and a sense of air and
+  warmth without competing with the fighters or hit effects.
+- **Job:** ambience.
+- **Condition:** run only during `phase == "fight"`. Start on entry to `"fight"` and stop emitting
+  when the phase changes to `"ko"` or any other non-fight phase.
+- **Feature Effect A doesn't use:** a rectangular emission region and non-zero `preprocess`, so
+  the ambience begins as an established field. Effect A uses a point emission shape and zero
+  preprocess.
+
+### The intent block
+
+- **Timing:**
+  - Fade in: individual particles fade in over approximately 0.5 seconds of their own lifetime.
+  - Steady state: a preprocessed particle field is already established when the effect becomes
+    visible.
+  - Fade out: when the fight phase ends, emission stops. Existing particles remain visible and
+    fade out naturally, with a maximum remaining lifetime of 2.5 seconds.
+  - `preprocess = 1.5` pre-simulates the particle system; it is not the same thing as a
+    0.5-second alpha fade. The first visible field can already be populated while individual
+    particles still follow their own alpha curves.
+- **Contrast:** muted warm amber (`#C58A55`) with low alpha, plus a small number of pale neutral
+  dust particles. Keep it subdued against the lantern-lit wall and never brighter than the hit
+  spark.
+- **Scale against the character:** individual particles about 1–3 px wide in the 640 × 360
+  viewport, far below 3% of Akaken's height; avoid large blobs.
+- **Change over life:** embers fade in quickly, drift, then fade to zero; dust remains low-alpha
+  and shrinks slightly near the end of life.
+- **Variation:** randomize position across the rectangular region, slow upward/downward drift,
+  horizontal velocity, scale and rotation. Keep velocity low and avoid a uniform conveyor-belt
+  appearance.
+- **Emitters:** one continuous rectangular emitter is sufficient for this ambience pass. A
+  separate emitter is not justified until the single-emitter result is visually evaluated.
+
+### The settings
+
+| Setting | Value | Why |
+|---|---|---|
+| Node type | `CPUParticles2D` | Consistent CPU implementation |
+| `amount` | 48 | Low-density ambience |
+| `one_shot` | `false` | Continuous emission during the fight |
+| `explosiveness` | 0 | Distributes emission over time |
+| `lifetime` | 2.5 s | Sets the maximum remaining life after emission stops |
+| Emission shape | Rectangle | Spreads particles across the courtyard |
+| `emission_rect_extents` | (280, 90), i.e. a full 560 × 180 px rectangle | Covers the visible arena ambience area |
+| Node `position` | (320, 215) | Centres the rectangle so it spans x 40–600, y 125–305: the fighting area, not below the ground |
+| `initial_velocity_min` / `_max` | 4 / 14 px/s | Slow, drifting movement |
+| `spread` | 180° | Allows movement in varied directions |
+| `gravity` | (0, −2) | Slight upward drift |
+| `damping_min` / `_max` | 1 / 3 | Keeps movement gentle |
+| `angle_min` / `angle_max` | 0° / 360° | Random angle; barely visible on a soft round particle, kept for variation |
+| `color_initial_ramp` | `#C58A55` → `#E8C49A` | Each particle starts somewhere between deeper and lighter amber, so they are not identical |
+| `color_ramp` | 0.00 `#C58A55` α 0.00; 0.20 `#C58A55` α 0.28; 0.75 `#E8C49A` α 0.20; 1.00 `#E8C49A` α 0.00 | Transparent start, fade-in by 20% of the lifetime (not 0.2 s), slow fade-out |
+| Alpha | Defined in `color_ramp` | Includes a per-particle fade-in and fade-out |
+| `scale_amount_min` / `_max` | 0.6 / 1.2 | Adds size variation |
+| `scale_amount_curve` | (0.00, 0.75), (0.20, 1.00), (1.00, 0.70) | With `scale_amount_min` / `_max` 0.6 / 1.2, sizes differ without abrupt changes |
+| Texture | Code-drawn 4 × 4 soft circle/diamond | Subtle dust and ember appearance |
+| Draw material | `CanvasItemMaterial`, normal blend | Avoids an overly bright additive field |
+| `local_coords` | `false` | Particles remain in world coordinates |
+| `preprocess` | 1.5 s | Pre-simulates an established particle field |
+| `speed_scale` | 0 during game pause/hitstop; 1 otherwise | Matches the game's custom pause behaviour |
+
+### Observable rules
+
+1. **Starts when the condition begins and stops when it ends.** Set `emitting = true` on entry to
+   `"fight"`; on exit set `emitting = false` and let existing particles finish their lifetime
+   naturally.
+2. **Game pause (`main.paused`):** set `speed_scale = 0` while custom pause is active; restore 1
+   when unpaused.
+3. **Tree paused (`get_tree().paused`):** use inherited pause behaviour
+   (`process_mode = INHERIT`); particles freeze when the scene tree is paused.
+4. **Hidden (`visible = false`):** hiding the node only suppresses rendering. It does not
+   automatically stop emission or freeze particle simulation. The emitter continues processing
+   while hidden, and particles continue aging. When the node becomes visible again, the current
+   particle state is rendered. `visible` is not a phase switch; emission is still decided by the
+   phase logic in rule 1.
+5. **First frame after the scene loads:** the node starts non-emitting because the phase is
+   `"title"`, so the first frame is empty either way. On entering `"fight"`, `preprocess = 1.5`
+   gives an established field; with preprocess set to 0, particles build up gradually.
+
+**Summary of the three paused/hidden cases (Zhaohui):**
+
+| State | Expected behaviour |
+|---|---|
+| `main.paused` / hitstop | frozen by `speed_scale = 0` |
+| `get_tree().paused` | follows the node's process mode; stops processing while the tree is paused |
+| `visible = false` | not drawn, but keeps emitting and simulating |
+
+### Evidence split
+
+Settings: headless configuration test reads back every configured property. Rules: headless
+tests cover phase start/stop, pause, tree pause, visibility and initial state. Visual intent:
+frame strip plus inspection in the running game.
+
+### The frame strip
+
+- **Preview background:** the wall/sky and lower-wall regions across the arena, including both
+  the dark wall sample and the warm lantern region.
+- **Condition begins at frame 10 and ends at frame 100.**
+- **Frames to read, and what each should show:**
+  - 10: the preprocessed ambience field appears populated.
+  - 25: particles continue their slow movement.
+  - 55: steady-state ambience.
+  - 100: fight phase ends and emission stops.
+  - 115: existing particles remain and begin clearing out.
+  - 145: only a small number of particles remain.
+  - 175: the 2.5-second maximum fade-out window has elapsed; no particles remain.
+
+---
+
+## Background where the effects appear (Claude Code, measured 2026-11-08)
+
+Relative luminance L of `godot/art/env/bg.png` (640 × 360, drawn 1:1 by `stage.gd:23`), sampled
+every 2 px over the arena x 24–616 (`fighter.gd:27-28`). WCAG decode as in the A5 brief's
+Revision 5.
+
+| Band (y) | What it is | Mean L | Darkest (x, y) colour | Lightest (x, y) colour |
+|---|---|---:|---|---|
+| 0–100 | sky | 0.0434 | 0.0021 (32, 56) `#140209` | 0.2188 (506, 98) `#b1724a` |
+| 100–200 | wall, lanterns | 0.0537 | 0.0006 (250, 148) `#070008` | 0.2091 (150, 104) `#af6f45` |
+| **200–260** | **where hits land** | **0.0256** | 0.0040 (364, 202) `#1a070d` | **0.2699 (510, 208) `#b18651`** |
+| 260–305 | lower wall | 0.0377 | 0.0074 (610, 284) `#1f101b` | 0.2081 (342, 290) `#a9705d` |
+| 305–360 | floor | 0.0614 | 0.0037 (602, 329) `#0f0a13` | 0.2027 (324, 323) `#a76f57` |
+
+Zhaohui: the hit band is mostly very dark, so the worst case for a bright spark is the warm
+lantern glow, L ≈ 0.27. Using the opaque near-white core `#EAFBFF` (approximate relative
+luminance 0.94), the contrast is approximately 13.1:1 *(Claude Code corrected 13.8 → 13.1)*
+against the hit-band mean L = 0.0256 and 3.0:1 against the lightest pixel L = 0.2699. The
+lantern-lit pixel is the limiting case; judge readability from the bright core and motion, not
+from a claim of 4.5:1 compliance.
+
+## Unconfirmed — to be checked by tests or strips (Claude Code, 2026-11-08)
+
+Open questions, not decisions. Each is answered by the named check, and the answer goes in a
+dated revision.
+
+1. **Spark reach.** With 45–75 px/s and damping 28–40, d = v·t − ½·a·t² gives about 8–14 px at
+   0.2 s and 20–40 px at 0.6 s: the fastest sparks end about 10 px beyond the intended 15–30 px,
+   when the ramp and scale curve have nearly faded them. *Check:* Effect A's first strip.
+2. **Hitstop starts on the hit tick.** `main.gd:137-138` sets hitstop on the same event that fires
+   the spark, so with `speed_scale = 0` during hitstop every in-game burst is held for its first
+   4 ticks (0.067 s, 2 frames at 30 fps). Not known: whether a one-shot `CPUParticles2D` spawns
+   at all while `speed_scale` is 0. The preview has no hitstop. *Check:* Effect A's state test.
+3. **`preprocess` after load.** Not known whether `preprocess` runs when `emitting` turns on after
+   the scene has loaded, or only on entering the tree or `restart()`. If the latter, frame 10 of
+   Effect B's strip is empty unless the code calls `restart()`. *Check:* Effect B's state test
+   or first strip.
+4. **Hidden.** Not known whether `CPUParticles2D` in 4.7.2 keeps simulating while
+   `visible = false` (rule 4). *Check:* Effect B's state test.
+5. **Two colour ramps on Effect B.** As far as Claude Code knows, `CPUParticles2D` multiplies the
+   `color_initial_ramp` sample by the `color_ramp` sample, so amber × amber comes out darker than
+   either stop (e.g. R 197/255 × 232/255 ≈ 179). Not confirmed for 4.7.2. *Check:* Effect B's
+   first strip against the intended `#C58A55`–`#E8C49A` range.
+
+## Boundaries
+
+Unchanged: collision, movement, input, state machine, timings, existing tests and counts, A5
+shaders, background, sprites, `effects.gd`, `audio_director.gd` and HUD. Presentation code may
+read game state but never writes it. Confirmed; no exception is required.
+
+## Predicted failures
+
+1. **Custom pause/hitstop does not freeze particles.** Test particle positions while toggling
+   pause and hitstop; assert `speed_scale == 0` and no movement.
+2. **A retrigger restarts and erases an active one-shot burst.** Catch with the frame-22
+   retrigger strip and a pool test that asserts two active bursts remain visible. *(Claude Code:
+   frame 21 → 22 to match the corrected strip.)*
+3. **The burst is parented to a fighter.** Assert the emitter parent is `Main`; move the fighter
+   after the hit and verify the burst stays at the event location.
+4. **Ambience runs outside the fight or fails to stop after KO.** Test title → fight → ko →
+   result and assert the emitter state at each transition.
+5. **Preprocess does not establish the expected ambience.** Compare the first active frame with
+   and without preprocess in a frame strip.
+6. **A Godot 3 property or unsupported renderer feature is used.** Catch with the Godot 4.7.2
+   headless configuration read-back test.
+
+## Price predictions and budget
+
+Zhaohui (original): 这里需要特别区分预测和实测。既然作业要求 CPU 粒子也测 GPU time，就不能再写
+N/A — CPU node。CPU 节点仍然需要 GPU 绘制，所以 GPU time 必须测。Step 6 可以临时创建一个 GPU 粒子节点
+来生成 process shader，但要明确记录：这是为了取得 GPU 对比数据，不代表最终效果改用 GPU 节点。
+
+(Translation: predictions and measurements must be kept apart. Since the assignment asks for GPU
+time for CPU particles too, "N/A — CPU node" can no longer be written. A CPU node still needs the
+GPU to draw, so GPU time must be measured. Step 6 may create a temporary GPU particle node to
+generate the process shader, but the record must say clearly that it is there to obtain the GPU
+comparison data, and that the final effects do not switch to GPU nodes.)
+
+| Effect | Peak particles | Predicted headless CPU price | Predicted GPU time | Budget | Compared on |
 |---|---|---|---|---|---|
-| **P-gi**: orange gi, lower torso | (52, 101) | (224.6, 257.5) | (449, 515) | (222, 89, 0, 254) | (48, 35, 47) |
-| **P-fist**: pale hand wrap, front fist | (75, 68) | (247.6, 224.5) | (495, 449) | (240, 230, 172, 254) | (66, 37, 60) |
+| A | 80 | 0.08 ms / frame | 0.04 ms / frame | CPU ≤ 0.25 ms; GPU ≤ 0.25 ms | Both CPU and GPU |
+| B | 48 | 0.05 ms / frame | 0.02 ms / frame | CPU ≤ 0.50 ms; GPU ≤ 0.50 ms | Both CPU and GPU |
 
-Note 1: the generated sprite is orange (222, 89, 0), not the palette's gi red `#D9482B`, so the
-prediction starts from the stored texel, not the palette. Note 2: these texels have alpha 254,
-not 255, so the background shows through by 1/255. That is under one 8-bit step, but say whether
-your colour line keeps `COLOR.a`. Coordinates are confirmed or corrected from the first capture.
+*(Revised 2026-11-08 after Claude review P, before any build: A 0.05 / 0.05 → 0.08 / 0.04 ms,
+B 0.08 / 0.08 → 0.05 / 0.02 ms. Budgets unchanged.)*
 
-| Pixel | `hurt_amount = 0.0` | `0.5` | `1.0` |
-|---|---|---|---|
-| P-gi | (222, 89, 0) | (238.5, 44.5, 0) → (239, 45, 0) ± 1 | (255, 0, 0) |
-| P-fist | (240, 230, 172) | (247.5, 115, 86) → (248, 115, 86) ± 1 | (255, 0, 0) |
+These are pre-implementation estimates, not measured results. The headless CPU estimates
+represent particle simulation overhead and may vary by machine. GPU time must be measured in the
+Visual Profiler for both CPU particle effects because their particles are still drawn by the GPU.
+A temporary GPU particle node may be used to generate and read a GPU process shader as required
+by Step 6; it is a scratch node for reading the shader, not a change to the selected CPU
+implementation, and the GPU times above are measured on the CPU effects. *(Claude Code: "compare"
+→ "read" and "measurement prototype" → "scratch node for reading the shader", to match Step 6.)* Record
+the actual profiler measurements separately after implementation.
 
-Computed by hand by Zhaohui from the colour line, `mix(a, b, t) = a + (b − a)·t` per channel with
-`flash_color` = (255, 0, 0). Values ending in .5 may land on either neighbour when the GPU
-converts to 8 bits, hence ± 1. The background term is ignored: alpha 254 moves each channel by
-under one step.
+**Why these numbers** (per frame, at each effect's heaviest state):
+- **CPU:** A has more particles alive at its peak (80 vs. 48), so its per-frame simulation cost
+  is predicted higher.
+- **GPU:** A uses the eight-point star texture and additive blending; B uses a simple 4 × 4 soft
+  texture and normal blending, so A's draw cost is predicted slightly higher.
+- **B's looser budget:** headroom for an effect that runs continuously; it does not mean B is
+  predicted to cost more than A.
 
-TO DO (Zhaohui): if the flash colour changes contrast against the background, the ratio.
+(An earlier reason, "B runs all fight, so its average cost is higher", was dropped: Claude review
+P pointed out that Step 7 measures each effect per frame at its peak, not averaged over a fight.
+Claude Code had offered that reason as an option.)
 
-### Hint experiment predictions
+## Short answers
 
-3 × 1 PNG with greys 64, 128, 192, unshaded quads, Linear tonemap, exposure 1.0.
-**This project uses the Compatibility renderer, not Forward+/Mobile, so these are predictions to
-be measured before they are explained.**
-
-| Band | Stored | Quad A: `source_color` | Quad B: no hint |
-|---|---|---|---|
-| 1 | 64 | TO DO (Zhaohui) | TO DO |
-| 2 | 128 | TO DO | TO DO |
-| 3 | 192 | TO DO | TO DO |
-
-Which quad shows the file's values unchanged, and why: TO DO (Zhaohui).
-
-## Material plan — granite floor and stone plinth
-
-**Why not the lantern (decided before this section was committed):** the first draft put the
-shader on PROP-LANTERN. A headless probe found that none of the three A3 props has UVs:
-`surface_get_arrays()` returns no `ARRAY_TEX_UV` on any surface of the lantern, makiwara or taiko.
-Adding UVs would change the source models, which this assignment keeps unchanged, and projecting
-UVs inside the shader would make the hand-written shader much harder. Zhaohui chose to texture
-the prop room's floor and a new stone plinth instead; both are Godot `BoxMesh`es, which have UVs.
-
-- **Objects:** in `godot/props3d/prop_room.tscn`, the existing `Floor` (BoxMesh 6 × 0.1 × 4 m,
-  top at y = 0) and a new `StonePlinth` (BoxMesh 0.8 × 0.3 × 0.8 m), standing on the floor at
-  x = 1.0, z = −1.0, clear of the three props and the 1.70 m reference box. No prop is moved.
-- **Material wiring:** these meshes are not imported, so there is no importer **Use External**
-  step; each `MeshInstance3D` takes its material as `material_override`, pointing at a `.tres`
-  file. The A3 props keep their imported materials.
-- **Lighting to judge under:** the prop room's `Sun` (DirectionalLight3D, energy 0.7, shadows) and
-  ambient 0.35. No SSAO, glow or fog.
-- **Shader:** `godot/shaders/granite.gdshader`, `shader_type spatial;`.
-- **Materials:** `godot/props3d/materials/granite_floor.tres` and `granite_plinth.tres`, both
-  ShaderMaterials of that one shader.
-- **UV layout to keep in mind:** `BoxMesh` lays its six faces into a 3 × 2 grid of the 0–1 UV
-  square (to be confirmed with a probe), so each face shows about a third by a half of the texture
-  at `uv_scale = 1`.
-
-| Texture | Source | What the numbers mean | Sampled as | compress/mode | compress/normal_map | mipmaps/generate |
-|---|---|---|---|---|---|---|
-| `granite_wall_diff_1k.png` | Poly Haven *Granite Wall* | sRGB-encoded surface colour | colour, `source_color` | 2 VRAM Compressed | 2 Disabled | true |
-| `granite_wall_rough_1k.png` | same | roughness 0–1, linear | data, no `source_color` | 2 VRAM Compressed | 2 Disabled | true |
-| `granite_wall_nor_gl_1k.png` | same, **OpenGL** convention | tangent-space normal, xyz = rgb·2−1 | data, `hint_normal` | 2 VRAM Compressed | 1 Enable | true |
-| `granite_wall_nor_dx_1k.png` | same, DirectX convention | calibration only, no material uses it | — | 0 Lossless | 2 Disabled | false |
-| `hint_grey_3x1.png` | written by a committed GDScript | greys 64, 128, 192 | both (hint experiment) | 0 Lossless | 2 Disabled | false |
-
-Enum values are positional in the importer's `PROPERTY_HINT_ENUM` strings, read from Godot
-4.7.2-stable `editor/import/resource_importer_texture.cpp`: `compress/mode` =
-"Lossless,Lossy,VRAM Compressed,VRAM Uncompressed,Basis Universal" (0–4), `compress/normal_map` =
-"Detect,Enable,Disabled" (0–2); `mipmaps/generate` is a bool.
-
-Source: `https://polyhaven.com/a/granite_wall`, authors Dimitrios Savva (all roles, per the Poly
-Haven API), licence CC0. Files: 1k PNG from `dl.polyhaven.org`. Date checked: 2026-10-26.
-Credits and SHA-256 per file: `godot/props3d/textures/ATTRIBUTION.md`.
-
-Uniforms (at least four, at least two `group_uniforms`). TO DO (Zhaohui): confirm names, ranges
-and defaults.
-
-| Group | Uniform | Type | Hint | Default | Expected on screen across the range |
-|---|---|---|---|---|---|
-| `surface` | `tint` | `vec4` | `source_color` | white | multiplies albedo; the plinth darker |
-| `surface` | `uv_scale` | `float` | `hint_range(0.25, 8.0)` | `1.0` | how many times the granite repeats across a face |
-| `detail` | `roughness_scale` | `float` | `hint_range(0.0, 1.0)` | `1.0` | 0 = glossy highlight, 1 = as scanned |
-| `detail` | `normal_strength` | `float` | `hint_range(0.0, 2.0)` | `1.0` | 0 = flat, 2 = exaggerated relief |
-
-**What differs between the two materials:** `uv_scale` (the 6 × 4 m floor repeats the granite
-several times; the 0.8 m plinth about once) and `tint` (the plinth toward `#6E6680`, the A3 stone
-colour, so it reads as a separate block on the floor).
-
-### Predicted failure cases
-
-1. **One flash on both fighters** (a shared material). *Check:* the rule 6 assertion; a capture
-   with only P2 hit.
-2. **Duration changes with frame rate or time scale** (the driver counts frames or uses `TIME`).
-   *Check:* the 30/60/144 runs and the `time_scale = 0.5` run.
-3. **Retrigger ignored** (the driver latches on the first `state_changed`). *Check:* a second hit
-   during hurt must read `1.0` again.
-4. **Roughness or normal map sampled with `source_color`.** *Check:* `test_materials.gd` reads the
-   hints from the source; the look check at `roughness_scale` minimum and maximum.
-5. **Normal map in DirectX convention, or not a real normal map.** *Check:* `normal_map_check.gd`
-   curl ratio, calibrated on the gl/dx pair.
-6. **The object has no usable UVs.** *Already seen* on the lantern before this section was
-   committed (see the material plan); it is why the floor and plinth are used. *Check for the
-   new objects:* the BoxMesh UV arrays read headlessly; the floor in the editor at `uv_scale = 1`.
-7. **The material is saved embedded in the scene instead of as the `.tres` file,** so the two
-   materials stop being shared resources of one shader. *Check:* `test_materials.gd` asserts each
-   `material_override.resource_path` and that both name the same shader path, after deleting
-   `godot/.godot` and reimporting.
-8. **The red flash is weak on Akaken,** whose gi is already orange-red (222, 89, 0): red can add at
-   most 33 to R and leaves B at 0, so only G carries most of the change. Aotake should read more
-   clearly. *Check:* the P-gi capture at `hurt_amount = 0.5` against P-fist, and the muted
-   playtest: can the player tell Akaken was hit? If not, revise `flash_color` with a dated entry.
-
-### Short answers
-
-TO DO (Zhaohui), each in a sentence or two:
-- The renderer project.godot names (`renderer/rendering_method="gl_compatibility"`, line 35) and
-  what it rules out.
-- What colour arrives in `fragment()` before you change it, and the tempting alternative.
-- What `texture(TEXTURE, UV)` would give instead of `COLOR`.
-- For spatial: `ALBEDO` if never written, and what `COLOR` holds.
-- A frame-counting version's duration at 30, 60 and 144 fps.
-- Which resource holds the default, which the current value, and what sharing a material does.
-- Does `hint_range` clamp a value the driver sets from code? (a prediction)
-
-## Revision 2 · 2026-10-28 · hint-experiment predictions (before any shader or measurement)
-
-Computed by hand by Zhaohui with a calculator, from the handout's encode function
-encode(x) = 1.055·x^(1/2.4) − 0.055 (x > 0.0031308), with x = stored / 255. The three
-stored greys are all above the linear-segment threshold.
-
-| Band | Stored | Quad A: `source_color` | Quad B: no hint |
-|---|---|---|---|
-| 1 | 64 | 64 | 137 |
-| 2 | 128 | 128 | 188 |
-| 3 | 192 | 192 | 224 |
-
-Claude's check of the arithmetic: 64 → 137.2 and 128 → 187.84 agree. 192 → 224.9998, which
-rounds to 225, so band 3 on Quad B may measure 224 or 225.
-
-**Which quad shows the file's values unchanged, and why** (Zhaohui's words): Quad A 显示原值，因为
-source_color 让 Godot 先将 sRGB 解码为线性值，再编码回 sRGB，两个互逆操作抵消，还原原始数值。
-(Quad A shows the stored values, because source_color makes Godot decode sRGB to linear and then
-encode back to sRGB; the two inverse operations cancel and give back the original numbers.)
-
-Still open from Version 1: the short answers, the contrast ratio, the hurt-flash `render_mode`
-and the granite uniform table. Measured values go in TEST-REPORT.md, not here.
-
-## Revision 3 · 2026-10-28 · two confirmations (before any shader)
-
-- **Hurt-flash `render_mode`: none.** Zhaohui agreed with Claude's suggestion: the fighter
-  sprites are unlit and the default blend (alpha mix) is what the flash needs, so the shader
-  declares no `render_mode`.
-- **Granite uniform table: confirmed as written in Version 1** by Zhaohui, unchanged: `tint`
-  (`vec4`, `source_color`, white), `uv_scale` (`float`, `hint_range(0.25, 8.0)`, 1.0) in group
-  `surface`; `roughness_scale` (`float`, `hint_range(0.0, 1.0)`, 1.0) and `normal_strength`
-  (`float`, `hint_range(0.0, 2.0)`, 1.0) in group `detail`.
-- From here on, entries in this file are written in English only (Zhaohui's request). Revision 2
-  keeps Zhaohui's sentence as written, with its English translation beside it.
-
-Still open: the short answers and the contrast ratio.
-
-## Revision 4 · 2026-10-28 · short answers (before any shader or measurement)
-
-Q5 and Q7 are Zhaohui's (Q5 computed with a calculator; Q7 in Zhaohui's own words). Q1–Q4 and
-Q6 were drafted by Claude Code after Zhaohui asked for help; Zhaohui read them and asked for no
-changes.
-
-- **Q1 — renderer** *(Claude-drafted)*. `godot/project.godot:35` names `gl_compatibility`, and
-  line 36 uses it for mobile too. That rules out decals, compute shaders, VoxelGI, SDFGI and
-  SSIL. It also means the hint-experiment predictions, which the handout derives for
-  Forward+/Mobile, must be measured before they are explained.
-- **Q2 — the colour arriving in `fragment()`** *(Claude-drafted)*. `COLOR` arrives as the
-  sprite's texture sample multiplied by the node's modulate (the vertex colour), alpha included.
-  The tempting alternative, `COLOR = flash_color;`, overwrites alpha too, so the whole transparent
-  rectangle around the fighter would turn solid red; even `COLOR.rgb = flash_color.rgb;` would
-  erase the sprite's shading.
-- **Q3 — `texture(TEXTURE, UV)` instead of `COLOR`** *(Claude-drafted)*. It gives the raw texel
-  without the modulate. The fighters set no modulate today, so the pixels would match now, but the
-  shader would silently ignore any modulate added later (for example a fade-out on K.O.).
-- **Q4 — spatial `ALBEDO` and `COLOR`** *(Claude-drafted)*. `ALBEDO` is white, `vec3(1.0)`, if
-  never written. `COLOR` in `fragment()` holds the vertex colour interpolated from `vertex()`;
-  it is neither a texture nor the output.
-- **Q5 — a frame-counting version** *(Zhaohui)*. 22 frames last 22 ÷ 30 ≈ 0.733 s at 30 fps,
-  22 ÷ 60 ≈ 0.367 s at 60 fps and 22 ÷ 144 ≈ 0.153 s at 144 fps. Only at 60 fps does it match
-  rule 2's 0.367 s, which is why the driver reads `stun` (physics ticks) instead of counting
-  frames.
-- **Q6 — default, current value, sharing** *(Claude-drafted)*. The default lives in the shader
-  source (the `= 0.0` on the `hurt_amount` uniform line); the current value lives in the
-  ShaderMaterial resource. If both fighters shared one material, setting `hurt_amount` for P2
-  would flash P1 too, so each fighter gets its own material (rule 6).
-- **Q7 — does `hint_range` clamp a value set from code? (prediction)** *(Zhaohui)*. No.
-  `hint_range` primarily controls the range shown in the Inspector and does not necessarily clamp
-  values assigned from code. *To be checked in Use It with a capture at `hurt_amount = 2.0`.*
-
-Still open: the contrast ratio.
-
-## Revision 5 · 2026-10-28 · contrast ratio (before any shader or measurement)
-
-WCAG contrast of P-gi against the background beneath it, computed by hand by Zhaohui with a
-calculator: decode each channel (c = v / 255, ((c + 0.055) / 1.055)^2.4), L = 0.2126 R +
-0.7152 G + 0.0722 B, ratio = (L_light + 0.05) / (L_dark + 0.05).
-
-| Colour | RGB | L | Ratio against the background |
-|---|---|---|---|
-| Background under P-gi | (48, 35, 47) | 0.02036 | — |
-| P-gi, `hurt_amount = 0.0` | (222, 89, 0) | 0.22674 | 3.93 : 1 |
-| P-gi, `hurt_amount = 1.0` | (255, 0, 0) | 0.21260 | **3.73 : 1** |
-
-Zhaohui first wrote 3.93 for the full-red row as well; Claude's check gave 0.2626 / 0.07036 ≈
-3.73, and Zhaohui accepted the correction. The other values agree with Claude's check.
-
-**Finding:** the red flash *lowers* Akaken's gi contrast slightly (3.93 → 3.73), because red takes
-G from 89 to 0 and G carries the largest luminance weight. The flash is visible through the hue
-change, not a brightness change. This supports predicted failure case 8; the capture and the
-muted playtest decide it.
-
-All TO DO items of Version 1 are now filled. The next step is the hand-written shader.
-
-## Revision 6 · 2026-10-29 · rule 3 cannot happen through real input (before the test is written)
-
-Zhaohui's decision, after the agent's plan and the probe (FRICTIONAL.md, 2026-10-28):
-
-- **Finding.** A second hit cannot land on a fighter still in `"hurt"` through real input. The
-  defender leaves hurt 22 ticks after a hit; the attacker's next punch connects at tick 23 at the
-  earliest, a kick later still, and `HIT_PUSH` moves the defender away. The probe tried 7 840
-  combinations (P1 punch or kick; P2 standing or walking in; mid-stage or against the right wall;
-  start gap 20–89 px; second press 0–13 ticks after recovery) and found **0**
-  (`logs/_probe_retrigger_direct.log`). Not searched: P2 attacking, jumps, crouches.
-- **Rule 3 is revised to:** *Retrigger: restart, by construction.* The game's own timing makes a
-  retrigger unreachable in play. If a hit ever does land during hurt (a later change to frame
-  data, push or hitboxes), the hit handler forces a fresh `"hurt"` with `stun = HITSTUN`, so the
-  driver's `hurt_amount` returns to `1.0` and the 22 ticks start over. Fight timing is not
-  changed to make this reachable (out of scope).
-- **How it is checked.** The step 2 test reaches the retrigger through the real loop and real
-  input, but with **test setup** between the two hits: it moves the defender back into range
-  while it is still in `"hurt"`. That setup writes a position, which presentation code never may;
-  only the test does it, and the test labels the case as setup, not input. The other rules are
-  checked through real input with no such setup, except the K.O. case (rule 5), whose setup
-  lowers the defender's health first and is labelled the same way.
-
-## Revision 7 · 2026-10-29 · rules 3, 4 and 5 after the first test runs
-
-Zhaohui's decisions after `test_hurt_flash.gd` failed 4 of 58 checks at 30, 60 and 144 fps
-(FRICTIONAL.md, 2026-10-29). Each changed expectation below has its reason; no assertion is
-removed.
-
-- **Rule 3, how it is checked (replaces Revision 6's setup).** Moving the defender back into range
-  cannot produce a retrigger, because the attacker's recovery is the limit (P1's second punch
-  connects at T+23 at the earliest; P2 leaves hurt at T+22). The test now lands the **first hit
-  through real input** (J) and the **second hit as SETUP**: while P2 is still in `"hurt"`, the test
-  calls the game's own `P2.receive_hit(P1, damage)` and then `P2.flush_ko()`, as `check_hit()`
-  does (`fighter.gd:171-173`). This calls the real hit handler, not the driver. **Expected:**
-  `hurt_amount` is `1.0` on that tick, then follows `stun / HITSTUN`, reaching `0.0` **18 ticks**
-  later. There is no 4-tick hold, because hitstop is set only when the attacker emits
-  `attack_resolved` (`main.gd:137-138`), which `receive_hit()` alone does not do.
-- **Rule 5, the mid-fade K.O.** The same unreachability applies. The test also checks it with the
-  same SETUP: P2 in `"hurt"` with health lowered, then `receive_hit()` → `"ko"`, and `hurt_amount`
-  must be `0.0` on that tick. The K.O. from idle stays as it is.
-- **Rule 4, time scale (replaces the 0.733 s prediction).** Under `Engine.time_scale = 0.5`,
-  Godot 4.7.2 with `--fixed-fps` still runs 60 physics ticks per second of frames (2 per frame at
-  30 fps), and the fight steps by ticks with frame data that ignores delta, so **the whole fight
-  is not slowed, and the flash, which follows game state, still lasts 22 ticks = 0.367 s of real
-  time**. That is the intended behaviour: presentation follows state and never runs its own
-  clock. The duration is in physics ticks; `Engine.time_scale` does not change it. The assertion's
-  expected value becomes 0.367 s. *Human check still needed:* the same in a normal windowed run
-  (not `--fixed-fps`).
-- **Pause** is unchanged and already passes.
-
-## Revision 8 · 2026-10-29 · material plan corrections from the audit
-
-From the materials audit (`godot/MATERIALS.md`, findings 1–3) and its review, approved by
-Zhaohui ("Apply all"):
-
-- **"The 0.8 m plinth about once" is wrong.** `BoxMesh` maps every face to a third × a half of
-  the UV square whatever its size (probe, confirmed), so at `uv_scale = 1.0` each plinth face
-  shows about **a third × a half** of the texture, not one copy. One copy covers 2.4 × 1.6 m on
-  the plinth's top and 2.4 × 0.6 m on its sides.
-- **The texture is not square on either object.** One `uv_scale` scales both axes, so the floor's
-  6 × 4 m top at 6.0 shows 2 × 3 copies of 3.0 × 1.33 m each (stretched 2.25 : 1), the plinth top
-  1.5 : 1 and its sides 4 : 1. The grain size also differs between the floor and the plinth.
-- **No change to the materials or the shader now.** Whether the stretch and the grain mismatch are
-  visible is a look question; the interface sweep and the side-by-side capture decide it. If they
-  matter, a later revision may set different values or add a second scale; any shader change is
-  Zhaohui's.
+1. Both effects use `CPUParticles2D`. Compared with `GPUParticles2D`, this design does not use
+   GPU-only controls such as `amount_ratio`, GPU visibility configuration, or GPU particle
+   trails. It also uses the CPU particle class's scale and colour properties rather than assuming
+   GPU-only properties exist. `CPUParticles2D` does not provide several advanced GPU particle
+   features listed in the assignment, including turbulence, attractors, particle collision,
+   sub-emitters, and particle trails. These capabilities are available through the GPU particle
+   workflow rather than the CPU particle node used in these two effects.
+2. With `local_coords = true`, live particles remain in the parent's local coordinate space. If
+   the parent moves after the hit, the existing particles move with it. Parenting the emitter to
+   the stable `Main` node avoids unintended movement during normal gameplay.
+3. Four pooled burst slots can be alive simultaneously, with 20 particles per slot, giving a peak
+   of 80 particles.
+4. A headless run may report a GPU particle processing cost close to zero because the particle
+   process runs as a GPU shader, which the dummy renderer does not execute. With VSync enabled,
+   FPS should read approximately the display refresh rate both with and without the effect, as
+   long as the frame budget is not exceeded.
+5. With `preprocess = 1.5`, the particle system is pre-simulated and can appear as an already
+   established field when it is first rendered. Without preprocess, it begins empty and gradually
+   fills through normal emission. When the scene tree is paused, the CPU particle node follows
+   its inherited process mode and stops processing if that mode is pausable. Setting
+   `visible = false` hides the particle rendering, but does not automatically stop emission or
+   freeze simulation. The emitter continues processing and particles continue aging while
+   hidden. When visibility is restored, the current state is rendered.
+6. Emission: `amount`, `one_shot`, `explosiveness`, `lifetime`, emission shape. Process: initial
+   velocity, spread, gravity, damping, colour ramp, scale amount and scale curve, preprocess,
+   speed scale, local coordinates. Draw: texture and draw material / blend mode. *(Revised
+   2026-11-08, Zhaohui's choice after Claude review N: initial velocity and spread moved from
+   emission to process, because they set how each particle moves.)*
