@@ -17,6 +17,12 @@ const LANTERN_POINT := Vector2(510, 208)
 
 @export var retrigger := true
 @export var at_lantern := false
+## GPU price (A6 "Use It"): keeps all four bursts alive (one new burst every lifetime / 4) so the
+## Visual Profiler sees Effect A at its heaviest. Space toggles it on and off. Used by
+## hit_spark_profile.tscn only; the strips never set it.
+@export var profile_loop := false
+var _profile_on := true
+var _profile_clock := 0.0
 
 var slots: Array[CPUParticles2D] = []
 var fired := 0
@@ -41,7 +47,21 @@ func _ready() -> void:
 	print("hit_spark_preview: retrigger %s, point %s" % [retrigger, _point()])
 
 
-func _process(_delta: float) -> void:
+func _unhandled_input(event: InputEvent) -> void:
+	if profile_loop and event is InputEventKey and event.pressed and not event.echo \
+			and event.keycode == KEY_SPACE:
+		_profile_on = not _profile_on
+		print("hit_spark_preview: profile bursts %s" % ("on (4 alive)" if _profile_on else "off"))
+
+
+func _process(delta: float) -> void:
+	if profile_loop:
+		_profile_clock += delta
+		var step := slots[0].lifetime / SLOTS
+		if _profile_on and _profile_clock >= step:
+			_profile_clock = 0.0
+			_fire(_point())
+		return
 	if frame == FIRST_FRAME or (retrigger and frame == RETRIGGER_FRAME):
 		_fire(_point())
 	frame += 1
