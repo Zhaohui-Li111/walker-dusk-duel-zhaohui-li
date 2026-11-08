@@ -23,6 +23,9 @@ can be seen clearly.)
 fires twice, at frames 10 and 22 (1.0 s apart in total from first spark to last particle), so
 "about 5 s" does not match the settings. Zhaohui to recheck whether 0.5 s was meant.
 
+**Correction (2026-11-08, Zhaohui, after the r0 strip was read):** "改0.6吧" (change it to 0.6):
+each burst lasts about **0.6 s**, not 5 s. The original sentence above is kept as written.
+
 ### Claude's reading of r0 (a claim, not a verdict; 2026-11-08)
 
 Read from zoomed crops of frames 10, 12, 15, 20, 22, 24, 28, 30, 40, 50 of both strips, plus the
