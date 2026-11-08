@@ -511,3 +511,12 @@ was: `Performance.TIME_PROCESS` refreshes about once per real second, so every c
 caught by the control). Means move between runs with OS spikes; medians are stable: **Effect A
 ≈ 0.010 ms, Effect B ≈ 0.006 ms per frame**, against predictions 0.08 / 0.05 ms and CPU budgets
 0.25 / 0.50 ms: both under budget. GPU time: TO DO (Zhaohui, HUMAN CHECK, Visual Profiler).
+
+## In play (HUMAN CHECK, Zhaohui, 2026-11-08)
+
+Zhaohui ran the game and reported, in their words: "我运行游戏的时候，一切正常，没什么问题"
+("when I ran the game everything was normal, no problems"). Recorded as given. This general
+report does not separately name the handout's specific checks (rapid repeats, darkest and
+lightest background, screen edge, Effect B on the first frames after load, paused and hidden),
+and it cannot settle Effect B rule 4: nothing in normal play hides the embers node.
+
