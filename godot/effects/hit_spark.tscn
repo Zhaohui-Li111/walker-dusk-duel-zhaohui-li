@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://effects/hit_spark_star.png" id="1_star"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_add"]
+blend_mode = 1
+
+[sub_resource type="Curve" id="Curve_scale"]
+_data = [Vector2(0, 1), 0.0, -0.5, 0, 1, Vector2(0.7, 0.65), -0.5, -2.16667, 1, 1, Vector2(1, 0), -2.16667, 0.0, 1, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_spark"]
+offsets = PackedFloat32Array(0, 0.35, 1)
+colors = PackedColorArray(0.917647, 0.984314, 1, 1, 0.513726, 0.87451, 0.94902, 0.75, 0.513726, 0.87451, 0.94902, 0)
+
+[node name="HitSpark" type="CPUParticles2D"]
+material = SubResource("CanvasItemMaterial_add")
+emitting = false
+amount = 20
+texture = ExtResource("1_star")
+lifetime = 0.6
+one_shot = true
+preprocess = 0.0
+speed_scale = 1.0
+explosiveness = 1.0
+local_coords = true
+emission_shape = 0
+spread = 180.0
+gravity = Vector2(0, 25)
+initial_velocity_min = 45.0
+initial_velocity_max = 75.0
+damping_min = 28.0
+damping_max = 40.0
+angle_min = -180.0
+angle_max = 180.0
+scale_amount_min = 0.7
+scale_amount_max = 1.2
+scale_amount_curve = SubResource("Curve_scale")
+color_ramp = SubResource("Gradient_spark")
