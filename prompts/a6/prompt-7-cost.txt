@@ -1,0 +1,24 @@
+Read CLAUDE.md first. Adapt the chapter's cost script from Example 09
+into godot/tests/cost_effects.gd for the effects in CHANGE-BRIEF.md.
+At a fixed rate, it measures the CPU time of: an empty scene; the game
+scene with both effects off; Effect A at the most bursts the brief says
+can be alive at once; and Effect B in its heaviest state. Report each
+case's mean and spread. If two cases that should differ report the
+same value, say so: the script may be measuring itself. Do not change
+any effect or gameplay file. Run it with
+./scripts/run-test.sh cost_effects.gd 60 300 and show the real output.
+Do not commit.
+
+Project notes from Claude Code (Zhaohui delegated the remaining steps,
+2026-11-08): Example 09's script is not in this repository or on this
+machine, so write it from the description above and say so in the
+script's header. Both effects are CPUParticles2D, so their CPU work runs
+in the engine's internal process: measure per-frame time that includes
+it (for example Performance.TIME_PROCESS and TIME_PHYSICS_PROCESS, or
+wall time per frame), not only the time of your own GDScript. For
+"Effect A at most bursts", the cost script may start all four pooled
+slots itself (it is a measurement, not a state test; label it SETUP).
+Effect B's heaviest state is emitting with the field full. Use enough
+frames per case for a stable mean, and warm-up frames before each.
+Run each command on its own, without "; echo". Do not run Godot outside
+the wrapper and do not write files outside the repository.

@@ -470,3 +470,44 @@ Finding for mutation 1: `CPUParticles2D` has no `initial_velocity`, and Godot 4.
 unknown key from the `.tscn` silently, so `initial_velocity_min` falls back to its default 0. The
 effect still fires; only the read-back of the brief's value catches it. (The Godot 3 names that
 `ParticleProcessMaterial` lists are a different class; this effect does not use it.)
+
+## State tests (headless, real loop and real input; SETUP cases labelled in the logs)
+
+| Test | Mode | Result | What it covers |
+|---|---|---|---|
+| `test_hit_spark_state.gd` | 60 | 57 checks, 0 failed | Effect A rules 1-6: no burst on load; one burst per "hit", none on blocked / whiff / interrupted (a full round vs the CPU: 16 hits, 16 bursts, 31 other results, 0 bursts); at `point`; two hits 23 ticks apart use two slots and the first is not restarted; frozen during pause and hitstop; rule 6 via SETUP `main.start_fight_now()` mid-burst. Not exercised: the all-four-busy fallback. |
+| `test_embers_state.gd` | 60 | 36 checks, 0 failed | Effect B rules 1-3 and 5: `emitting == (phase == "fight")` on every tick, off at K.O., on again in round 2; `speed_scale` 0 on every paused and hitstop tick; tree pause (SETUP) stops node and controller; `amount` stays 48. |
+
+**Open finding, Effect B rule 4 (hidden).** Ticks from the stop until `is_processing_internal()`
+turns false: 153 after a plain stop, 215 with a 60-tick tree pause, never within 600 while
+`visible = false`. In Godot 4.7.2 the CPU particles appear to stop aging while hidden, against
+rule 4 and short answer 5. The test's rule-4 PASS checks node flags only and is not evidence for
+rule 4. Indirect: no headless run sees particles. To be decided by Zhaohui (dated brief
+revision) after a windowed look.
+
+All earlier suites after both effects were wired (Claude Code, 2026-11-08): `test_runner` 94/0,
+`test_hurt_flash` 30/60/144 69/0, `check_props3d` 49/0, `test_materials` 96/0,
+`calibrate_normal_map` PASS. Config tests: `test_hit_spark_config` 69/0, `test_embers_config` 85/0.
+
+## Headless CPU price (`scripts/run-test.sh cost_effects.gd 60 300`)
+
+`godot/tests/cost_effects.gd` (agent; Example 09's script was not available, so written from the
+handout's description). Engine time per frame = wall time minus the script's own per-frame code,
+240 warm-up and 1 200 measured frames per case, two passes (second reversed). Title screen, no
+attacks, so A − G and B − G are the effects alone. A: four slots restarted in turn (SETUP), four
+bursts alive on every measured frame. B: emitting, field full after 4 s.
+
+| Case | Run 1 (agent) mean / median µs | Run 2 (Claude Code) mean / median µs |
+|---|---|---|
+| E empty scene (control) | 5.8 / 5.0 | 5.3 / 5.0 |
+| G game, both effects off | 38.2 / 37.0 | 46.0 / 38.0 |
+| A Effect A, 4 bursts alive | 49.4 / 47.0 | 51.1 / 48.0 |
+| B Effect B, field full | 45.1 / 43.0 | 48.3 / 44.0 |
+| A − G | +11.2 ± 0.5 / +10.0 | +5.1 ± 1.2 / +10.0 |
+| B − G | +6.9 ± 0.6 / +6.0 | +2.3 ± 1.3 / +6.0 |
+
+The control differs from every case, so the script is not measuring itself (its first version
+was: `Performance.TIME_PROCESS` refreshes about once per real second, so every case read the same;
+caught by the control). Means move between runs with OS spikes; medians are stable: **Effect A
+≈ 0.010 ms, Effect B ≈ 0.006 ms per frame**, against predictions 0.08 / 0.05 ms and CPU budgets
+0.25 / 0.50 ms: both under budget. GPU time: TO DO (Zhaohui, HUMAN CHECK, Visual Profiler).

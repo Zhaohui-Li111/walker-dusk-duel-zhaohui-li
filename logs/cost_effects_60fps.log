@@ -1,0 +1,109 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+cost_effects: Godot 4.7.2-stable (official), 60 physics ticks/s; headless dummy renderer, CPU time only
+Each case: 240 warm-up frames, then 1200 measured frames; two passes (E G A B, then B A G E)
+Source: Example 09's script is not available here; written from the step's description.
+
+== pass 1 ==
+-- E: empty scene
+    PASS [E] state held on all 1200 measured frames
+    PASS [E] exactly one physics tick per measured frame (1200 of 1200)
+    PASS [E] fixed rate: delta == 1/60 s on 1201 of 1201 frames
+    wall     n 1200  mean 6.8  sd 4.8  min 4.0  median 6.0  p95 9.0  max 146.0 µs
+    harness  n 1200  mean 0.6  sd 0.7  min 0.0  median 1.0  p95 1.0  max 17.0 µs
+    engine   n 1200  mean 6.2  sd 4.3  min 3.0  median 6.0  p95 9.0  max 129.0 µs
+-- G: game, both effects off
+    PASS [G] state held on all 1200 measured frames
+    PASS [G] exactly one physics tick per measured frame (1200 of 1200)
+    PASS [G] fixed rate: delta == 1/60 s on 1201 of 1201 frames
+    OBSERVE: is_processing_internal() at the end: HitSpark0-3 [false, false, false, false], Embers false
+    wall     n 1200  mean 55.0  sd 28.7  min 38.0  median 43.0  p95 106.0  max 283.0 µs
+    harness  n 1200  mean 1.9  sd 1.3  min 0.0  median 2.0  p95 4.0  max 22.0 µs
+    engine   n 1200  mean 53.1  sd 27.9  min 37.0  median 42.0  p95 102.0  max 278.0 µs
+-- A: Effect A, 4 bursts alive
+    SETUP (not a hit): 4 HitSpark slots positioned in the hit band and restart()ed, each every 30 frames, staggered
+    PASS [A] state held on all 1200 measured frames
+    PASS [A] exactly one physics tick per measured frame (1200 of 1200)
+    PASS [A] fixed rate: delta == 1/60 s on 1201 of 1201 frames
+    SETUP: 160 restart() calls in the measured frames (one per slot every 30 frames)
+    OBSERVE: is_processing_internal() at the end: HitSpark0-3 [true, true, true, true], Embers false
+    wall     n 1200  mean 52.2  sd 24.6  min 47.0  median 50.0  p95 58.0  max 593.0 µs
+    harness  n 1200  mean 1.9  sd 6.8  min 0.0  median 2.0  p95 3.0  max 237.0 µs
+    engine   n 1200  mean 50.3  sd 22.3  min 46.0  median 48.0  p95 55.0  max 581.0 µs
+-- B: Effect B, emitting, field full
+    SETUP (not a phase change): Embers.restart(), so it emits with preprocess; phase stays "title"
+    PASS [B] state held on all 1200 measured frames
+    PASS [B] exactly one physics tick per measured frame (1200 of 1200)
+    PASS [B] fixed rate: delta == 1/60 s on 1201 of 1201 frames
+    OBSERVE: is_processing_internal() at the end: HitSpark0-3 [false, false, false, false], Embers true
+    wall     n 1200  mean 50.4  sd 23.8  min 43.0  median 45.0  p95 75.0  max 406.0 µs
+    harness  n 1200  mean 1.6  sd 2.1  min 1.0  median 1.0  p95 2.0  max 62.0 µs
+    engine   n 1200  mean 48.8  sd 23.1  min 42.0  median 44.0  p95 71.0  max 399.0 µs
+
+== pass 2 ==
+-- B: Effect B, emitting, field full
+    SETUP (not a phase change): Embers.restart(), so it emits with preprocess; phase stays "title"
+    PASS [B] state held on all 1200 measured frames
+    PASS [B] exactly one physics tick per measured frame (1200 of 1200)
+    PASS [B] fixed rate: delta == 1/60 s on 1201 of 1201 frames
+    OBSERVE: is_processing_internal() at the end: HitSpark0-3 [false, false, false, false], Embers true
+    wall     n 1200  mean 49.4  sd 21.5  min 43.0  median 45.0  p95 60.0  max 392.0 µs
+    harness  n 1200  mean 1.7  sd 6.0  min 0.0  median 1.0  p95 2.0  max 205.0 µs
+    engine   n 1200  mean 47.8  sd 19.7  min 42.0  median 44.0  p95 58.0  max 386.0 µs
+-- A: Effect A, 4 bursts alive
+    SETUP (not a hit): 4 HitSpark slots positioned in the hit band and restart()ed, each every 30 frames, staggered
+    PASS [A] state held on all 1200 measured frames
+    PASS [A] exactly one physics tick per measured frame (1200 of 1200)
+    PASS [A] fixed rate: delta == 1/60 s on 1201 of 1201 frames
+    SETUP: 160 restart() calls in the measured frames (one per slot every 30 frames)
+    OBSERVE: is_processing_internal() at the end: HitSpark0-3 [true, true, true, true], Embers false
+    wall     n 1200  mean 53.6  sd 19.7  min 47.0  median 50.0  p95 64.0  max 461.0 µs
+    harness  n 1200  mean 1.8  sd 0.8  min 1.0  median 2.0  p95 3.0  max 12.0 µs
+    engine   n 1200  mean 51.9  sd 19.4  min 45.0  median 48.0  p95 62.0  max 456.0 µs
+-- G: game, both effects off
+    PASS [G] state held on all 1200 measured frames
+    PASS [G] exactly one physics tick per measured frame (1200 of 1200)
+    PASS [G] fixed rate: delta == 1/60 s on 1201 of 1201 frames
+    OBSERVE: is_processing_internal() at the end: HitSpark0-3 [false, false, false, false], Embers false
+    wall     n 1200  mean 40.2  sd 12.8  min 36.0  median 38.0  p95 45.0  max 233.0 µs
+    harness  n 1200  mean 1.4  sd 0.6  min 0.0  median 1.0  p95 2.0  max 8.0 µs
+    engine   n 1200  mean 38.9  sd 12.5  min 34.0  median 37.0  p95 43.0  max 225.0 µs
+-- E: empty scene
+    PASS [E] state held on all 1200 measured frames
+    PASS [E] exactly one physics tick per measured frame (1200 of 1200)
+    PASS [E] fixed rate: delta == 1/60 s on 1201 of 1201 frames
+    wall     n 1200  mean 4.8  sd 1.1  min 4.0  median 4.0  p95 7.0  max 12.0 µs
+    harness  n 1200  mean 0.4  sd 0.5  min 0.0  median 0.0  p95 1.0  max 3.0 µs
+    engine   n 1200  mean 4.4  sd 1.2  min 3.0  median 4.0  p95 7.0  max 11.0 µs
+
+== SUMMARY: both passes pooled, microseconds per frame ==
+case                               metric       mean       sd      min   median      p95      max
+E empty scene                      wall          5.8      3.6      4.0      5.0      9.0    146.0
+                                   harness       0.5      0.6      0.0      0.0      1.0     17.0
+                                   engine        5.3      3.3      3.0      5.0      8.0    129.0
+G game, both effects off           wall         47.6     23.5     36.0     40.0     83.0    283.0
+                                   harness       1.6      1.0      0.0      1.0      3.0     22.0
+                                   engine       46.0     22.8     34.0     38.0     81.0    278.0
+A Effect A, 4 bursts alive         wall         52.9     22.3     47.0     50.0     60.0    593.0
+                                   harness       1.9      4.9      0.0      2.0      3.0    237.0
+                                   engine       51.1     20.9     45.0     48.0     58.0    581.0
+B Effect B, emitting, field full   wall         49.9     22.7     43.0     45.0     66.0    406.0
+                                   harness       1.6      4.5      0.0      1.0      2.0    205.0
+                                   engine       48.3     21.5     42.0     44.0     64.0    399.0
+
+== DRIFT: pass 1 vs pass 2 (engine), difference and its 95% interval ==
+    E: pass 1 6.2, pass 2 4.4, difference -1.8 ± 0.3 µs  <- the passes differ by more than the noise
+    G: pass 1 53.1, pass 2 38.9, difference -14.3 ± 1.7 µs  <- the passes differ by more than the noise
+    A: pass 1 50.3, pass 2 51.9, difference +1.6 ± 1.7 µs
+    B: pass 1 48.8, pass 2 47.8, difference -1.0 ± 1.7 µs
+
+== DIFFERENCES (pooled): mean difference ± 95% interval (Welch, 1.96 x standard error); medians ==
+    G - E  engine  mean   +40.7 ±  0.9 µs, median   +33.0 µs  separated
+    A - G  engine  mean    +5.1 ±  1.2 µs, median   +10.0 µs  separated
+    B - G  engine  mean    +2.3 ±  1.3 µs, median    +6.0 µs  separated
+    A - B  engine  mean    +2.8 ±  1.2 µs, median    +4.0 µs  separated
+    harness share, E: 0.5 µs of 5.8 µs wall (8%)
+    harness share, G: 1.6 µs of 47.6 µs wall (3%)
+    harness share, A: 1.9 µs of 52.9 µs wall (4%)
+    harness share, B: 1.6 µs of 49.9 µs wall (3%)
+24 checks, 0 failed
