@@ -94,6 +94,40 @@ is copied unchanged from the course handout.
     wiring, the CLAUDE.md and audit reviews, and the TEST-REPORT measurements.
   - Restored `granite.gdshader` after the third mutation with `git checkout` of Zhaohui's commit.
 
+## Assignment 6: textures, tools and who did what
+
+**Textures:** both written by code in this repository, no sourced or generated image:
+`godot/effects/hit_spark_star.png` (8 × 8 eight-point star) and `godot/effects/embers_soft.png`
+(4 × 4 soft dot), drawn by `godot/effects/make_textures.gd`. No generative model made any A6 asset.
+
+**Tools:** Godot 4.7.2 stable (Compatibility, Movie Maker for the strips); Claude Code 2.1.311
+(Opus 5.5) for this session and the `claude -p` sessions in `sessions/a6/`; `scripts/run-test.sh`
+is the course handout's A6 wrapper with a `GODOT` variable added. Example 09's cost script was not
+available on this machine; `cost_effects.gd` was written from the handout's description.
+
+**Who did what in A6:**
+- **Zhaohui Li:**
+  - Chose the two effects (hit spark; courtyard embers as ambience) and their jobs.
+  - Wrote the A6 brief's intent, settings, rules, predictions, budgets and short answers, in a
+    draft and two rounds of corrections after Claude's review (asked about authorship, Zhaohui
+    answered "I wrote it" and "I wrote it myself"; recorded in the brief).
+  - Decided the three CLAUDE.md questions (poll `phase`; wire through `main.tscn` only; textures
+    saved as PNG), rule 6's labelled setup, and sharpening the star texture.
+  - Ran every Movie Maker capture, wrote the hit spark first look, answered the embers first
+    look as three multiple-choice questions, made both config mutations and judged the first in
+    the preview ("slower"), and gave both tuning verdicts (kept).
+  - Delegated the remaining agent steps to Claude Code ("你把剩下的任务自己做完吧").
+- **Claude Code (Opus 5.5):**
+  - Project facts and review notes in the brief; Revisions 2–3 from Zhaohui's verdicts.
+  - Through `claude -p` sessions (prompts in `prompts/a6/`): CLAUDE.md (committed unedited, then
+    reviewed), both effect scenes, config tests and previews, both controllers
+    (`hit_spark_pool.gd`, `embers_controller.gd`), both state tests, `cost_effects.gd`. Each agent
+    build was committed as delivered before any fix. Steps after the delegation were approved by
+    Claude Code, as each prompt says.
+  - Directly: the star texture fix, the preview's fixed seed, the pool's slot-freeing fix,
+    `godot/game/debug_vsync.gd` (F9), the strip readings and predictions in TUNING.md, the
+    TEST-REPORT entries, README and these notes.
+
 ## References consulted (not copied)
 
 - GDQuest, godot-4-hitbox-hurtbox demo: https://github.com/gdquest-demos/godot-4-hitbox-hurtbox

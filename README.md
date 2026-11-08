@@ -41,6 +41,7 @@ godot --headless --path godot --script res://tests/test_runner.gd
 | Pause / resume (quit on the result screen) | Esc or P | Start |
 | **Mute music / mute effects** | **M / N** | — |
 | Show collision boxes | F1 | — |
+| Toggle vsync (A6, for the GPU price) | F9 | — |
 
 ## What the slice demonstrates
 
@@ -202,6 +203,65 @@ godot --path godot --script res://tests/capture_a5.gd
   - **Game source shown:** `godot/` at `043df17`.
   - **Film source and evidence:** [youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev/](youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev/)
     (start with BUILD-LOG.md, FACTCHECK.md and SOURCES.md).
+
+## Assignment 6: particle effects
+
+Two particle effects on the 2D fight, both `CPUParticles2D` with every setting in a scene file in
+`godot/effects/`, and the textures drawn once by `godot/effects/make_textures.gd`.
+
+- **Effect A, hit spark** (`hit_spark.tscn`): a one-shot white-to-cyan burst at the contact point
+  on every clean hit (`Fighter.attack_resolved`, result `"hit"`). Four pooled slots in
+  `main.tscn`, started by `hit_spark_pool.gd`; retrigger rule **overlap** (a new hit takes a free
+  slot, never restarts a live burst); frozen during the game's pause and hitstop.
+- **Effect B, courtyard embers** (`embers.tscn`): ambience, a continuous field of faint amber
+  embers behind the fighters while `main.phase == "fight"`, started and stopped by
+  `embers_controller.gd`. Uses what Effect A doesn't: a rectangle emission shape and `preprocess`
+  1.5 s, so the field is already there when the fight starts.
+- **Tuning:** one revision per effect, each with a prediction, strips before and after, and
+  Zhaohui's verdict ([TUNING.md](TUNING.md)); preview scenes in `godot/previews/`, strips in
+  `captures/` (fixture captures).
+- **Documents:** [CHANGE-BRIEF.md](CHANGE-BRIEF.md) (A6, Revisions 2–3) · [CLAUDE.md](CLAUDE.md) ·
+  [TUNING.md](TUNING.md) · [TEST-REPORT.md](TEST-REPORT.md) (Assignment 6) ·
+  [FRICTIONAL.md](FRICTIONAL.md) · prompts in `prompts/a6/`, agent transcripts in `sessions/a6/`.
+- **Controls added:** F9 toggles vsync (for an uncapped FPS comparison only).
+
+Run the A6 checks through the wrapper (`scripts/run-test.sh <test> <fps|realtime> [timeout]`;
+set `GODOT` to the console build if `godot` is not on PATH; run `--import` once after cloning):
+
+```bash
+./scripts/run-test.sh test_hit_spark_config.gd 60
+```
+
+```bash
+./scripts/run-test.sh test_hit_spark_state.gd 60
+```
+
+```bash
+./scripts/run-test.sh test_embers_config.gd 60
+```
+
+```bash
+./scripts/run-test.sh test_embers_state.gd 60
+```
+
+```bash
+./scripts/run-test.sh cost_effects.gd 60 300
+```
+
+Expected: 69 / 0, 57 / 0, 85 / 0, 36 / 0, and 24 / 0. The earlier suites keep their counts
+(94, 49, 69 at 30/60/144, 96, PASS). Strips need a window, for example:
+
+```bash
+godot --path godot res://previews/hit_spark_preview.tscn --write-movie "$PWD/captures/hit_spark/r1/frame.png" --fixed-fps 30 --quit-after 120
+```
+
+- **A6 known limitations:**
+  - Headless runs see node state, never particles: the look is the strips and the human checks.
+  - Effect B rule 4 (hidden) appears not to hold in Godot 4.7.2: a hidden `CPUParticles2D` seems
+    to stop ageing its particles (TEST-REPORT, open finding).
+  - The all-four-busy fallback of Effect A's pool was never reached in a test.
+  - Rule 6 (a round reset clears live bursts) is reachable only with labelled test setup.
+  - The hit spark has no impact direction (`spread` 180°).
 
 ## Final film
 

@@ -1098,3 +1098,90 @@ the A5 inspect-and-revise cycles, agent mistakes and limitations to TEST-REPORT.
   SHA-256 `e04cbc98…3143`) and said: "我看了，没问题" (I watched it; no problems).
 - Before the deadline, tag `a5` (`532e0eb`) was pushed while the film was still exporting, at
   Zhaohui's request; the film's hash followed in the documentation-only commit `a6946db`.
+
+---
+
+# Assignment 6 — particle effects
+
+Entries marked "recorded by Claude Code" are Claude Code's factual account from the session,
+the commits and the agent transcripts in `sessions/a6/`; they are not Zhaohui's experience.
+Zhaohui's own entries are marked TO DO (Zhaohui). TUNING.md holds the tuning details; these
+entries point to it instead of copying it.
+
+## 2026-11-08 — Wrapper and baseline (recorded by Claude Code)
+
+- The A6 wrapper replaced A5's, keeping the `GODOT` variable (Godot is not on PATH here).
+  Baseline through it, all exit 0: 94, 49, 69 × 3, 96, PASS (`e14315e`). Same as the A5 clone check.
+
+## 2026-11-08 — The brief (recorded by Claude Code)
+
+- Claude drafted only the structure and project facts (measured hit heights, background
+  luminance, a `ClassDB` probe of 4.7.2) and left every design line as TO DO (Zhaohui).
+- Zhaohui's draft had empty sections and errors; Claude marked 11 review notes, then 14, then 2,
+  over three rounds of Zhaohui's corrections. Ones worth remembering: `CPUParticles2D` has no
+  `alpha_curve` or `scale_min`; the 0.24 s lifetime put the two retrigger events outside one
+  lifetime; 75–155 px/s with that damping would fly 40–90 px, not 8–12; the GPU price is required
+  for CPU nodes too; Claude's own offered reason for B costing more than A was per-fight, not per
+  frame. Committed before the first prompt (`efa8d71`).
+- Claude asked twice whether text was written with another AI; Zhaohui answered "I wrote it"
+  and "I wrote it myself", recorded as given.
+- Claude's own error: the brief cited `main.gd:25` for `phase`; prompt-1's agent found it is
+  `:24` (fixed in brief Revision 2).
+
+## 2026-11-08 — Step 1, CLAUDE.md (recorded by Claude Code)
+
+- prompt-1, read-only: success, 33 turns, 1 denial (a compound Bash command). The draft deleted
+  the whole "Headless facts" block; the review restored it with the three A6 lines, and probed
+  every property the draft called unconfirmed (all present in 4.7.2). Zhaohui decided its three
+  open questions. `6c6ad44` (draft), `7e3861d` (review).
+- Zhaohui asked why the run "cost money": `total_cost_usd` is an API-price estimate; the run
+  used the logged-in account (`apiKeySource: none`), not an API key.
+
+## 2026-11-08 — Step 2, Effect A build (recorded by Claude Code)
+
+- 9 permission denials: the agent kept trying to call Godot directly to draw the star texture,
+  then ran `make_textures.gd` through `./scripts/run-test.sh ../effects/...` and deleted that log
+  with `rm`, which the allow list did not block. Committed as delivered (`0ac83ee`).
+- Its own star-shape check failed on its own 8 × 8 texture (tip/gap 7.72 / 5.46). Zhaohui chose
+  to sharpen it; Claude changed two numbers (`873d614`). Claude also added the fixed seed the
+  agent left out of the preview.
+- Zhaohui's terminal is PowerShell: `export`, `"$GODOT"` and `scripts/run-test.sh` did not run
+  there; Claude gave PowerShell forms (`$env:GODOT`, `&`, `++` for user args, Git Bash for the
+  wrapper). The first capture used `--quit-after 60` and stopped at frame 30; recaptured at 120.
+- Mutations (TEST-REPORT): the Godot 3 name `initial_velocity` loaded silently and left
+  `initial_velocity_min` at 0; the test failed (exit 1) and Zhaohui saw slower sparks.
+
+## 2026-11-08 — Steps 3 and 5, wiring and state tests (recorded by Claude Code)
+
+- After the hit spark Step 1, Zhaohui delegated the rest ("你把剩下的任务自己做完吧"); Claude
+  approved later agent steps on that basis and wrote so in each prompt.
+- The hit spark state test found a weak spot in the agent's own pool: a late `finished` signal
+  after a round reset could free a busy slot. Claude changed the pool to read `emitting`
+  (`e96c916`). The all-four-busy fallback was never reached.
+- The embers state test found that a hidden `CPUParticles2D` seems to stop ageing its particles,
+  against brief rule 4. Open; not decided.
+- Two agent runs used `; echo` after `run-test.sh` and were denied; the agent reran plainly.
+  The embers plan session tried 4 times to run a probe outside the wrapper; all denied.
+
+## 2026-11-08 — Step 7, the cost script (recorded by Claude Code)
+
+- The agent's first version read `Performance.TIME_PROCESS`, which refreshes about once per
+  real second, so every case read the same; the empty-scene control showed it. The final script
+  uses per-frame wall time minus its own code. Two runs: means move, medians stable (A ≈ 0.010 ms,
+  B ≈ 0.006 ms per frame), both far under the budgets.
+
+## 2026-11-08 — Tuning (recorded by Claude Code; details in TUNING.md)
+
+- Embers r1: driven by Zhaohui's first look ("too faint"); alpha 0.28/0.20 → 0.70/0.50; matched
+  the prediction; kept ("我感觉差不多").
+- Hit spark r1: "It reads as a ring" was an option Claude offered from its r0 reading; asked
+  afterwards, Zhaohui said they had seen the ring themself. Min speed 45 → 15; the ring went as
+  predicted, but the burst also got smaller, which Claude had predicted wrongly. Kept.
+- Zhaohui asked Claude to write the first looks and verdicts; Claude declined and asked
+  multiple-choice questions instead, recorded as chosen.
+
+## TO DO (Zhaohui) — your own account
+
+What you tried, expected and learned, in your words (Chinese is fine): directing an agent on
+something it cannot see; what surprised you in the strips or in play; what you accepted, changed
+or rejected from Claude; open questions (for example rule 4).
