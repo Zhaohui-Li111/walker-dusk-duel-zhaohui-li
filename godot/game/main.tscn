@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://game/main.gd" id="1_main"]
 [ext_resource type="Script" path="res://game/stage.gd" id="2_stage"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://effects/hit_spark_pool.gd" id="8_hit_spark_pool"]
 [ext_resource type="PackedScene" path="res://effects/embers.tscn" id="9_embers"]
 [ext_resource type="Script" path="res://effects/embers_controller.gd" id="10_embers_controller"]
+[ext_resource type="Script" path="res://game/debug_vsync.gd" id="11_debug_vsync"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_main")
@@ -60,3 +61,6 @@ script = ExtResource("5_hud")
 
 [node name="AudioDirector" type="Node" parent="."]
 script = ExtResource("6_audio")
+
+[node name="DebugVsync" type="Node" parent="."]
+script = ExtResource("11_debug_vsync")
