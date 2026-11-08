@@ -510,7 +510,7 @@ The control differs from every case, so the script is not measuring itself (its 
 was: `Performance.TIME_PROCESS` refreshes about once per real second, so every case read the same;
 caught by the control). Means move between runs with OS spikes; medians are stable: **Effect A
 ≈ 0.010 ms, Effect B ≈ 0.006 ms per frame**, against predictions 0.08 / 0.05 ms and CPU budgets
-0.25 / 0.50 ms: both under budget. GPU time: TO DO (Zhaohui, HUMAN CHECK, Visual Profiler).
+0.25 / 0.50 ms: both under budget. GPU time: see below.
 
 ## In play (HUMAN CHECK, Zhaohui, 2026-11-08)
 
@@ -519,4 +519,29 @@ Zhaohui ran the game and reported, in their words: "我运行游戏的时候，�
 report does not separately name the handout's specific checks (rapid repeats, darkest and
 lightest background, screen edge, Effect B on the first frames after load, paused and hidden),
 and it cannot settle Effect B rule 4: nothing in normal play hides the embers node.
+
+## GPU price (Intel UHD Graphics, OpenGL 3.3, Compatibility, Windows 11)
+
+- **Visual Profiler (Zhaohui, in the editor, 2026-11-08):** the Frame Time row's GPU column read
+  0 throughout ("frametime那里一直都是0啊"). In this Compatibility setup the editor's Visual
+  Profiler reported no GPU time, so the handout's primary instrument gave no number.
+- **Measured instead (run by Claude Code, windowed, on the same machine, after Zhaohui asked
+  Claude to do it):** `godot/tests/gpu_price.gd` reads
+  `RenderingServer.viewport_get_measured_render_time_gpu` for the root viewport (the source of
+  Movie Maker's non-zero "GPU render time" line), 90 warm-up and 300 measured frames per case,
+  vsync on (GPU time is the GPU's own work, not presentation). Log: `logs/gpu_price_windowed.log`.
+
+| Case | GPU median / p95 ms | Difference (median) | Predicted | GPU budget |
+|---|---|---|---|---|
+| A on: four bursts alive (`hit_spark_profile.tscn`) | 0.450 / 0.457 | | | |
+| A off: same scene, bursts stopped | 0.438 / 0.442 | **A: +0.012 ms** | 0.04 ms | ≤ 0.25 ms: under |
+| B on: fight, embers field full | 0.537 / 0.547 | | | |
+| B off: same fight, `Embers` hidden (SETUP) | 0.533 / 0.543 | **B: +0.004 ms** | 0.02 ms | ≤ 0.50 ms: under |
+
+- A first run (`logs/gpu_price_windowed_run1_title_off.log`) gave A +0.010 ms but B −0.075 ms,
+  because its "B off" was the title screen, which draws more HUD text than the fight; the off
+  case was then moved into the same fight. B's +0.004 ms is within the frame-to-frame spread
+  (p95 − median ≈ 0.01 ms): too small to separate on this GPU.
+- Both effects are far under their GPU budgets, and below the predictions.
+- Not done: an FPS comparison with vsync off (F9).
 

@@ -1,0 +1,63 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 - Build 31.0.101.4502 - Compatibility - Using Device: Intel - Intel(R) UHD Graphics
+
+gpu_price: 4.7.2-stable (official), opengl3 / gl_compatibility, adapter: Intel(R) UHD Graphics, vsync mode 1
+hit_spark_preview: retrigger true, point (364.0, 202.0)
+hit_spark_preview: frame 0, burst 0 in Slot0 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 1 in Slot1 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 2 in Slot2 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 3 in Slot3 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 4 in Slot0 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 5 in Slot1 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 6 in Slot2 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 7 in Slot3 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 8 in Slot0 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 9 in Slot1 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 10 in Slot2 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 11 in Slot3 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 12 in Slot0 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 13 in Slot1 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 14 in Slot2 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 15 in Slot3 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 16 in Slot0 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 17 in Slot1 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 18 in Slot2 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 19 in Slot3 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 20 in Slot0 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 21 in Slot1 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 22 in Slot2 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 23 in Slot3 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 24 in Slot0 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 25 in Slot1 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 26 in Slot2 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 27 in Slot3 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 28 in Slot0 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 29 in Slot1 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 30 in Slot2 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 31 in Slot3 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 32 in Slot0 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 33 in Slot1 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 34 in Slot2 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 35 in Slot3 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 36 in Slot0 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 37 in Slot1 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 38 in Slot2 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 39 in Slot3 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 40 in Slot0 at (364.0, 202.0)
+hit_spark_preview: frame 0, burst 41 in Slot1 at (364.0, 202.0)
+gpu_price: A on   (4 hit-spark bursts alive)  GPU median 0.448 ms
+gpu_price: A off  (bursts stopped)  GPU median 0.438 ms
+gpu_price: B off  (title screen, embers not emitting)  GPU median 0.609 ms
+gpu_price: B on   (fight, embers field full)  GPU median 0.534 ms
+
+gpu_price: SUMMARY, milliseconds per frame (median / mean / p95)
+  A on   (4 hit-spark bursts alive)            GPU  0.448 /  0.448 /  0.454   CPU  0.289 /  0.286 /  0.486
+  A off  (bursts stopped)                      GPU  0.438 /  0.438 /  0.443   CPU  0.304 /  0.295 /  0.439
+  B off  (title screen, embers not emitting)   GPU  0.609 /  0.608 /  0.614   CPU  0.257 /  0.295 /  0.522
+  B on   (fight, embers field full)            GPU  0.534 /  0.534 /  0.542   CPU  0.338 /  0.363 /  0.631
+gpu_price: A on - A off GPU median +0.010 ms;  B on - B off GPU median -0.075 ms
+gpu_price: if every GPU value is 0.000, this renderer reports no GPU time here.
+WARNING: 4 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 2 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
