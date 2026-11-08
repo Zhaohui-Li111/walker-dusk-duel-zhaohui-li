@@ -429,3 +429,13 @@ Claude Code had offered that reason as an option.)
    speed scale, local coordinates. Draw: texture and draw material / blend mode. *(Revised
    2026-11-08, Zhaohui's choice after Claude review N: initial velocity and spread moved from
    emission to process, because they set how each particle moves.)*
+
+## Revision 2 · 2026-11-08 · Effect B tuning r1 kept; one fact corrected
+
+- **Effect B `color_ramp` alpha** (settings table): offset 0.20 alpha 0.28 → **0.70**; offset
+  0.75 alpha 0.20 → **0.50**. Colours and offsets unchanged. Driven by Zhaohui's first look in
+  the preview ("too faint"); r1 captured and kept by Zhaohui ("我感觉差不多", "about right").
+  Prediction, strips and comparison: TUNING.md, Effect B r1. The scene and
+  `test_embers_config.gd` already carry these values (commit 6f0c304). Appended by Claude Code.
+- **Fact correction (Claude Code's error in the project facts):** `phase` is declared at
+  `godot/game/main.gd:24`, not `:25`.

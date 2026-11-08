@@ -112,10 +112,20 @@ Claude's prediction for r1 (same seed, so the same particle positions as r0):
 - 100: like 55. 115: thinning but visible. 145: a few dots, easier to see than r0's 145.
 - Next to the lanterns the amber still blends with the glow (a judgement for Zhaohui).
 - Still dimmer than the white/cyan additive hit spark (intent: never brighter than the spark).
-Claude's comparison of r1 with its prediction: TO DO after the recapture.
-My verdict (preview window, 1280 × 720): TO DO (Zhaohui): kept | reverted, because
+Claude's comparison of r1 with its prediction (changed pixels r0 → r1):
+- 9: 0 → 0; 175: 0 → 0. Matches.
+- 10: 168 → 447. Matches (predicted 400–600).
+- 25: 230 → 624; 55: 215 → 658. Slightly above the predicted "about 500"; same positions as r0.
+  At 1:1 on frame 55, small amber specks are now findable across the door, the wall and the sky,
+  still 1–3 px and subtle.
+- 100: 274 → 713; 115: 237 → 571; 145: 62 → 195. Thinning as predicted, easier to see than r0.
+- Next to the lanterns the specks are visible against the purple sky but merge with the lamp
+  glow itself, as predicted. Still far dimmer than the hit spark.
+My verdict (preview window, 1280 × 720, Zhaohui's words): "录完了，我感觉差不多" ("recorded; I feel
+it's about right"). Recorded as **kept**. Zhaohui asked Claude Code to write the rest of this
+entry ("你自己看着写点吧"); everything above this verdict line is Claude Code's.
 Strips: captures/embers/r0/, captures/embers/r1/
-Commits: TO DO
+Commits: 6f0c304 (change), this commit (strip r1 and verdict)
 
 <!-- Revision template (copy for each revision):
 
