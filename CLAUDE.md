@@ -2,71 +2,60 @@
 
 ## Project context
 
-- **Engine:** Godot 4.7.2 stable (`README.md:10`; the run itself prints "Godot Engine
-  v4.7.2.stable.official.ed1daf0bf", `logs/test_runner_60fps.log:1`); the project declares
-  feature "4.7" (`godot/project.godot:15`). The project lives in `godot/`.
-- **Renderer:** GL Compatibility, `renderer/rendering_method="gl_compatibility"`, also for mobile
-  (`godot/project.godot:35-36`). This rules out decals, compute shaders, VoxelGI, SDFGI and SSIL
-  (A5 handout, Step 1 questions).
+- **Engine:** Godot 4.7.2 stable, `v4.7.2.stable.official.ed1daf0bf` (`README.md:10`,
+  `logs/test_hurt_flash_60fps.log:1`), feature "4.7" (`godot/project.godot:15`), in `godot/`.
+- **Renderer:** GL Compatibility, desktop and mobile (`godot/project.godot:35-36`).
 - **Main scene:** `res://game/main.tscn` (`godot/project.godot:14`). Viewport 640 × 360, window
-  1280 × 720, `canvas_items` stretch (`godot/project.godot:23-27`). Physics 60 ticks/s
-  (`godot/project.godot:31`).
-- **How the shaded object is drawn:** each fighter is `godot/fighter/fighter.tscn`, a `Node2D`
-  with a child `Sprite2D` (`centered = false`, no material yet) (`godot/fighter/fighter.tscn:5-10`).
-  `Fighter._update_sprite()` sets its `texture`, `flip_h` and `offset` from the current state
-  (`godot/fighter/fighter.gd:286-291`), using images and offsets from `FighterArt`
-  (`godot/fighter/fighter_art.gd:24-50`, `:67-74`). Two instances, `P1` (akaken) and `P2`
-  (aotake), live in `godot/game/main.tscn:16-24`.
-- **Game state that drives the effect:** `godot/fighter/fighter.gd` owns `state` and `stun`
-  (`:48`, `:53`) and `HITSTUN := 18` (`:40`). `receive_hit()` sets `stun = HITSTUN` and forces a
-  fresh `"hurt"` (`:196-200`), or `"ko"` at 0 health (`:192-195`); `step()` counts `stun` down in
-  `"hurt"` and returns to `"idle"` (`:109-113`). `godot/game/main.gd` steps both fighters
-  (`:55-69`), freezes them for `HITSTOP_FRAMES := 4` after a hit (`:16`, `:60-62`, `:137-138`) and
-  stops stepping while `paused` (`:56-57`).
-- **3D object for the textured shader:** in `godot/props3d/prop_room.tscn`, the `Floor`
-  `MeshInstance3D` (BoxMesh 6 × 0.1 × 4) and the `StonePlinth` (BoxMesh 0.8 × 0.3 × 0.8), each
-  with `material_override` → `godot/props3d/materials/granite_floor.tres` and
-  `granite_plinth.tres`, both ShaderMaterials of `godot/shaders/granite.gdshader`
-  (`prop_room.tscn:43`, `:48`; audit in `godot/MATERIALS.md`). The floor's old embedded
-  `StandardMaterial3D` is still on the BoxMesh, hidden by the override (MATERIALS.md finding 4). Textures: `godot/props3d/textures/granite_wall_*_1k.png`, credits
-  in `godot/props3d/textures/ATTRIBUTION.md`. BoxMesh UVs are a 3 × 2 grid; the top face uses
-  UV (⅓–⅔, ½–1) (probe, `FRICTIONAL.md:724`).
-- **Tests** — run from the repo root, always through the wrapper
-  (`scripts/run-test.sh <file in godot/tests/> <fps>`, `scripts/run-test.sh:2`). It needs
-  `GODOT` set to the console build if `godot` is not on PATH (`:3-6`), runs headless with a 120 s
-  timeout, writes `logs/<name>_<fps>fps.log` and fails on `SHADER ERROR` or `SCRIPT ERROR`
-  (`:7-12`):
+  1280 × 720, `canvas_items` stretch (`godot/project.godot:23-27`); physics 60 ticks/s (`:31`).
+- **Node type per effect:** both effects are `CPUParticles2D` (`CHANGE-BRIEF.md:105`, `:223`).
+  Effect A is a pool of four one-shot emitters × 20 particles (`CHANGE-BRIEF.md:136-139`);
+  Effect B is one continuous rectangle emitter, 48 particles (`CHANGE-BRIEF.md:216-224`).
+- **Effect A (hit spark), event:** `Fighter.attack_resolved(fighter, kind, result, point)`
+  (`godot/fighter/fighter.gd:19`), emitted only by `_resolve()` (`:221-223`). `check_hit()` emits
+  `"hit"` or `"blocked"` with `point` = centre of hitbox ∩ hurtbox (`:170-172`), then `flush_ko()`
+  (`:173`), so a K.O. hit sends `"hit"` before `knocked_out` (`:21`, `:206-209`). `receive_hit()`
+  emits `"interrupted"` with `Vector2.ZERO` (`:185-186`). `main.gd` connects both fighters
+  (`godot/game/main.gd:42-44`); its handler drops `"interrupted"`, calls `effects.spawn()` and
+  sets `hitstop = HITSTOP_FRAMES` (4) on `"hit"` (`:16`, `:133-138`).
+- **Effect B (embers), condition:** `main.phase` (`godot/game/main.gd:24`), a plain variable with
+  **no change signal**. It becomes `"intro"` in `start_round()` (`:98`), `"fight"` in `step()`
+  after `INTRO_FRAMES` (`:13`, `:71-74`) or in `start_fight_now()` (`:120-123`), `"ko"` in
+  `_on_knocked_out()` (`:145`), `"result"` after `KO_FRAMES` (`:14`, `:78-79`), `"title"` in
+  `_show_title()` (`:127`).
+- **Signals and state both effects read:** `round_started(round_number)` (`main.gd:9`, emitted
+  `:102` after `effects.clear()` `:95`); `round_over(winner)` (`:10`, `:150`);
+  `paused_changed(paused)` (`:11`, `:116`). `paused` (`:27`) and `hitstop` (`:28`) only make
+  `step()` return early (`:56-57`, `:60-62`); nothing calls `get_tree().paused`, so particle nodes
+  keep running unless `speed_scale` is changed (`CHANGE-BRIEF.md:26-30`). `hitstop` has no signal.
+- **Scenes the effects appear in:** `godot/game/main.tscn` — root `Main` (`Node2D`, `main.gd`,
+  `:10-11`) with children `Stage`, `P1`, `P2`, `Effects`, `HUD`, `AudioDirector` (`:13-42`).
+  Effect A's emitters are parented to `Main` (`CHANGE-BRIEF.md:140-141`); Effect B sits at
+  (320, 215) with extents (280, 90) (`CHANGE-BRIEF.md:229-230`). Effect scenes go in
+  `godot/effects/`, which does not exist yet (Glob, 2026-11-08). Fighters are
+  `godot/fighter/fighter.tscn` (`Node2D` → `Sprite2D` → `HurtFlash`, `:6-14`).
+- **Existing hit feedback:** `godot/game/effects.gd` draws an 8-line spark for 10 ticks
+  (`:9-10`, `:31-35`); it stays, and the particle burst is added beside it (`CHANGE-BRIEF.md:65-67`).
+- **Tests** — from the repo root, always through the wrapper (`scripts/run-test.sh:2`):
+  `scripts/run-test.sh <file in godot/tests/> <fps|realtime> [timeout-seconds]`. `GODOT` names
+  the console build if `godot` is not on PATH (`:3-7`). Always `--headless`; a number adds
+  `--fixed-fps N` and logs to `logs/<name>_<N>fps.log`; `realtime` adds no fps flag and logs to
+  `logs/<name>_realtime.log` (`:9-14`). Timeout defaults to 120 s (`:15`; exit 124 = timeout).
+  Exit 1 if the log has `SHADER ERROR` or `SCRIPT ERROR`, even when Godot exited 0 (`:16-18`).
 
   ```bash
-  scripts/run-test.sh test_runner.gd 60           # fight, sound, music (godot/tests/test_runner.gd:9-21)
-  scripts/run-test.sh check_props3d.gd 60         # A3 props vs brief (godot/tests/check_props3d.gd:1-10)
-  scripts/run-test.sh calibrate_normal_map.gd 60  # curl check on gl/dx pair (godot/tests/calibrate_normal_map.gd:6)
+  scripts/run-test.sh test_runner.gd 60           # 94 checks, 0 failed (logs/test_runner_60fps.log:24)
+  scripts/run-test.sh check_props3d.gd 60         # 49 / 0 (logs/check_props3d_60fps.log:22)
+  scripts/run-test.sh test_hurt_flash.gd 30       # 69 / 0 at 30, 60, 144 (logs/test_hurt_flash_*fps.log:172)
+  scripts/run-test.sh test_materials.gd 60        # 96 / 0 (logs/test_materials_60fps.log:125)
+  scripts/run-test.sh calibrate_normal_map.gd 60  # exit 1 if the gl/dx pair does not separate (:6-7)
+  scripts/run-test.sh <new_test>.gd realtime 180  # real frame clock, still headless
   ```
 
-  Rule 2 of the brief asks for 30, 60 and 144 fps runs (`CHANGE-BRIEF.md:281-284`, `:308`): pass
-  `30` / `144` as the second argument. `godot/tests/normal_map_check.gd` is a library
-  (`extends RefCounted`, `:1`), not a runnable test. `capture_states.gd`, `capture_flow.gd` and
-  `capture_props3d.gd` need a window (`godot/tests/capture_states.gd:3`,
-  `capture_props3d.gd:3`; `capture_flow.gd:4` gives its command without `--headless`), so they
-  do not run through the headless wrapper. Baseline at 60 fps: `test_runner.gd` 94 checks,
-  0 failed (`logs/test_runner_60fps.log:24`); `check_props3d.gd` 49, 0 failed
-  (`logs/check_props3d_60fps.log:22`). Run `godot --headless --path godot --import` once
-  after cloning (`README.md:104-107`).
-
-## Headless facts (this machine: Windows 11, Godot 4.7.2, Git Bash)
-
-- A headless run uses the dummy renderer and draws nothing. It can prove that a shader parses,
-  that its uniforms are declared and driven, and that materials are wired. It cannot prove how
-  anything looks. Captures need a real window (`capture_*.gd`, `capture_flow.gd:4`).
-- Exit code 0 does not mean no errors. `scripts/run-test.sh:11` fails on `SHADER ERROR` /
-  `SCRIPT ERROR`; exit 124 means the 120 s timeout hit (`:9`).
-- `--fixed-fps N` fixes the frame delta; physics still runs 60 ticks per game second
-  (`project.godot:31`). `test_runner.gd` turns physics off and calls `main.step(1/60)` itself
-  (`test_runner.gd:8`, `:48`), so its result is the same at any fps. A test for rule 2 must go
-  through the real `_physics_process` loop.
-- `get_shader_uniform_list()` gives names and types; defaults are read from the shader source text.
-  To confirm by the Step 2 mutations: a shader that fails to parse returns an empty list, and
-  `set_shader_parameter` with an undeclared name raises no error and reads its value back.
+  `test_runner.gd` turns physics off and calls `main.step()` itself (`godot/tests/test_runner.gd:48`);
+  `test_hurt_flash.gd` keeps `_physics_process` on (`:5-6`), the model for pause/hitstop tests.
+  `test_hit_spark_config.gd` (`CHANGE-BRIEF.md:154`) does not exist yet. `capture_*.gd` need a
+  window (`capture_a5.gd:2-3`). Headless draws nothing: it proves properties and signals, never
+  looks. Run `godot --headless --path godot --import` once after cloning (`README.md:104-107`).
 
 ## Current change
 
@@ -77,33 +66,54 @@
 - Every file in `godot/shaders/` (e.g. `hurt_flash.gdshader`, `granite.gdshader`) is hand-written
   by the human (Zhaohui). An agent never creates, edits, reformats or "fixes" these files. If a
   shader looks wrong, report it and stop.
-- Lines marked "TO DO (Zhaohui)" in `CHANGE-BRIEF.md` are Zhaohui's to write. The A5 section is
-  only appended to, with dated revisions (`CHANGE-BRIEF.md:232-233`).
+- Effect settings live in scene files in `godot/effects/`, not in code. Every value in the brief's
+  settings tables (`CHANGE-BRIEF.md:103-125`, `:221-245`) is set in a `.tscn`; scripts only start,
+  stop, position, pool and set `speed_scale` at run time.
+- The intent, setting values, rules, predictions, budgets and short answers are Zhaohui's
+  (`CHANGE-BRIEF.md:7-8`). The brief is only appended to, with dated revisions (`:8-9`).
+
+## Godot 4 names
+
+- Use Godot 4.7.2 names: `CPUParticles2D`, `GPUParticles2D`, `ParticleProcessMaterial`,
+  `CanvasItemMaterial`, `Gradient`, `Curve`. Never Godot 3 names such as `Particles2D` or
+  `ParticlesMaterial` (that class does not exist, `CHANGE-BRIEF.md:46-47`).
+- Confirmed on `CPUParticles2D` by the brief's `ClassDB` probe (`CHANGE-BRIEF.md:43-46`):
+  `use_fixed_seed`, `seed`, `emission_rect_extents`, `color_ramp`, `scale_amount_min` / `_max` /
+  `_curve`, `damping_min` / `_max`, `hue_variation_min`, `angle_min`. **Absent:** `amount_ratio`,
+  `alpha_curve`, `scale_min`, `scale_max`, `turbulence_enabled`, `trail_enabled`, `sub_emitter`.
+  Alpha goes in `color_ramp`; size in `scale_amount_*` (`CHANGE-BRIEF.md:127-129`).
+- Not in that probe, so **not confirmed for 4.7.2 from the files**: `color_initial_ramp`,
+  `initial_velocity_min` / `_max`, `angle_max`, `spread`, `gravity`, `emission_shape` and its
+  rectangle value, `explosiveness`, `one_shot`, `lifetime`, `preprocess`, `local_coords`,
+  `speed_scale`, `CanvasItemMaterial.blend_mode`. Check each with `ClassDB.class_get_property_list`
+  in a headless test before relying on it; if one is missing, report it, do not substitute.
+- `ParticleProcessMaterial` also lists `initial_velocity` and `scale` (Godot 3 names, effect
+  unknown, `CHANGE-BRIEF.md:47-48`). Do not use them.
 
 ## Out of scope
 
-- The fight itself: collision boxes, movement, input, the state machine, every frame count and
-  timing constant in `fighter.gd` and `main.gd`. The flash driver only reads `state`, `stun` and
-  `HITSTUN`; it never writes them or adds game logic.
-- `effects.gd`, `audio_director.gd`, the HUD, the background (`stage.gd`, `art/env/bg.png`), and
-  the sprite images and `data/poses.json`.
-- The existing tests and their expectations (`test_runner.gd`, `check_props3d.gd`); new checks
-  go in new test files.
-- The three A3 props: their `.glb` models, imported materials, positions, and the `.blend`
-  sources. No UVs are added to them; the textured shader goes on the floor and plinth only.
-- The 1.70 m reference box, the camera, the `Sun` and the environment of the prop room
-  (no SSAO, glow or fog is added).
-- The renderer: stay on GL Compatibility; do not set `hdr_2d` or change project settings.
-- One material per fighter: never one shared hurt-flash material on both sprites.
+- Fight logic: collisions, movement, input, the state machine, frame data and timing constants
+  in `fighter.gd` and `main.gd`. Effect code reads `phase`, `paused`, `hitstop` and signals; it
+  never writes game state or adds rules.
+- `effects.gd` and its spark, `audio_director.gd`, the HUD, `stage.gd` and `art/env/bg.png`,
+  sprite images, `data/poses.json`.
+- All A5 work: `godot/shaders/`, `hurt_flash.gd`, the granite and hint materials, the prop room
+  and the A3 props and `.blend` sources.
+- Existing tests and their counts (new checks go in new files); project settings and renderer
+  (stay on GL Compatibility, no `hdr_2d`, no new autoloads).
+- `GPUParticles2D` in the final effects: a GPU node may exist only as a scratch node for reading
+  the process shader in Step 6, and is not kept (`CHANGE-BRIEF.md:384-386`).
 
 ## Unconfirmed
 
-- *Settled since the draft (review, 2026-10-29):* the driver is `godot/fighter/hurt_flash.gd`, a
-  node under each fighter's `Sprite2D` that builds its own material; the brief's TO DOs were
-  filled in Revisions 2–5; all three shaders, both granite materials, the `StonePlinth` and both
-  hint materials exist (`godot/MATERIALS.md`).
-- The sprite texel coordinates in the brief are to be "confirmed or corrected from the first
-  capture" (`CHANGE-BRIEF.md:336`).
-- `blender/prop_taiko.blend` already had an uncommitted change before A5 began (git status at the
-  start of A5); it is not part of this change and must not be committed with it.
-- There is no `AGENTS.md` at the repository root, so this file does not import one.
+- Which file wires the effects into `main.tscn`, and whether `main.gd` may gain any line: the
+  brief parents Effect A to `Main` (`:140-141`) but does not say. Ask before editing `main.gd`.
+- The textures are "code-drawn" (`CHANGE-BRIEF.md:120`, `:241`), which conflicts with "settings
+  in scene files"; a texture saved once as a resource would satisfy both. Zhaohui decides.
+- Effect B has no phase signal (`main.gd:24`); polling each tick keeps `main.gd` unchanged.
+  Not decided.
+- The brief cites `main.gd:25` for `phase`; it is on `:24`.
+- The brief's open questions 1–5 (`CHANGE-BRIEF.md:316-337`): spark reach, spawning at
+  `speed_scale` 0, `preprocess` after load, simulation while hidden, the two colour ramps.
+- `blender/prop_taiko.blend` has an uncommitted change from before A5; never commit it with A6.
+- There is no `AGENTS.md` at the repository root (Glob, 2026-11-08), so none is imported.
