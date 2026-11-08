@@ -44,7 +44,7 @@ const EXPECTED := {
 ## color_initial_ramp: offset, colour, alpha.
 const INITIAL_RAMP := [[0.00, "C58A55", 1.00], [1.00, "E8C49A", 1.00]]
 ## color_ramp: offset, colour, alpha.
-const RAMP := [[0.00, "C58A55", 0.00], [0.20, "C58A55", 0.28], [0.75, "E8C49A", 0.20], [1.00, "E8C49A", 0.00]]
+const RAMP := [[0.00, "C58A55", 0.00], [0.20, "C58A55", 0.70], [0.75, "E8C49A", 0.50], [1.00, "E8C49A", 0.00]]  # r1: alpha 0.28/0.20 -> 0.70/0.50 (TUNING.md)
 ## scale_amount_curve points.
 const CURVE := [Vector2(0.00, 0.75), Vector2(0.20, 1.00), Vector2(1.00, 0.70)]
 ## Brief's property correction: these must not exist on CPUParticles2D (nothing can set them).

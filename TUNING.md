@@ -95,6 +95,28 @@ and the count of capture pixels that differ from frame 0 by more than 8 levels (
   if `color_initial_ramp` multiplies `color_ramp` (open question 5), the amber comes out darker
   still. This agrees with Zhaohui's "too faint".
 
+## 2026-11-08 — Effect B, revision r1
+What I saw (preview window, 1280 × 720): "too faint" (Zhaohui's first look above). This revision
+is driven by that observation.
+Claude's reading of r0: the field is present from frame 10 but only ~200 of 921 600 pixels
+change at steady state; at 1:1 only two or three specks are findable on frame 55.
+Change: `color_ramp` alpha at offset 0.20: 0.28 → 0.70, and at offset 0.75: 0.20 → 0.50 (one
+setting; colours, offsets, size and amount unchanged). Approved by Zhaohui ("嗯，你不用问我，直接
+做就行", "fine, you don't need to ask me, just do it").
+Claude's prediction for r1 (same seed, so the same particle positions as r0):
+- 9 and 175: empty, 0 changed pixels.
+- 10: field present at once; changed pixels 168 → about 400–600; separate amber dots visible
+  on the dark wall.
+- 25 and 55: the same dots, clearly visible but still small; about 500 changed pixels (r0:
+  215–230).
+- 100: like 55. 115: thinning but visible. 145: a few dots, easier to see than r0's 145.
+- Next to the lanterns the amber still blends with the glow (a judgement for Zhaohui).
+- Still dimmer than the white/cyan additive hit spark (intent: never brighter than the spark).
+Claude's comparison of r1 with its prediction: TO DO after the recapture.
+My verdict (preview window, 1280 × 720): TO DO (Zhaohui): kept | reverted, because
+Strips: captures/embers/r0/, captures/embers/r1/
+Commits: TO DO
+
 <!-- Revision template (copy for each revision):
 
 ## <date> — Effect A, revision r<N+1>

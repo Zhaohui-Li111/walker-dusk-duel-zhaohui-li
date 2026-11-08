@@ -67,8 +67,8 @@ PASS: color_initial_ramp stop 1: 1.00 #E8C49A alpha 1.00 (brief 1.00 #E8C49A alp
 PASS: color_ramp is a Gradient
 PASS: color_ramp has 4 stops (got 4)
 PASS: color_ramp stop 0: 0.00 #C58A55 alpha 0.00 (brief 0.00 #C58A55 alpha 0.00)
-PASS: color_ramp stop 1: 0.20 #C58A55 alpha 0.28 (brief 0.20 #C58A55 alpha 0.28)
-PASS: color_ramp stop 2: 0.75 #E8C49A alpha 0.20 (brief 0.75 #E8C49A alpha 0.20)
+PASS: color_ramp stop 1: 0.20 #C58A55 alpha 0.70 (brief 0.20 #C58A55 alpha 0.70)
+PASS: color_ramp stop 2: 0.75 #E8C49A alpha 0.50 (brief 0.75 #E8C49A alpha 0.50)
 PASS: color_ramp stop 3: 1.00 #E8C49A alpha 0.00 (brief 1.00 #E8C49A alpha 0.00)
 PASS: scale_amount_curve is a Curve
 PASS: scale_amount_curve has 3 points (got 3)
