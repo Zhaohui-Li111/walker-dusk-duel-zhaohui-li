@@ -18,7 +18,7 @@ const EXPECTED := {
 	"explosiveness": 1.0,
 	"lifetime": 0.6,
 	"emission_shape": CPUParticles2D.EMISSION_SHAPE_POINT,
-	"initial_velocity_min": 45.0,
+	"initial_velocity_min": 15.0,  # r1: 45 -> 15 (TUNING.md)
 	"initial_velocity_max": 75.0,
 	"spread": 180.0,
 	"gravity": Vector2(0, 25),

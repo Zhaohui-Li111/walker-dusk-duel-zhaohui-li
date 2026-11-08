@@ -56,6 +56,30 @@ Where the strip and the intent disagree, as Claude reads it:
 3. **Timing matches the settings:** the whole burst lasts 18 frames (0.6 s) and frames 40 and 50
    are empty. This does not match "about 5 s" in Zhaohui's first look above.
 
+## 2026-11-08 — Effect A, revision r1
+What I saw: Zhaohui chose "It reads as a ring" when asked what to change in the hit spark. That
+option was one of two taken from Claude's reading of r0 (frames 12–15 read as an expanding
+ring), so this revision is **not independent of Claude's reading**; whether Zhaohui saw the ring
+in the running game is to be stated in the verdict below.
+Claude's reading of r0: `spread` 180° and speeds 45–75 px/s send every spark out at nearly the
+same speed, so at frames 12–15 they sit on one circle with an empty centre.
+Change: `initial_velocity_min` 45 → 15 px/s (one setting; `initial_velocity_max` stays 75, so
+the outer edge does not move). Approved under Zhaohui's standing "你不用问我，直接做就行".
+Claude's prediction for r1 (same seed, so the same directions as r0):
+- 10: unchanged, a solid white disc (all sparks start at the point).
+- 12 and 15: a filled, uneven cluster instead of a ring: some sparks stay near the centre,
+  others reach the same outer edge as r0 (about 21 px across at 12, about 31 px at 15).
+- 20: sparks spread from the centre to about 47 px across, no empty middle.
+- 22 and 24: the second burst's disc among the first burst's scattered sparks; widest extent
+  about the same as r0 (about 58 px across).
+- 28 and 30: second burst as a filled cluster; 40 and 50 empty.
+- Still no impact direction: sparks still go all ways (that would need `spread` plus a per-hit
+  direction in the pool code, a second change).
+Claude's comparison of r1 with its prediction: TO DO after the recapture.
+My verdict (running game or preview, 1280 × 720): TO DO (Zhaohui): kept | reverted, because
+Strips: captures/hit_spark/r0/, captures/hit_spark/r1/
+Commits: this commit (change)
+
 ## Effect B — courtyard embers
 
 ### r0 — first look (before Claude reads any strip)

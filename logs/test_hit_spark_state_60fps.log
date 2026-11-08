@@ -110,7 +110,3 @@ PASS [1, 2] scene: 2 fires for 2 hits, one per hit on its tick within 1 px of it
 PASS [5] scene: speed_scale 0 on all 4 slots on every tick with main.paused or main.hitstop > 0 (8 hitstop ticks), 1 on the other 319 ticks
 PASS [4] freeing Main freed all 4 slots with it
 57 checks, 0 failed
-WARNING: 10 ObjectDB instances were leaked at exit (run with `--verbose` for details).
-   at: cleanup (core/object/object.cpp:2536)
-ERROR: 4 resources still in use at exit (run with --verbose for details).
-   at: clear (core/io/resource.cpp:822)
