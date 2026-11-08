@@ -23,7 +23,7 @@ PASS [parse] AOTAKE: get_shader_uniform_list() is not empty (2), so the shader p
 PASS [names/types] AOTAKE: exactly hurt_amount (float) and flash_color (vec4 source_color, listed as Color): ["hurt_amount=float", "flash_color=Color"]
 PASS [names/types] AOTAKE: hurt_amount is listed with a 0..1 range hint
 PASS [wiring] AOTAKE: the material's shader code is the text of the file
-PASS [6] P1 and P2 have different ShaderMaterial instances (ids -9223372004508301816, -9223372001488402942) of one shader
+PASS [6] P1 and P2 have different ShaderMaterial instances (ids -9223372003652663790, -9223372000632764912) of one shader
 PASS [defaults] source text: uniform float hurt_amount : hint_range(0.0, 1.0) = 0.0
 PASS [defaults] source text: uniform vec4 flash_color : source_color = vec4(1.0, 0.0, 0.0, 1.0)
 PASS [brief] source text: the colour line as written, nothing assigns COLOR or COLOR.a, no render_mode
@@ -170,3 +170,7 @@ PASS [5] no tail: hurt_amount 0.0 on all 31 ticks and 72 frames from the K.O. ti
 == rule 6 over all scenarios ==
 PASS [6] P1's hurt_amount was 0.0 on all 1968 frames and 820 ticks recorded, while P2 flashed on 368 frames (max P1 0.0000)
 69 checks, 0 failed
+WARNING: 12 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 6 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

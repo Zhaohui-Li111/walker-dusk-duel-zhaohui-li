@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://game/main.gd" id="1_main"]
 [ext_resource type="Script" path="res://game/stage.gd" id="2_stage"]
@@ -6,6 +6,8 @@
 [ext_resource type="Script" path="res://game/effects.gd" id="4_effects"]
 [ext_resource type="Script" path="res://game/hud.gd" id="5_hud"]
 [ext_resource type="Script" path="res://game/audio_director.gd" id="6_audio"]
+[ext_resource type="PackedScene" path="res://effects/hit_spark.tscn" id="7_hit_spark"]
+[ext_resource type="Script" path="res://effects/hit_spark_pool.gd" id="8_hit_spark_pool"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_main")
@@ -25,6 +27,17 @@ display_name = "AOTAKE"
 
 [node name="Effects" type="Node2D" parent="."]
 script = ExtResource("4_effects")
+
+[node name="HitSpark0" parent="." instance=ExtResource("7_hit_spark")]
+
+[node name="HitSpark1" parent="." instance=ExtResource("7_hit_spark")]
+
+[node name="HitSpark2" parent="." instance=ExtResource("7_hit_spark")]
+
+[node name="HitSpark3" parent="." instance=ExtResource("7_hit_spark")]
+
+[node name="HitSparkPool" type="Node" parent="."]
+script = ExtResource("8_hit_spark_pool")
 
 [node name="HUD" type="CanvasLayer" parent="."]
 
