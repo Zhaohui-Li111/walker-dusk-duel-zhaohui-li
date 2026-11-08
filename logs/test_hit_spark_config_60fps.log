@@ -68,10 +68,10 @@ PASS: scale_amount_curve(0.85) = 0.3250, linear between points 0.3250 (Claude Co
 PASS: texture is res://effects/hit_spark_star.png (got res://effects/hit_spark_star.png)
 PASS: texture is 8 x 8 (got 8 x 8)
 PASS: texture centre 2 x 2 is opaque white (wide at the centre)
-FAIL: texture is an eight-point star: outer alpha on tips 7.72 > 2 x between tips 5.46
+PASS: texture is an eight-point star: outer alpha on tips 5.71 > 2 x between tips 2.45
 PASS: material is a CanvasItemMaterial (got (res://effects/hit_spark.tscn::CanvasItemMaterial_add):<CanvasItemMaterial#-9223372009289808398>)
 PASS: CanvasItemMaterial.blend_mode exists
 PASS: blend_mode = BLEND_MODE_ADD (got 1)
 -- in the tree
 PASS: still not emitting after 5 frames in the tree (rule 1)
-69 checks, 1 failed
+69 checks, 0 failed

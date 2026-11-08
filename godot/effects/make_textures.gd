@@ -13,7 +13,9 @@ const SUPERSAMPLE := 4               # samples per pixel side, for anti-aliased 
 
 
 func _initialize() -> void:
-	_save(_star(8, 4.0, 1.25, 3.0), "hit_spark_star.png")
+	# r_in 1.25 -> 1.0, sharp 3 -> 6 (2026-11-08, Zhaohui chose "sharpen the texture"): the first
+	# star's tips did not separate on 8 x 8 (tip/gap alpha 7.72 / 5.46 < 2).
+	_save(_star(8, 4.0, 1.0, 6.0), "hit_spark_star.png")
 	quit()
 
 

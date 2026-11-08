@@ -32,6 +32,10 @@ func _ready() -> void:
 	for i in SLOTS:
 		var fx := SPARK.instantiate() as CPUParticles2D
 		fx.name = "Slot%d" % i
+		# Fixed seed on the preview's instances only, never in hit_spark.tscn, so before/after
+		# strips compare the same randomness (A6 handout, "Controlled randomness").
+		fx.use_fixed_seed = true
+		fx.seed = 7270 + i
 		add_child(fx)
 		slots.append(fx)
 	print("hit_spark_preview: retrigger %s, point %s" % [retrigger, _point()])
