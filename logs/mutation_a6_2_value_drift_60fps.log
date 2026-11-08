@@ -1,0 +1,77 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+-- scene
+PASS: res://effects/hit_spark.tscn loads as a PackedScene
+PASS: scene has one node, the emitter (node count 1)
+PASS: root node type is CPUParticles2D (got CPUParticles2D)
+-- every property the scene file sets exists in Godot 4.7.2-stable (official)
+PASS: CPUParticles2D.material exists
+PASS: CPUParticles2D.emitting exists
+PASS: CPUParticles2D.amount exists
+PASS: CPUParticles2D.texture exists
+PASS: CPUParticles2D.lifetime exists
+PASS: CPUParticles2D.one_shot exists
+PASS: CPUParticles2D.preprocess exists
+PASS: CPUParticles2D.speed_scale exists
+PASS: CPUParticles2D.explosiveness exists
+PASS: CPUParticles2D.local_coords exists
+PASS: CPUParticles2D.emission_shape exists
+PASS: CPUParticles2D.spread exists
+PASS: CPUParticles2D.gravity exists
+PASS: CPUParticles2D.initial_velocity_min exists
+PASS: CPUParticles2D.initial_velocity_max exists
+PASS: CPUParticles2D.damping_min exists
+PASS: CPUParticles2D.damping_max exists
+PASS: CPUParticles2D.angle_min exists
+PASS: CPUParticles2D.angle_max exists
+PASS: CPUParticles2D.scale_amount_min exists
+PASS: CPUParticles2D.scale_amount_max exists
+PASS: CPUParticles2D.scale_amount_curve exists
+PASS: CPUParticles2D.color_ramp exists
+PASS: CPUParticles2D has no 'alpha_curve' (brief's correction)
+PASS: CPUParticles2D has no 'scale_min' (brief's correction)
+PASS: CPUParticles2D has no 'scale_max' (brief's correction)
+PASS: CPUParticles2D has no 'amount_ratio' (brief's correction)
+   info: CPUParticles2D has visibility_rect = false (brief: not applicable to this CPU design)
+-- settings table
+FAIL: amount = 25 (brief 20)
+PASS: one_shot = true (brief true)
+PASS: explosiveness = 1.0 (brief 1.0)
+PASS: lifetime = 0.6 (brief 0.6)
+PASS: emission_shape = 0 (brief 0)
+PASS: initial_velocity_min = 45.0 (brief 45.0)
+PASS: initial_velocity_max = 75.0 (brief 75.0)
+PASS: spread = 180.0 (brief 180.0)
+PASS: gravity = (0.0, 25.0) (brief (0.0, 25.0))
+PASS: damping_min = 28.0 (brief 28.0)
+PASS: damping_max = 40.0 (brief 40.0)
+PASS: angle_min = -180.0 (brief -180.0)
+PASS: angle_max = 180.0 (brief 180.0)
+PASS: scale_amount_min = 0.69999998807907 (brief 0.7)
+PASS: scale_amount_max = 1.20000004768372 (brief 1.2)
+PASS: local_coords = true (brief true)
+PASS: preprocess = 0.0 (brief 0.0)
+PASS: speed_scale = 1.0 (brief 1.0)
+PASS: emitting = false (brief false)
+PASS: color_ramp is a Gradient
+PASS: color_ramp has 3 stops (got 3)
+PASS: color_ramp stop 0: 0.00 #EAFBFF alpha 1.00 (brief 0.00 #EAFBFF alpha 1.00)
+PASS: color_ramp stop 1: 0.35 #83DFF2 alpha 0.75 (brief 0.35 #83DFF2 alpha 0.75)
+PASS: color_ramp stop 2: 1.00 #83DFF2 alpha 0.00 (brief 1.00 #83DFF2 alpha 0.00)
+PASS: scale_amount_curve is a Curve
+PASS: scale_amount_curve has 3 points (got 3)
+PASS: scale_amount_curve point 0 = (0.0, 1.0) (brief (0.0, 1.0))
+PASS: scale_amount_curve point 1 = (0.7, 0.65) (brief (0.7, 0.65))
+PASS: scale_amount_curve point 2 = (1.0, 0.0) (brief (1.0, 0.0))
+PASS: scale_amount_curve(0.35) = 0.8250, linear between points 0.8250 (Claude Code's tangent choice)
+PASS: scale_amount_curve(0.85) = 0.3250, linear between points 0.3250 (Claude Code's tangent choice)
+PASS: texture is res://effects/hit_spark_star.png (got res://effects/hit_spark_star.png)
+PASS: texture is 8 x 8 (got 8 x 8)
+PASS: texture centre 2 x 2 is opaque white (wide at the centre)
+PASS: texture is an eight-point star: outer alpha on tips 5.71 > 2 x between tips 2.45
+PASS: material is a CanvasItemMaterial (got (res://effects/hit_spark.tscn::CanvasItemMaterial_add):<CanvasItemMaterial#-9223372009289808398>)
+PASS: CanvasItemMaterial.blend_mode exists
+PASS: blend_mode = BLEND_MODE_ADD (got 1)
+-- in the tree
+PASS: still not emitting after 5 frames in the tree (rule 1)
+69 checks, 1 failed

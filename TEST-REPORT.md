@@ -435,3 +435,38 @@ change to fight behaviour was reported; the headless baseline stays 94 / 0.
 - The OS-screenshot comparison was not done.
 - The retrigger and the mid-fade K.O. are reachable only by labelled test setup.
 - The granite looks like planks on this BoxMesh.
+
+---
+
+# Assignment 6 — particle effects
+
+Godot 4.7.2 stable, GL Compatibility, Windows 11, GPU Intel UHD Graphics (OpenGL 3.3, from the
+Movie Maker run's startup line). All tests through `scripts/run-test.sh` unless noted. Rows marked
+**HUMAN CHECK** are Zhaohui's.
+
+## Baseline (earlier suites, through the A6 wrapper, commit `e14315e`)
+
+| Suite | Mode | Result |
+|---|---|---|
+| `test_runner.gd` | 60 | 94 checks, 0 failed |
+| `check_props3d.gd` | 60 | 49 checks, 0 failed |
+| `test_hurt_flash.gd` | 30, 60, 144 | 69 checks, 0 failed each |
+| `test_materials.gd` | 60 | 96 checks, 0 failed |
+| `calibrate_normal_map.gd` | 60 | PASS |
+
+## Effect A configuration test
+
+`scripts/run-test.sh test_hit_spark_config.gd 60`: agent build `0ac83ee` 69 checks, 1 failed (its
+own star-shape check); after the texture fix `873d614` **69 checks, 0 failed**.
+
+## Mutations of `godot/effects/hit_spark.tscn` (each by Zhaohui, each restored)
+
+| # | Mutation | Config test | Game / preview |
+|---|---|---|---|
+| 1 | Godot 3 name: `initial_velocity_min = 45.0` → `initial_velocity = 45.0` (2026-11-08) | **exit 1**, 69 checks, 2 failed: `CPUParticles2D.initial_velocity exists` and `initial_velocity_min = 0.0 (brief 45.0)` (`logs/mutation_a6_1_godot3_name_60fps.log`) | The scene loaded with no error or warning in the log; the preview still fired both bursts (frames 10 and 22, its console output). What it looked like (Zhaohui, HUMAN CHECK, preview window): "我觉得火花好像慢了一些" (the sparks seemed a little slower), consistent with the minimum speed falling from 45 to 0 px/s |
+| 2 | Value drift, brief unchanged: `amount = 20` → `amount = 25` (2026-11-08) | **exit 1**, 69 checks, 1 failed: `amount = 25 (brief 20)` (`logs/mutation_a6_2_value_drift_60fps.log`) | not run |
+
+Finding for mutation 1: `CPUParticles2D` has no `initial_velocity`, and Godot 4.7.2 drops the
+unknown key from the `.tscn` silently, so `initial_velocity_min` falls back to its default 0. The
+effect still fires; only the read-back of the brief's value catches it. (The Godot 3 names that
+`ParticleProcessMaterial` lists are a different class; this effect does not use it.)
