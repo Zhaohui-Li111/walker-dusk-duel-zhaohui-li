@@ -1,0 +1,56 @@
+[typecheck] wrote D:\courses\7270\walker-dusk-duel-zhaohui-li\youtube\claude-liam-walker-dusk-duel-zhaohui-li-a6-gamedev\TYPECHECK.md
+[typecheck] §8.10 B00: SKIP
+[typecheck] §8.10 B01: SKIP
+[typecheck] §8.10 B02: SKIP
+[typecheck] §8.10 B03: SKIP
+[typecheck] §8.10 B04: SKIP
+[typecheck] §8.10 B05: SKIP
+[typecheck] §8.10 B06: SKIP
+[typecheck] §8.10 B07: SKIP
+[typecheck] §8.10 B08: SKIP
+[typecheck] §8.10 B09: SKIP
+[typecheck] §8.10 B10: SKIP
+[typecheck] §8.10 B11: SKIP
+[typecheck] §8.10 B12: SKIP
+[typecheck] §8.10 B13: SKIP
+[typecheck] §8.10 B14: SKIP
+[typecheck] §8.10 B15: SKIP
+[typecheck] §8.10 B16: SKIP
+[typecheck] §8.10 B17: SKIP
+[typecheck] §8.10 B18: SKIP
+[typecheck] §8.10 B19: SKIP
+[typecheck] §8.10 B20: SKIP
+[typecheck] §8.10 B21: SKIP
+[typecheck] §8.10 B22: 0.55
+[typecheck] §8.10 B23: SKIP
+[typecheck] §8.10 B24: SKIP
+[typecheck] GATE T: PASS
+[art] compiled B00  VIDEO    19.0s  ← B00.mp4
+[art] compiled B01  VIDEO    11.1s  ← B01.mp4
+[art] compiled B02  VIDEO    17.3s  ← B02.mp4
+[art] compiled B03  VIDEO    21.4s  ← B03.mp4
+[art] compiled B04  VIDEO    18.7s  ← B04.mp4
+[art] compiled B05  VIDEO    20.2s  ← B05.mp4
+[art] compiled B06  VIDEO    21.7s  ← B06.mp4
+[art] compiled B07  VIDEO    20.4s  ← B07.mp4
+[art] compiled B08  VIDEO    18.9s  ← B08.mp4
+[art] compiled B09  VIDEO    10.9s  ← B09.mp4
+[art] compiled B10  VIDEO    19.1s  ← B10.mp4
+[art] compiled B11  VIDEO    19.4s  ← B11.mp4
+[art] compiled B12  VIDEO    18.3s  ← B12.mp4
+[art] compiled B13  VIDEO    19.1s  ← B13.mp4
+[art] compiled B14  VIDEO    18.5s  ← B14.mp4
+[art] compiled B15  VIDEO     6.5s  ← B15.mp4
+[art] compiled B16  VIDEO    20.5s  ← B16.mp4
+[art] compiled B17  VIDEO    29.7s  ← B17.mp4
+[art] compiled B18  VIDEO    26.1s  ← B18.mp4
+[art] compiled B19  VIDEO    30.7s  ← B19.mp4
+[art] compiled B20  VIDEO    20.3s  ← B20.mp4
+[art] compiled B21  VIDEO    22.4s  ← B21.mp4
+[art] compiled B22  VIDEO    36.7s  ← B22.mp4
+[art] compiled B23  VIDEO    19.6s  ← B23.mp4
+[art] compiled B24  VIDEO     4.1s  ← B24.mp4
+[art] motion histogram: card-cues:13  line-highlight:4  none:3  type-on:2  type-on-correct:1  artifact-lines:1  mascot-title:1
+[art] build stamp → beat_sheet.json (25/25 filled)
+[art] wrote D:\courses\7270\walker-dusk-duel-zhaohui-li\youtube\claude-liam-walker-dusk-duel-zhaohui-li-a6-gamedev\exports\landscape\claude-liam-walker-dusk-duel-zhaohui-li-a6-gamedev.mp4  (490.7s, audio: per-beat timeline (source audio preserved), drawtext: yes)
+[art] slots: 25/25 filled — B00:VIDEO B01:VIDEO B02:VIDEO B03:VIDEO B04:VIDEO B05:VIDEO B06:VIDEO B07:VIDEO B08:VIDEO B09:VIDEO B10:VIDEO B11:VIDEO B12:VIDEO B13:VIDEO B14:VIDEO B15:VIDEO B16:VIDEO B17:VIDEO B18:VIDEO B19:VIDEO B20:VIDEO B21:VIDEO B22:VIDEO B23:VIDEO B24:VIDEO

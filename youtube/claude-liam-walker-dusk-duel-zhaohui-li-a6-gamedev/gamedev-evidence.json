@@ -1,0 +1,894 @@
+{
+ "schema_version": 1,
+ "game": "godot",
+ "source_revision": "840bcfd",
+ "teaching_contract": "code-then-result-v1",
+ "files": [
+  {
+   "path": "effects/embers.tscn",
+   "sha256": "2c614429d63f47f4de16e19de2e940bd98089632b28cd52aa59cd14c26b20628",
+   "role": "scene",
+   "component_ids": [
+    "embers-effect"
+   ]
+  },
+  {
+   "path": "effects/embers_controller.gd",
+   "sha256": "0447c465be04a1909c18f5f2d244bb857ea77049a600d417a5f2144dc8c7fec0",
+   "role": "GDScript source",
+   "component_ids": [
+    "embers-controller"
+   ]
+  },
+  {
+   "path": "effects/embers_soft.png",
+   "sha256": "58aec32a4c8a31a7b933eb3915c577ed208fa5295edb7e03d3fad47089c802dd",
+   "role": "texture (PNG)",
+   "component_ids": [
+    "embers-effect"
+   ]
+  },
+  {
+   "path": "effects/embers_soft.png.import",
+   "sha256": "b10e5f8105724fde86ae15bd530496e381e5c36bc3b20dcea622145b309a653f",
+   "role": "Godot import settings sidecar (authored)",
+   "component_ids": [
+    "embers-effect"
+   ]
+  },
+  {
+   "path": "effects/hit_spark.tscn",
+   "sha256": "180c07800611f6c4664a8b7d86d0b33bc9ea186acc68d61f27c2e8cab82b34c8",
+   "role": "scene",
+   "component_ids": [
+    "hit-spark-effect"
+   ]
+  },
+  {
+   "path": "effects/hit_spark_pool.gd",
+   "sha256": "83faf4476ec7dcd3e89ea553a6d00017e2859773d7b88e1f47d8680a50fc3a8c",
+   "role": "GDScript source",
+   "component_ids": [
+    "hit-spark-pool"
+   ]
+  },
+  {
+   "path": "effects/hit_spark_star.png",
+   "sha256": "69297bd53f4d45c1793c63561ef8d5ddba5fef9bfcfbb63bd2955298f38ddaaa",
+   "role": "texture (PNG)",
+   "component_ids": [
+    "hit-spark-effect"
+   ]
+  },
+  {
+   "path": "effects/hit_spark_star.png.import",
+   "sha256": "3bb35a9b73b252116a56032f17bb19fd6e9d814f387de12e8fec35a6cb439e65",
+   "role": "Godot import settings sidecar (authored)",
+   "component_ids": [
+    "hit-spark-effect"
+   ]
+  },
+  {
+   "path": "effects/make_textures.gd",
+   "sha256": "fef70bfb1c55bdac7a114879efd7a1bd8835c07cda22d8e6b29b1f30057cdd80",
+   "role": "GDScript source",
+   "component_ids": [
+    "hit-spark-effect"
+   ]
+  },
+  {
+   "path": "game/debug_vsync.gd",
+   "sha256": "72dde8bc7f233a075063a528676039b386450d1384c2943f0caddd725f84ead5",
+   "role": "GDScript source",
+   "component_ids": [
+    "a6-price"
+   ]
+  },
+  {
+   "path": "game/main.tscn",
+   "sha256": "497b8031b05d9e0917020feca4d71e1aae9bbbf62ac1bddce117df3026d40cd4",
+   "role": "scene",
+   "component_ids": [
+    "hit-spark-pool"
+   ]
+  },
+  {
+   "path": "previews/embers_preview.gd",
+   "sha256": "945b866d22cf9dee38035dad2a9244f6f4cc10452e6786322dc9845a494ca5e0",
+   "role": "GDScript source",
+   "component_ids": [
+    "embers-effect"
+   ]
+  },
+  {
+   "path": "previews/embers_preview.tscn",
+   "sha256": "c3ec8bedabbf2f5296130d99b76c475676a51af8618a5218ce68504fd52c7024",
+   "role": "scene",
+   "component_ids": [
+    "embers-effect"
+   ]
+  },
+  {
+   "path": "previews/hit_spark_preview.gd",
+   "sha256": "de09fe315cd28ea15a5707f8afa5ba023098b8f2ba48e96d995926748154b25a",
+   "role": "GDScript source",
+   "component_ids": [
+    "hit-spark-effect"
+   ]
+  },
+  {
+   "path": "previews/hit_spark_preview.tscn",
+   "sha256": "281bf34b1b4004b7da93907221676fcaafed7de4b81f51cb7cc869c91ac0fb0a",
+   "role": "scene",
+   "component_ids": [
+    "hit-spark-effect"
+   ]
+  },
+  {
+   "path": "previews/hit_spark_profile.tscn",
+   "sha256": "a3ac9fcd5c92aa01849ca50289d8c76c35d5d8dd66a1b2056fe963bdbdebb7e3",
+   "role": "scene",
+   "component_ids": [
+    "a6-price"
+   ]
+  },
+  {
+   "path": "shaders/particles_generated.gdshader",
+   "sha256": "01b4c5aa74096635696c9883d2fa3f30bb2217f5bbab4fc0a885f76010ea94fe",
+   "role": "Godot shading language source",
+   "component_ids": [
+    "process-shader"
+   ]
+  },
+  {
+   "path": "tests/cost_effects.gd",
+   "sha256": "530865c2cebd162cb824c67b03124746c152f026e9758e2f4e8dc14acbbdc79d",
+   "role": "GDScript source",
+   "component_ids": [
+    "a6-price"
+   ]
+  },
+  {
+   "path": "tests/gpu_price.gd",
+   "sha256": "07af193d943136cdbfd2aa2e2e6e2b383cba054c5794b3bb5aba99c2b2c66d00",
+   "role": "GDScript source",
+   "component_ids": [
+    "a6-price"
+   ]
+  },
+  {
+   "path": "tests/test_embers_config.gd",
+   "sha256": "fccdcfb74b77347925dfc357fcfe902b366b91790f5f580c6dfd5a3e74fb8259",
+   "role": "GDScript source",
+   "component_ids": [
+    "a6-tests"
+   ]
+  },
+  {
+   "path": "tests/test_embers_state.gd",
+   "sha256": "5a588a0a88da3e14fd65061326874b8ad153ec6563732d846e910f6f10be8146",
+   "role": "GDScript source",
+   "component_ids": [
+    "a6-tests"
+   ]
+  },
+  {
+   "path": "tests/test_hit_spark_config.gd",
+   "sha256": "8e30faf14b9d800e356abfaaa51c54f25db5ae3830512e8b2d6a9a9b79f01c6c",
+   "role": "GDScript source",
+   "component_ids": [
+    "a6-tests"
+   ]
+  },
+  {
+   "path": "tests/test_hit_spark_state.gd",
+   "sha256": "62bdc1e9d9e2d035aa5aa5719c4a246a90811ebfe9ec71007bb57fe74acaafa8",
+   "role": "GDScript source",
+   "component_ids": [
+    "a6-tests"
+   ]
+  }
+ ],
+ "components": [
+  {
+   "id": "hit-spark-effect",
+   "explanation": "effects/hit_spark.tscn: a one-shot CPUParticles2D (20 particles, explosiveness 1, point emission; spread 180, gravity (0, 25), speed 15-75 after tuning r1, damping, colour ramp, scale curve; star texture, additive CanvasItemMaterial). Its texture is drawn by effects/make_textures.gd; the preview scene in previews/ makes the fixture-capture strips.",
+   "beat_ids": [
+    "B03",
+    "B04",
+    "B05",
+    "B06",
+    "B07"
+   ],
+   "files": [
+    "effects/hit_spark.tscn",
+    "effects/hit_spark_star.png",
+    "effects/hit_spark_star.png.import",
+    "effects/make_textures.gd",
+    "previews/hit_spark_preview.gd",
+    "previews/hit_spark_preview.tscn"
+   ]
+  },
+  {
+   "id": "hit-spark-pool",
+   "explanation": "effects/hit_spark_pool.gd starts one of four pooled HitSpark slots (children of Main in game/main.tscn) on attack_resolved with result hit, at point, never restarting a live burst; speed_scale 0 during the game's pause and hitstop; a round reset clears them.",
+   "beat_ids": [
+    "B08",
+    "B09"
+   ],
+   "files": [
+    "effects/hit_spark_pool.gd",
+    "game/main.tscn"
+   ]
+  },
+  {
+   "id": "embers-effect",
+   "explanation": "effects/embers.tscn: a continuous CPUParticles2D (48 particles, rectangle emission 560 x 180 px, preprocess 1.5 s, lifetime 2.5 s, two colour ramps, soft 4 x 4 texture, normal blend); the preview scene makes the strips.",
+   "beat_ids": [
+    "B10",
+    "B11",
+    "B12",
+    "B13"
+   ],
+   "files": [
+    "effects/embers.tscn",
+    "effects/embers_soft.png",
+    "effects/embers_soft.png.import",
+    "previews/embers_preview.gd",
+    "previews/embers_preview.tscn"
+   ]
+  },
+  {
+   "id": "embers-controller",
+   "explanation": "effects/embers_controller.gd polls main.phase each physics tick: restart() on entering the fight (preprocess every round), emitting = false on leaving it, speed_scale 0 during pause and hitstop; never touches visible (rule 4, revised after the state test).",
+   "beat_ids": [
+    "B14",
+    "B15",
+    "B16"
+   ],
+   "files": [
+    "effects/embers_controller.gd"
+   ]
+  },
+  {
+   "id": "process-shader",
+   "explanation": "shaders/particles_generated.gdshader: the particles shader Godot generated when Zhaohui converted the hit spark to GPUParticles2D in the editor; nothing in the game uses it. Lines 137, 260, 307 and 320 implement the brief's speed, spread and gravity; the colour ramp and scale curve were dropped (lines 348, 147).",
+   "beat_ids": [
+    "B17"
+   ],
+   "files": [
+    "shaders/particles_generated.gdshader"
+   ]
+  },
+  {
+   "id": "a6-tests",
+   "explanation": "tests/test_hit_spark_config.gd and test_embers_config.gd read every brief setting back (69 / 0, 85 / 0); test_hit_spark_state.gd and test_embers_state.gd drive the real loop with real input (57 / 0, 38 / 0), SETUP cases labelled.",
+   "beat_ids": [
+    "B16",
+    "B18",
+    "B20"
+   ],
+   "files": [
+    "tests/test_embers_config.gd",
+    "tests/test_embers_state.gd",
+    "tests/test_hit_spark_config.gd",
+    "tests/test_hit_spark_state.gd"
+   ]
+  },
+  {
+   "id": "a6-price",
+   "explanation": "tests/cost_effects.gd (headless CPU price with an empty-scene control), tests/gpu_price.gd (windowed RenderingServer GPU time, run by Claude Code), previews/hit_spark_profile.tscn (four bursts kept alive) and game/debug_vsync.gd (F9 toggles vsync).",
+   "beat_ids": [
+    "B19"
+   ],
+   "files": [
+    "game/debug_vsync.gd",
+    "previews/hit_spark_profile.tscn",
+    "tests/cost_effects.gd",
+    "tests/gpu_price.gd"
+   ]
+  }
+ ],
+ "excerpts": [
+  {
+   "beat_id": "B06",
+   "path": "effects/hit_spark.tscn",
+   "start_line": 17,
+   "end_line": 30,
+   "text": "material = SubResource(\"CanvasItemMaterial_add\")\nemitting = false\namount = 20\ntexture = ExtResource(\"1_star\")\nlifetime = 0.6\none_shot = true\npreprocess = 0.0\nspeed_scale = 1.0\nexplosiveness = 1.0\nlocal_coords = true\nemission_shape = 0\nspread = 180.0\ngravity = Vector2(0, 25)\ninitial_velocity_min = 15.0"
+  },
+  {
+   "beat_id": "B08",
+   "path": "effects/hit_spark_pool.gd",
+   "start_line": 43,
+   "end_line": 56,
+   "text": "\tvar i := busy.find(false)\n\tif i < 0:\n\t\ti = started.find(started.min())\n\tvar slot := slots[i]\n\tslot.position = point\n\tslot.restart()\n\tbusy[i] = true\n\tstarted[i] = _next\n\t_next += 1\n\n\n## Rule 5: the game's pause and hitstop do not pause the tree, so the emitters are frozen here.\nfunc _apply_speed() -> void:\n\tvar s := 0.0 if (main.paused or main.hitstop > 0) else 1.0"
+  },
+  {
+   "beat_id": "B12",
+   "path": "effects/embers.tscn",
+   "start_line": 21,
+   "end_line": 34,
+   "text": "process_mode = 0\nmaterial = SubResource(\"CanvasItemMaterial_mix\")\nposition = Vector2(320, 215)\nemitting = false\namount = 48\ntexture = ExtResource(\"1_soft\")\nlifetime = 2.5\none_shot = false\npreprocess = 1.5\nspeed_scale = 1.0\nexplosiveness = 0.0\nlocal_coords = false\nemission_shape = 3\nemission_rect_extents = Vector2(280, 90)"
+  },
+  {
+   "beat_id": "B14",
+   "path": "effects/embers_controller.gd",
+   "start_line": 20,
+   "end_line": 33,
+   "text": "func _physics_process(_delta: float) -> void:\n\tvar fight: bool = main.phase == \"fight\"\n\tif fight and not _in_fight:\n\t\t# Rule 1 says \"emitting = true\"; restart() also sets emitting to true, and resets the\n\t\t# emitter's time so preprocess (1.5 s) runs again in every round, as rule 5 intends. Plain\n\t\t# emitting = true may only preprocess the first time (brief, Unconfirmed Q3). No embers are\n\t\t# erased: a K.O., the result screen and the 1 s intro always take longer than the 2.5 s\n\t\t# lifetime. (Claude Code, under Zhaohui's delegation, 2026-11-08.)\n\t\tembers.restart()\n\telif _in_fight and not fight:\n\t\tembers.emitting = false      # rule 1: stop emitting; live particles finish their lifetime\n\t_in_fight = fight\n\t_apply_speed()\n"
+  }
+ ],
+ "exclusions": [
+  {
+   "path": "MATERIALS.md",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "art/akaken/block.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/akaken/block.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/akaken/crouch.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/akaken/crouch.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/akaken/fall.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/akaken/fall.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/akaken/hurt.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/akaken/hurt.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/akaken/idle.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/akaken/idle.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/akaken/kick.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/akaken/kick.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/akaken/ko.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/akaken/ko.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/akaken/punch.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/akaken/punch.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/akaken/rise.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/akaken/rise.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/akaken/walk.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/akaken/walk.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/akaken/win.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/akaken/win.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/aotake/block.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/aotake/block.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/aotake/hurt.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/aotake/hurt.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/aotake/idle.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/aotake/idle.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/aotake/kick.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/aotake/kick.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/aotake/ko.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/aotake/ko.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/env/bg.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/env/bg.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/akaken/block.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/akaken/block.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/akaken/crouch.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/akaken/crouch.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/akaken/fall.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/akaken/fall.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/akaken/hurt.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/akaken/hurt.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/akaken/idle.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/akaken/idle.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/akaken/kick.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/akaken/kick.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/akaken/ko.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/akaken/ko.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/akaken/punch.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/akaken/punch.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/akaken/rise.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/akaken/rise.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/akaken/walk.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/akaken/walk.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/akaken/win.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/akaken/win.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/aotake/block.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/aotake/block.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/aotake/hurt.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/aotake/hurt.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/aotake/idle.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/aotake/idle.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/aotake/kick.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/aotake/kick.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/aotake/ko.png",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "art/placeholder/aotake/ko.png.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "audio/music/loop.ogg",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "audio/music/loop.ogg.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "audio/sfx/block.ogg",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "audio/sfx/block.ogg.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "audio/sfx/hit.ogg",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "audio/sfx/hit.ogg.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "audio/sfx/ko.ogg",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "audio/sfx/ko.ogg.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "audio/sfx/whiff.ogg",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "audio/sfx/whiff.ogg.import",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "data/poses.json",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "fighter/cpu_controller.gd",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "fighter/fighter.gd",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "fighter/fighter.tscn",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "fighter/fighter_art.gd",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "fighter/hurt_flash.gd",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "fighter/intent.gd",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "fighter/player_controller.gd",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "fighter/scripted_controller.gd",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "game/audio_director.gd",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "game/controls.gd",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "game/effects.gd",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "game/hud.gd",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "game/main.gd",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "game/stage.gd",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "hint_experiment/hint_as_color.tres",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "hint_experiment/hint_as_data.tres",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "hint_experiment/hint_experiment.tscn",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "hint_experiment/hint_grey_3x1.png",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "hint_experiment/hint_grey_3x1.png.import",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "hint_experiment/make_hint_materials.gd",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "hint_experiment/write_hint_png.gd",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "project.godot",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "props3d/make_granite_materials.gd",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "props3d/materials/granite_floor.tres",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "props3d/materials/granite_plinth.tres",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "props3d/models/prop_lantern.glb",
+   "reason": "A3 prop asset or check, unchanged by A6 (check_props3d.gd still 49 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a3-gamedev"
+  },
+  {
+   "path": "props3d/models/prop_lantern.glb.import",
+   "reason": "A3 prop asset or check, unchanged by A6 (check_props3d.gd still 49 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a3-gamedev"
+  },
+  {
+   "path": "props3d/models/prop_makiwara.glb",
+   "reason": "A3 prop asset or check, unchanged by A6 (check_props3d.gd still 49 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a3-gamedev"
+  },
+  {
+   "path": "props3d/models/prop_makiwara.glb.import",
+   "reason": "A3 prop asset or check, unchanged by A6 (check_props3d.gd still 49 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a3-gamedev"
+  },
+  {
+   "path": "props3d/models/prop_taiko.glb",
+   "reason": "A3 prop asset or check, unchanged by A6 (check_props3d.gd still 49 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a3-gamedev"
+  },
+  {
+   "path": "props3d/models/prop_taiko.glb.import",
+   "reason": "A3 prop asset or check, unchanged by A6 (check_props3d.gd still 49 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a3-gamedev"
+  },
+  {
+   "path": "props3d/prop_room.tscn",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "props3d/textures/ATTRIBUTION.md",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "props3d/textures/granite_wall_diff_1k.png",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "props3d/textures/granite_wall_diff_1k.png.import",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "props3d/textures/granite_wall_nor_dx_1k.png",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "props3d/textures/granite_wall_nor_dx_1k.png.import",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "props3d/textures/granite_wall_nor_gl_1k.png",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "props3d/textures/granite_wall_nor_gl_1k.png.import",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "props3d/textures/granite_wall_rough_1k.png",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "props3d/textures/granite_wall_rough_1k.png.import",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "shaders/granite.gdshader",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "shaders/hint_experiment.gdshader",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "shaders/hurt_flash.gdshader",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "shaders/standard_generated.gdshader",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "tests/calibrate_normal_map.gd",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "tests/capture_a5.gd",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "tests/capture_flow.gd",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "tests/capture_props3d.gd",
+   "reason": "A3 prop asset or check, unchanged by A6 (check_props3d.gd still 49 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a3-gamedev"
+  },
+  {
+   "path": "tests/capture_states.gd",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  },
+  {
+   "path": "tests/check_props3d.gd",
+   "reason": "A3 prop asset or check, unchanged by A6 (check_props3d.gd still 49 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a3-gamedev"
+  },
+  {
+   "path": "tests/normal_map_check.gd",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "tests/test_hurt_flash.gd",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "tests/test_materials.gd",
+   "reason": "Assignment 5 shader/material work, unchanged by A6 (test_hurt_flash 69 / 0 at 30/60/144, test_materials 96 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-a5-gamedev"
+  },
+  {
+   "path": "tests/test_runner.gd",
+   "reason": "Assignment 2 2D game, unchanged in behaviour by A6 (test_runner.gd still 94 / 0); explained in youtube/claude-liam-walker-dusk-duel-zhaohui-li-gamedev"
+  }
+ ],
+ "code_result_pairs": [
+  {
+   "code_beat": "B06",
+   "result_beat": "B07",
+   "observation": "In the committed fixture-capture strips (same seed), r0 (min speed 45) shows a hollow ring at frames 12-15 and r1 (min 15, the value on line 30) a filled cluster; the widest extent falls from about 58 to 48 px across (TUNING.md), smaller than Claude predicted.",
+   "media": {
+    "path": "media/B07.mp4",
+    "sha256": "0fba459be54426163aa7122aa6b2a4fcb24540c5be96b6a252dce0255c7fca9e"
+   }
+  },
+  {
+   "code_beat": "B08",
+   "result_beat": "B09",
+   "observation": "In the scripted-input capture, a punch lands and Esc pauses the game: the live sparks stay where they are for the 3 s pause (speed_scale 0, line 56) and finish after resume; later hits 0.5 s apart leave two bursts alive at once (lines 42-43: a free slot, no restart).",
+   "media": {
+    "path": "media/B09.mp4",
+    "sha256": "7d4c560971c0bd1ea453bc470859f03d71383dba051ef7bd6dedfd43f18bcea3"
+   }
+  },
+  {
+   "code_beat": "B12",
+   "result_beat": "B13",
+   "observation": "In the committed embers strips (same seed), r1 (ramp alpha 0.70 / 0.50) changes 447 pixels at frame 10 against r0's 168 and 658 at frame 55 against 215 (TUNING.md); specks 1-3 px, dimmer than the spark.",
+   "media": {
+    "path": "media/B13.mp4",
+    "sha256": "fd68bc3902bc78074fedae5c9710ac415a392e4eded19c242f30ddf0fd633fbc"
+   }
+  },
+  {
+   "code_beat": "B14",
+   "result_beat": "B15",
+   "observation": "In the scripted-input capture, the K.O. turns emission off (line 30) and the remaining embers fade; after Enter starts round 2, the field is present as soon as the fight phase begins (restart, line 28).",
+   "media": {
+    "path": "media/B15.mp4",
+    "sha256": "2349ee656a0d7e446c40952c52ba5e33a53e108f54e44de632b9bb43887c794d"
+   }
+  }
+ ]
+}

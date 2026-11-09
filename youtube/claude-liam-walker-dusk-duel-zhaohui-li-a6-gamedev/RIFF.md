@@ -1,0 +1,14 @@
+# RIFF — observations behind the commentary
+
+Times are seconds into `capture/a6_play.avi` (event times from `capture/a6_play.log`).
+
+| Artifact + range | Visible observation | Interpretation (source) | Narration | Next experiment |
+|---|---|---|---|---|
+| capture 0.6-14.9 s (B02) | Title screen with no embers; Enter; "ROUND 1 - FIGHT"; at 2.5 s the fight starts and a few faint amber specks are already on the wall; from 4.17 s each punch shows the white 8-line star with small cyan particles around it; Aotake turns red (A5 hurt flash). | The field is present at once because the controller calls `restart()` and `preprocess` is 1.5 s (embers_controller.gd:28, embers.tscn:29). The white star is the older code-drawn spark in `effects.gd` (kept by the brief); the cyan particles are Effect A. | "a burst of cyan particles around the white star, which is the old code-drawn spark" | Capture with `effects.gd`'s spark hidden in a copy, to judge the particle burst alone. |
+| capture 5.4-16.3 s, cropped 2.4× (B09) | A punch at 5.67 s; PAUSED from 5.72 s to 8.72 s: the cyan particles and the white star stay where they are; after resume they finish; later punches 0.5 s apart show a new burst while the last one is still fading. | `speed_scale` 0 while `main.paused` (hit_spark_pool.gd:56; the tree is never paused, main.gd:105-116). Overlap comes from taking a non-emitting slot (:43). | "the sparks hang in the air until the game resumes" | Hold pause mid-burst while hidden-tab / window loses focus, to check nothing else advances. |
+| capture 12.7-19.2 s (B15) | Final punch at 13.20 s, K.O.; the remaining amber specks thin out over about two seconds (hard to see at full frame); result screen; Enter; at 17.55 s the round-2 fight starts with specks present again. | `emitting = false` on leaving the fight (:30), lifetime 2.5 s; `restart()` re-runs preprocess every round (:28). | "Emission stops, and the last embers fade out. Then the rematch, and the field is back at once." | A strip of round 2's first frame against round 1's, to confirm preprocess re-runs. |
+| fig_strip_a_r0 / fig_r1_a (B04, B07) | r0 frames 12-15: a white ring with a dark centre; r1: a filled cluster that is visibly smaller at frame 24. | Lowering `initial_velocity_min` lowers almost every random speed in [min, max] (TUNING r1). | "The ring is gone … the burst shrank" | Raise `initial_velocity_max` to restore the edge, predict the frame-24 extent first. |
+| fig_strip_b_r0 / fig_r1_b (B11, B13) | At 1:1 the r0 embers are nearly invisible; r1 specks are findable on the door; the diagnostic panel shows more changed pixels in r1. | Alpha 0.28 → 0.70 peak (Revision 2). | "Still one to three pixels per ember" | Try `scale_amount` ×2 at the old alpha, to tell size from alpha. |
+
+All observations are Claude's (this build), from the frames and images listed. Zhaohui's own words
+are quoted only where TUNING.md / TEST-REPORT.md record them; no observation here is Zhaohui's.

@@ -1,0 +1,87 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 - Build 31.0.101.4502 - Compatibility - Using Device: Intel - Intel(R) UHD Graphics
+
+Movie Maker mode enabled, recording movie in 3840×2160 @ 60 FPS...
+tick 1  t=0.017s  PHASE -> title  | phase title paused false hitstop 0 sparks_emitting 0 embers_emitting false embers_speed 1
+tick 30  t=0.500s  status | phase title paused false hitstop 0 sparks_emitting 0 embers_emitting false embers_speed 1  P1 x 220.0 P2 x 420.0
+tick 60  t=1.000s  status | phase title paused false hitstop 0 sparks_emitting 0 embers_emitting false embers_speed 1  P1 x 220.0 P2 x 420.0
+tick 90  t=1.500s  Enter (confirm)
+tick 90  t=1.500s  status | phase title paused false hitstop 0 sparks_emitting 0 embers_emitting false embers_speed 1  P1 x 220.0 P2 x 420.0
+tick 91  t=1.517s  PHASE -> intro  | phase intro paused false hitstop 0 sparks_emitting 0 embers_emitting false embers_speed 1
+tick 120  t=2.000s  status | phase intro paused false hitstop 0 sparks_emitting 0 embers_emitting false embers_speed 1  P1 x 220.0 P2 x 420.0
+tick 150  t=2.500s  PHASE -> fight  | phase fight paused false hitstop 0 sparks_emitting 0 embers_emitting true embers_speed 1
+tick 150  t=2.500s  status | phase fight paused false hitstop 0 sparks_emitting 0 embers_emitting true embers_speed 1  P1 x 220.0 P2 x 420.0
+tick 180  t=3.000s  status | phase fight paused false hitstop 0 sparks_emitting 0 embers_emitting true embers_speed 1  P1 x 265.0 P2 x 420.0
+tick 210  t=3.500s  status | phase fight paused false hitstop 0 sparks_emitting 0 embers_emitting true embers_speed 1  P1 x 310.0 P2 x 420.0
+tick 240  t=4.000s  status | phase fight paused false hitstop 0 sparks_emitting 0 embers_emitting true embers_speed 1  P1 x 355.0 P2 x 420.0
+tick 250  t=4.167s  HIT #1 by P1 (punch) at (412.7, 230.4)  P1 100  P2 92
+tick 270  t=4.500s  status | phase fight paused false hitstop 0 sparks_emitting 1 embers_emitting true embers_speed 1  P1 x 365.5 P2 x 430.3
+tick 280  t=4.667s  interrupted by P2 (kick)
+tick 280  t=4.667s  HIT #2 by P1 (punch) at (426.1, 230.4)  P1 100  P2 84
+tick 300  t=5.000s  status | phase fight paused false hitstop 0 sparks_emitting 1 embers_emitting true embers_speed 1  P1 x 376.0 P2 x 441.1
+tick 310  t=5.167s  HIT #3 by P1 (punch) at (433.9, 230.4)  P1 100  P2 76
+tick 330  t=5.500s  status | phase fight paused false hitstop 0 sparks_emitting 1 embers_emitting true embers_speed 1  P1 x 386.5 P2 x 451.8
+tick 340  t=5.667s  HIT #4 by P1 (punch) at (444.5, 230.4)  P1 100  P2 68
+tick 343  t=5.717s  Esc (pause toggle)  | before: phase fight paused false hitstop 2 sparks_emitting 2 embers_emitting true embers_speed 0
+tick 360  t=6.000s  status | phase fight paused true hitstop 2 sparks_emitting 2 embers_emitting true embers_speed 0  P1 x 394.0 P2 x 452.2
+tick 390  t=6.500s  status | phase fight paused true hitstop 2 sparks_emitting 2 embers_emitting true embers_speed 0  P1 x 394.0 P2 x 452.2
+tick 403  t=6.717s  Esc (pause toggle)  | before: phase fight paused true hitstop 2 sparks_emitting 2 embers_emitting true embers_speed 0
+tick 420  t=7.000s  status | phase fight paused false hitstop 0 sparks_emitting 1 embers_emitting true embers_speed 1  P1 x 397.0 P2 x 462.5
+tick 430  t=7.167s  HIT #5 by P1 (punch) at (455.1, 230.4)  P1 100  P2 60
+tick 450  t=7.500s  status | phase fight paused false hitstop 0 sparks_emitting 1 embers_emitting true embers_speed 1  P1 x 407.5 P2 x 473.2
+tick 461  t=7.683s  interrupted by P2 (kick)
+tick 461  t=7.683s  HIT #6 by P1 (punch) at (469.3, 230.4)  P1 100  P2 52
+tick 480  t=8.000s  status | phase fight paused false hitstop 0 sparks_emitting 1 embers_emitting true embers_speed 1  P1 x 418.0 P2 x 483.8
+tick 491  t=8.183s  HIT #7 by P1 (punch) at (477.1, 230.4)  P1 100  P2 44
+tick 510  t=8.500s  status | phase fight paused false hitstop 0 sparks_emitting 1 embers_emitting true embers_speed 1  P1 x 428.5 P2 x 494.5
+tick 521  t=8.683s  HIT #8 by P1 (punch) at (487.7, 230.4)  P1 100  P2 36
+tick 540  t=9.000s  status | phase fight paused false hitstop 0 sparks_emitting 1 embers_emitting true embers_speed 1  P1 x 439.0 P2 x 505.2
+tick 551  t=9.183s  HIT #9 by P1 (punch) at (498.3, 230.4)  P1 100  P2 28
+tick 570  t=9.500s  status | phase fight paused false hitstop 0 sparks_emitting 1 embers_emitting true embers_speed 1  P1 x 449.5 P2 x 516.0
+tick 581  t=9.683s  HIT #10 by P1 (punch) at (509.0, 230.4)  P1 100  P2 20
+tick 600  t=10.000s  status | phase fight paused false hitstop 0 sparks_emitting 1 embers_emitting true embers_speed 1  P1 x 460.0 P2 x 526.7
+tick 611  t=10.183s  HIT #11 by P1 (punch) at (519.6, 230.4)  P1 100  P2 12
+tick 630  t=10.500s  status | phase fight paused false hitstop 0 sparks_emitting 1 embers_emitting true embers_speed 1  P1 x 470.5 P2 x 537.4
+tick 641  t=10.683s  HIT #12 by P1 (punch) at (530.2, 230.4)  P1 100  P2 4
+tick 660  t=11.000s  status | phase fight paused false hitstop 0 sparks_emitting 1 embers_emitting true embers_speed 1  P1 x 481.0 P2 x 548.1
+tick 672  t=11.200s  HIT #13 by P1 (punch) at (541.5, 230.4)  P1 100  P2 0
+tick 673  t=11.217s  PHASE -> ko  | phase ko paused false hitstop 4 sparks_emitting 2 embers_emitting false embers_speed 0
+tick 690  t=11.500s  status | phase ko paused false hitstop 0 sparks_emitting 1 embers_emitting false embers_speed 1  P1 x 491.5 P2 x 548.7
+tick 720  t=12.000s  status | phase ko paused false hitstop 0 sparks_emitting 0 embers_emitting false embers_speed 1  P1 x 491.5 P2 x 548.7
+tick 750  t=12.500s  status | phase ko paused false hitstop 0 sparks_emitting 0 embers_emitting false embers_speed 1  P1 x 491.5 P2 x 548.7
+tick 763  t=12.717s  PHASE -> result  | phase result paused false hitstop 0 sparks_emitting 0 embers_emitting false embers_speed 1
+tick 780  t=13.000s  status | phase result paused false hitstop 0 sparks_emitting 0 embers_emitting false embers_speed 1  P1 x 491.5 P2 x 548.7
+tick 810  t=13.500s  status | phase result paused false hitstop 0 sparks_emitting 0 embers_emitting false embers_speed 1  P1 x 491.5 P2 x 548.7
+tick 840  t=14.000s  status | phase result paused false hitstop 0 sparks_emitting 0 embers_emitting false embers_speed 1  P1 x 491.5 P2 x 548.7
+tick 870  t=14.500s  status | phase result paused false hitstop 0 sparks_emitting 0 embers_emitting false embers_speed 1  P1 x 491.5 P2 x 548.7
+tick 873  t=14.550s  Enter (confirm, rematch)
+tick 874  t=14.567s  PHASE -> intro  | phase intro paused false hitstop 0 sparks_emitting 0 embers_emitting false embers_speed 1
+tick 900  t=15.000s  status | phase intro paused false hitstop 0 sparks_emitting 0 embers_emitting false embers_speed 1  P1 x 220.0 P2 x 420.0
+tick 930  t=15.500s  status | phase intro paused false hitstop 0 sparks_emitting 0 embers_emitting false embers_speed 1  P1 x 220.0 P2 x 420.0
+tick 933  t=15.550s  PHASE -> fight  | phase fight paused false hitstop 0 sparks_emitting 0 embers_emitting true embers_speed 1
+tick 960  t=16.000s  status | phase fight paused false hitstop 0 sparks_emitting 0 embers_emitting true embers_speed 1  P1 x 260.5 P2 x 420.0
+tick 990  t=16.500s  status | phase fight paused false hitstop 0 sparks_emitting 0 embers_emitting true embers_speed 1  P1 x 305.5 P2 x 420.0
+tick 1020  t=17.000s  status | phase fight paused false hitstop 0 sparks_emitting 0 embers_emitting true embers_speed 1  P1 x 350.5 P2 x 420.0
+tick 1033  t=17.217s  HIT #14 by P1 (punch) at (412.7, 230.4)  P1 100  P2 92
+tick 1050  t=17.500s  status | phase fight paused false hitstop 0 sparks_emitting 1 embers_emitting true embers_speed 1  P1 x 362.5 P2 x 429.7
+tick 1063  t=17.717s  interrupted by P2 (kick)
+tick 1063  t=17.717s  HIT #15 by P1 (punch) at (426.1, 230.4)  P1 100  P2 84
+tick 1080  t=18.000s  status | phase fight paused false hitstop 0 sparks_emitting 1 embers_emitting true embers_speed 1  P1 x 373.0 P2 x 440.4
+tick 1093  t=18.217s  HIT #16 by P1 (punch) at (433.9, 230.4)  P1 100  P2 76
+tick 1110  t=18.500s  status | phase fight paused false hitstop 0 sparks_emitting 1 embers_emitting true embers_speed 1  P1 x 383.5 P2 x 451.2
+tick 1123  t=18.717s  HIT #17 by P1 (punch) at (444.5, 230.4)  P1 100  P2 68
+tick 1140  t=19.000s  status | phase fight paused false hitstop 0 sparks_emitting 1 embers_emitting true embers_speed 1  P1 x 394.0 P2 x 461.9
+tick 1153  t=19.217s  HIT #18 by P1 (punch) at (455.1, 230.4)  P1 100  P2 60
+tick 1170  t=19.500s  status | phase fight paused false hitstop 0 sparks_emitting 1 embers_emitting true embers_speed 1  P1 x 404.5 P2 x 472.6
+capture done, frames 1173; P1 health 100, P2 health 60, hits 18 | phase fight paused false hitstop 0 sparks_emitting 1 embers_emitting true embers_speed 1
+--------------------------------------------------------------------------------
+Done recording movie at path: D:/courses/7270/walker-dusk-duel-zhaohui-li/youtube/claude-liam-walker-dusk-duel-zhaohui-li-a6-gamedev/capture/a6_play.avi
+1173 frames at 60 FPS (movie length: 00:00:19:33), recorded in 00:05:12 (6% of real-time speed).
+CPU render time: 0.37 seconds (average: 0.32 ms/frame)
+GPU render time: 1.40 seconds (average: 1.19 ms/frame)
+Encoding time: 114.91 seconds (average: 97.96 ms/frame)
+--------------------------------------------------------------------------------
+WARNING: 8 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 4 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
