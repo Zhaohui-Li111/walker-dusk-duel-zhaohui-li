@@ -11,7 +11,8 @@
 - **Git tag and submitted commit SHA:** tag `a6`. The commit SHA is the one the tag points at; it is
   entered in the Canvas note, because a file cannot contain its own commit hash. The source ZIP is
   `git archive` of that commit.
-- **Game-source revision shown in the film:** TO DO (after the film is made).
+- **Game-source revision shown in the film:** `840bcfd`, the last commit that changed `godot/`.
+  Later commits add only the film source, documentation and this note; `godot/` is unchanged.
 - **Godot version, renderer, and operating system:** Godot 4.7.2 stable, GL Compatibility,
   Windows 11 Home
 - **GPU used for the GPU price:** Intel(R) UHD Graphics (OpenGL 3.3, driver build 31.0.101.4502)
@@ -31,8 +32,9 @@
 - **Texture sources and licences (or model, version, and terms):** both textures are written by
   code in this repository (`godot/effects/make_textures.gd`): `hit_spark_star.png` and
   `embers_soft.png`. No sourced image and no generative model.
-- **Final film URL and filename:** TO DO
-- **Final film SHA-256:** TO DO
+- **Final film URL and filename:** TO DO (Google Drive link) · `claude-liam-walker-dusk-duel-zhaohui-li-a6-gamedev.mp4`
+  ("Dusk Duel, Sparked", 8:10.7, 3840 × 2160, 30 fps, 45.8 MB)
+- **Final film SHA-256:** `fda51db799b8005ed25ff272b2e2fb5139c9d88b8c83b389aef1bafd65cf5040`
 - **Summary of my work:** I chose the two effects and their jobs, wrote the A6 brief's intent,
   settings, rules, predictions, budgets and short answers, and revised them after Claude's review.
   I decided the CLAUDE.md questions, rule 6's test setup, the star texture fix and rule 4's

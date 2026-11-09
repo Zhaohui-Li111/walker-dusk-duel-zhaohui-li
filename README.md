@@ -263,6 +263,15 @@ godot --path godot res://previews/hit_spark_preview.tscn --write-movie "$PWD/cap
   - Rule 6 (a round reset clears live bursts) is reachable only with labelled test setup.
   - The hit spark has no impact direction (`spread` 180°).
 
+- **A6 film: "Dusk Duel, Sparked".** A Brutalist explainer made with the `godot-gamedev` skill in
+  walker mode. 8:10.7, 3840 × 2160, 30 fps.
+  - **Link:** TO DO
+  - **File name:** `claude-liam-walker-dusk-duel-zhaohui-li-a6-gamedev.mp4`
+  - **SHA-256:** `fda51db799b8005ed25ff272b2e2fb5139c9d88b8c83b389aef1bafd65cf5040`
+  - **Game source shown:** `godot/` at `840bcfd`.
+  - **Film source and evidence:** [youtube/claude-liam-walker-dusk-duel-zhaohui-li-a6-gamedev/](youtube/claude-liam-walker-dusk-duel-zhaohui-li-a6-gamedev/)
+    (start with BUILD-LOG.md, FACTCHECK.md and SOURCES.md).
+
 ## Final film
 
 **"Dusk Duel, Generated"**: a Brutalist explainer made with the `godot-gamedev` skill in walker
