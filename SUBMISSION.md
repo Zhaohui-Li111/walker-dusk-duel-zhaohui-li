@@ -32,7 +32,7 @@
 - **Texture sources and licences (or model, version, and terms):** both textures are written by
   code in this repository (`godot/effects/make_textures.gd`): `hit_spark_star.png` and
   `embers_soft.png`. No sourced image and no generative model.
-- **Final film URL and filename:** TO DO (Google Drive link) · `claude-liam-walker-dusk-duel-zhaohui-li-a6-gamedev.mp4`
+- **Final film URL and filename:** https://drive.google.com/file/d/14RO54dogIjB1_7lQKjMlKed8cd_hiId3/view?usp=sharing · `claude-liam-walker-dusk-duel-zhaohui-li-a6-gamedev.mp4`
   ("Dusk Duel, Sparked", 8:10.7, 3840 × 2160, 30 fps, 45.8 MB)
 - **Final film SHA-256:** `fda51db799b8005ed25ff272b2e2fb5139c9d88b8c83b389aef1bafd65cf5040`
 - **Summary of my work:** I chose the two effects and their jobs, wrote the A6 brief's intent,
