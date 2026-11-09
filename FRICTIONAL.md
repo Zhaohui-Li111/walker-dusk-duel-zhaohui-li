@@ -1184,3 +1184,11 @@ entries point to it instead of copying it.
 
 "感受就是游戏做的挺好，符合要求。" ("My impression is that the game turned out well and meets the
 requirements.") Recorded as given; nothing added.
+
+## 2026-11-08 — The A6 film, watched by Zhaohui (recorded by Claude Code)
+
+- Built by a Claude Code subagent ("Dusk Duel, Sparked", 8:10.7, 4K; BUILD-LOG in the reel
+  folder). Zhaohui asked for speed near the deadline; the request arrived after 20 of 22 beats were
+  rendered, so the film stayed at 25 beats instead of the 12–14 asked for.
+- Zhaohui uploaded it to Google Drive (the link opens without sign-in) and reported watching the
+  final export: "我已经看了" ("I've watched it"). No corrections were reported.
