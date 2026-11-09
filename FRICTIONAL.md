@@ -1192,3 +1192,31 @@ requirements.") Recorded as given; nothing added.
   rendered, so the film stayed at 25 beats instead of the 12–14 asked for.
 - Zhaohui uploaded it to Google Drive (the link opens without sign-in) and reported watching the
   final export: "我已经看了" ("I've watched it"). No corrections were reported.
+
+## 2026-11-08 — Zhaohui's own account, in more detail (Zhaohui's words, recorded by Claude Code)
+
+Written by Zhaohui in chat after Claude listed questions about their own experience; recorded as
+given, with an English translation. The trace (commit, file or entry) after each line is Claude
+Code's.
+
+1. "当时发现跑不了，才明白这个不是powershell的命令" (When it would not run, I realised it was
+   not a PowerShell command.) — `export` / `scripts/run-test.sh` in PowerShell; the mutation runs
+   then went through Git Bash (TEST-REPORT, A6 mutations).
+2. "第一次录得时候不知道是自动结束" (On the first capture I didn't know it ends by itself.) — the
+   first `--quit-after 60` capture stopped at frame 30; recaptured at 120 (`b014849`).
+3. "因为将初始速度调成了0，所以火花慢了一些" (Because the initial speed was set to 0, the sparks
+   were a little slower.) — mutation 1, `logs/mutation_a6_1_godot3_name_60fps.log`.
+4. "我当时觉得应该不是从这里去记录数据" (At the time I felt this was not where the data should be
+   recorded.) — the Visual Profiler's GPU column read 0; GPU price measured another way (`7888427`).
+5. "我查询了其中几个数值发现找不到" (I searched for some of the values and could not find them.)
+   — `color_ramp` and the scale curve are missing from `particles_generated.gdshader` (`840bcfd`).
+6. "觉得颜色太淡了，改完后还可以" (The colour looked too faint; after the change it was fine.)
+   — embers r1 (`6f0c304`, `505b0ba`; TUNING.md Effect B r1).
+7. "玩的时候我就发现了" (I noticed it while playing.) — the hit spark reading as a ring
+   (`1a1e60e`, `1fa6370`; TUNING.md Effect A r1).
+8. "我觉得冻结好像更合理一些" (Freezing seemed more reasonable to me.) — rule 4, brief
+   Revision 4 (`dd4736d`).
+9. "火花r1有误，后来纠正了" (Spark r1 was wrong and was corrected later.) — Claude's r1 prediction
+   of the burst's extent was wrong (58 → 48 px), recorded in TUNING.md (`1fa6370`).
+10. "把一些重复得步骤交给了claude" (I handed some repetitive steps to Claude.) — the delegation
+    "你把剩下的任务自己做完吧"; later prompts in `prompts/a6/` say so.
