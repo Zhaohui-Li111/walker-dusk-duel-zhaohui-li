@@ -1,7 +1,15 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://fighter/fighter.gd" id="1_fighter"]
 [ext_resource type="Script" path="res://fighter/hurt_flash.gd" id="2_hurt_flash"]
+[ext_resource type="Animation" path="res://animations/kick_arc.tres" id="3_kick_arc"]
+[ext_resource type="Animation" path="res://animations/kick_rest.tres" id="4_kick_rest"]
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_kick"]
+_data = {
+&"kick_arc": ExtResource("3_kick_arc"),
+&"rest": ExtResource("4_kick_rest")
+}
 
 [node name="Fighter" type="Node2D"]
 script = ExtResource("1_fighter")
@@ -12,3 +20,24 @@ centered = false
 
 [node name="HurtFlash" type="Node" parent="Sprite2D"]
 script = ExtResource("2_hurt_flash")
+
+[node name="KickRig" type="Node2D" parent="."]
+
+[node name="Pivot" type="Node2D" parent="KickRig"]
+visible = false
+modulate = Color(1, 1, 1, 0)
+rotation = 1.48353
+
+[node name="Trail" type="Polygon2D" parent="KickRig/Pivot"]
+polygon = PackedVector2Array(37.79, -3.97, 44, 0, 42.49, 7.49, 39.74, 14.46, 35.88, 20.71, 31.08, 26.08, 25.53, 30.42, 19.43, 33.65, 13, 35.71, 18.57, 32.17, 23.32, 27.8, 27.14, 22.77, 29.94, 17.29, 31.68, 11.53, 32.36, 5.71, 32, 0)
+vertex_colors = PackedColorArray(0.949, 0.902, 0.816, 0.75, 0.949, 0.902, 0.816, 0.75, 0.949, 0.902, 0.816, 0.645, 0.949, 0.902, 0.816, 0.532, 0.949, 0.902, 0.816, 0.427, 0.949, 0.902, 0.816, 0.323, 0.949, 0.902, 0.816, 0.217, 0.949, 0.902, 0.816, 0.105, 0.949, 0.902, 0.816, 0, 0.949, 0.902, 0.816, 0.105, 0.949, 0.902, 0.816, 0.217, 0.949, 0.902, 0.816, 0.323, 0.949, 0.902, 0.816, 0.427, 0.949, 0.902, 0.816, 0.532, 0.949, 0.902, 0.816, 0.645, 0.949, 0.902, 0.816, 0.75)
+
+[node name="Core" type="Polygon2D" parent="KickRig/Pivot"]
+polygon = PackedVector2Array(37.79, -3.97, 40, 0, 38.9, 6.86, 36.65, 13.34, 33.34, 19.25, 29.11, 24.43, 32.48, 18.75, 34.77, 12.65, 35.95, 6.34, 36, 0)
+vertex_colors = PackedColorArray(1, 0.98, 0.93, 1, 1, 0.98, 0.93, 1, 1, 0.98, 0.93, 0.75, 1, 0.98, 0.93, 0.5, 1, 0.98, 0.93, 0.25, 1, 0.98, 0.93, 0, 1, 0.98, 0.93, 0.25, 1, 0.98, 0.93, 0.5, 1, 0.98, 0.93, 0.75, 1, 0.98, 0.93, 1)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="KickRig"]
+callback_mode_process = 2
+libraries = {
+&"": SubResource("AnimationLibrary_kick")
+}

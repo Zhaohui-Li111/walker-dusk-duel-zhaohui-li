@@ -1,0 +1,51 @@
+[gd_resource type="Animation" format=3]
+
+; A7 Clip 2, kick arc (CHANGE-BRIEF.md, "The phase table"), 60 fps, step 1/60, key time = frame / 60.
+; Fighter.frame -> key time:  0 -> 0.0  (startup begins)      7 -> 0.116667 (last startup frame)
+;                             8 -> 0.133333 (active opens)   12 -> 0.2      (last active frame)
+;                            13 -> 0.216667 (recovery)       27 -> 0.45     (last recovery frame)
+;                            28 -> 0.466667 (= length; the fighter is idle again)
+; Pivot rotation (rad):  85 deg wind-back start, 100 deg wound back, 70 deg sweep starts, -15 deg at
+; the hitbox, -20 deg settled. Transitions: 0.5 ease-out into the wind-back, 2.0 ease-in (accelerating)
+; into the active frames, 1.0 linear sweep, 0.4 ease-out settling through recovery.
+
+[resource]
+resource_name = "kick_arc"
+length = 0.466667
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pivot:visible")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.466667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pivot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.116667, 0.133333, 0.2, 0.216667, 0.45, 0.466667),
+"transitions": PackedFloat32Array(0.5, 2, 1, 1, 0.4, 1, 1),
+"update": 0,
+"values": [1.48353, 1.745329, 1.22173, -0.261799, -0.261799, -0.349066, -0.349066]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Pivot:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.116667, 0.133333, 0.2, 0.216667, 0.45, 0.466667),
+"transitions": PackedFloat32Array(0.5, 2, 1, 1, 0.4, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.4), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0.9), Color(1, 1, 1, 0), Color(1, 1, 1, 0)]
+}
