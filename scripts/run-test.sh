@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # scripts/run-test.sh <test-file.gd> <fps|realtime> [timeout-seconds]
-# A6 wrapper (course handout), plus one local addition: Godot 4.7.2 is not on PATH on
+# A7 wrapper (course handout): A6's, plus "Failed loading resource" now fails the run.
+# One local addition kept from A6: Godot 4.7.2 is not on PATH on
 # Zhaohui's machine, so GODOT may name the console build, e.g.
 #   export GODOT=~/Downloads/Godot_v4.7.2-stable_win64.exe/Godot_v4.7.2-stable_win64_console.exe
 set -o pipefail
@@ -14,5 +15,5 @@ fi
 log="logs/$(basename "$1" .gd)_${tag}.log"
 timeout "${3:-120}" "$godot" --headless "${fps_args[@]}" --path godot --script "res://tests/$1" 2>&1 | tee "$log"
 status=$?
-if grep -qE "SHADER ERROR|SCRIPT ERROR" "$log"; then status=1; fi
+if grep -qE "SHADER ERROR|SCRIPT ERROR|Failed loading resource" "$log"; then status=1; fi
 exit $status
