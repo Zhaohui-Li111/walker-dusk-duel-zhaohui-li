@@ -11,7 +11,7 @@
   fighters on the physics tick (`godot/game/main.gd:51-52`, `:64-65`) and checks hits after
   (`:67-68`); `paused` and `hitstop` skip that step (`:56-62`). P1 Akaken is the player
   (`PlayerController`), P2 Aotake the CPU (`main.gd:36-37`).
-- **Kick, from the code** (`CHANGE-BRIEF.md:26-35`): frame 0–7 startup, 8–12 active
+- **Kick, from the code** (`CHANGE-BRIEF.md:28-36`): frame 0–7 startup, 8–12 active
   (`check_hit()`, `fighter.gd:164-165`), 13–27 recovery, `idle` on frame 28 (`:106-108`).
 - **Clip 1, lantern flame (cycle):** route Sprite2D + AnimationPlayer frame track
   (`CHANGE-BRIEF.md:59`). One scene, `godot/animations/lantern_flame.tscn`: `Sprite2D`,
@@ -55,8 +55,16 @@
 
 ## Headless facts (this machine: Windows 11, Godot 4.7.2, Git Bash)
 
-- A headless run uses a dummy renderer and draws nothing; node state is observable, the look is not.
+- A headless run advances clips and reads their structure. It draws nothing, so whether the
+  motion reads is not observable here.
+- Key times are 32-bit floats; compare them with a tolerance (13/60 reads back as 0.2166666687
+  after a `.tres` round trip, probe 2026-11-22).
+- `value_track_get_update_mode` applies only to value tracks (on a 3D position track it prints
+  `ERROR: Condition "t->type != TYPE_VALUE"` and returns `UPDATE_CONTINUOUS`, same probe).
+- Frame strips come from a windowed Movie Maker run, which Zhaohui starts.
 - `--fixed-fps N` fixes the frame delta; physics still runs 60 ticks per game second.
+- A track path resolves from the player's `root_node` (default `..`); a wrong path is silently
+  inert (the 2026-11-22 probe's own `..:rotation` track moved nothing).
 
 ## Current change
 
@@ -89,12 +97,13 @@ has one; if a change needs one, stop and say so.
   `Animation.loop_mode` (`LOOP_NONE`, `LOOP_LINEAR`), `Animation.step`, `Animation.length`,
   `AnimationPlayer.speed_scale`, `current_animation`, `callback_mode_process`
   (`ANIMATION_CALLBACK_MODE_PROCESS_IDLE` / `_PHYSICS` / `_MANUAL`), `Animation.UPDATE_DISCRETE`.
-  Never Godot 3 names: a boolean `loop` (absent, `CHANGE-BRIEF.md:46-47`), `playback_speed`
+  Never Godot 3 names: a boolean `loop` (absent, `CHANGE-BRIEF.md:47-48`), `playback_speed`
   (absent), `AnimatedSprite`, `frames` or a settable `playing`.
-- Confirmed by the 2026-11-22 probe (`CHANGE-BRIEF.md:44-48`): `Animation` has `loop_mode`, `step`,
-  `length`; `AnimationPlayer` has `speed_scale`, `current_animation`, `callback_mode_process`.
-  Not yet probed: `ANIMATION_CALLBACK_MODE_PROCESS_MANUAL` and `value_track_get_update_mode` in
-  4.7.2. For any other property, check `ClassDB.class_get_property_list` first; if missing, say so.
+- Confirmed by the 2026-11-22 probes (`CHANGE-BRIEF.md:44-48`; review probe): `Animation` has
+  `loop_mode`, `step`, `length`, `value_track_get_update_mode`; `AnimationPlayer` has
+  `speed_scale`, `current_animation`, `callback_mode_process`; `ANIMATION_CALLBACK_MODE_PROCESS_MANUAL`
+  = 2, and on it `seek(t, true)` applies keys within the call and the player never advances itself.
+  For any other property, check `ClassDB.class_get_property_list` first; if missing, say so.
 
 ## Out of scope
 
@@ -109,8 +118,7 @@ has one; if a change needs one, stop and say so.
 
 ## Unconfirmed
 
-- Whether `seek(t, true)` on a `MANUAL` player applies keys on the same physics tick (brief's
-  0 s clock disagreement, `CHANGE-BRIEF.md:166-168`); a state test must measure it.
-- Physics order: the rig controller must run after `main.step()` in each tick; not yet checked.
+- Physics order: the rig controller must `seek()` after `main.step()` in the same tick for the
+  brief's 0 s disagreement (`CHANGE-BRIEF.md:166-168`); not yet measured in the game.
 - `blender/prop_taiko.blend` has an uncommitted change from before A5; never commit it with A7.
 - There is no `AGENTS.md` at the repository root (checked 2026-11-22), so none is imported.
