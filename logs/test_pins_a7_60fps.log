@@ -1,0 +1,48 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+A7 pins: Godot 4.7.2-stable (official), 60 physics ticks/s; headless, nothing is drawn
+PASS [pin harness] main's _physics_process is on and P1 is driven by its PlayerController
+    INPUT: Enter (title) pressed after tick -1
+PASS [pin harness] Enter on the title started round 1 and the intro ran into the fight (phase fight)
+    HARNESS (writes no fight state): P2's controller set to null when the round starts
+
+== pin 1-2: scripted run (P1 x 220, P2 x 420) ==
+    INPUT: D (walk right) held from tick 76 for 20 ticks
+    INPUT: K (kick) pressed after tick 107
+    INPUT: J (punch) pressed after tick 141
+    INPUT: W (jump) pressed after tick 165
+    INPUT: S (crouch) held from tick 213 for 10 ticks
+    INPUT: L (block) held from tick 229 for 10 ticks
+    P1 states in order: ["walk", "idle", "kick", "idle", "punch", "idle", "jump", "idle", "crouch", "idle", "block", "idle"]
+PASS [pin 1] state sequence walk idle kick idle punch idle jump idle crouch idle block idle
+PASS [pin 2] kick lasts 28 ticks (got 28)
+PASS [pin 2] punch lasts 18 ticks (got 18)
+PASS [pin 2] jump airtime 42 ticks (got 42)
+PASS [pin 2] out of range, the kick whiffs on its frame 13 (got whiff on frame 13)
+PASS [pin 2] out of range, the punch whiffs on its frame 9 (got whiff on frame 9)
+PASS [pin 2] during the kick P1.frame counts 0, 1, ... 27, one per tick
+
+== pin 3: kick in range (walk until the gap <= 55.7 px) ==
+    P1 x 365.5, P2 x 420.0, gap 54.5
+    INPUT: K (kick) pressed after tick 328
+PASS [pin 3] the kick in range hits (got [337, "kick", "hit"])
+PASS [pin 3] it hits on kick frame 8, the first active frame (got 8)
+PASS [pin 3] P1.frame is 8 on the hit tick (got 8)
+PASS [pin 3] hitstop holds P1 on kick frame 8 for the next 4 ticks
+PASS [pin 3] after hitstop P1.frame goes on from 9 (got 9)
+PASS [pin 3] the kick ends 28 + 4 ticks after it started (got 32)
+PASS [pin 3] P2 is in hurt on the hit tick
+
+== pin 4: pause during a kick ==
+    INPUT: K (kick) pressed after tick 409
+    INPUT: P (pause) pressed after tick 415
+PASS [pin 4] P pauses the game during the kick
+PASS [pin 4] 30 ticks of pause: P1 still kick on frame 5 (got kick 5)
+    INPUT: P (unpause) pressed after tick 449
+    kick start tick 410, pause from about 419 to 453, 34 paused ticks
+PASS [pin 4] the kick ends after 28 unpaused ticks (62 in all, 34 paused)
+19 checks, 0 failed
+WARNING: 16 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 6 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
