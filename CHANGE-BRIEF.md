@@ -322,3 +322,51 @@ C4. 灯笼的帧由 AnimatedSprite2D 控制，踢腿 Rig 的节点属性由 Anim
 C5. 灯笼动画在 idle tick 上推进，踢腿 Rig 应该在 physics tick 上推进，游戏也应该在 physics tick 上读取踢腿的 active 判定窗口。如果动画和判定都在 60 Hz 的 physics tick 上运行，就不会产生 tick 不同步的问题；如果跨 tick 更新，最大可能产生约 1/60 秒（16.67 ms）的偏差。
 
 C6. 灯笼应该按照 0–7 的顺序循环播放，最后一帧直接过渡到第一帧，不应该额外重复首帧或末帧。如果接缝处多一帧重复，火焰会短暂停顿，看起来像卡顿或闪烁。
+
+## Revision 2 · 2026-11-22 · Short answers 1–6 revised by Zhaohui
+
+Zhaohui pasted revised answers in Chinese after Claude Code's consistency notes on version 1.
+Asked once whether they were written with another AI, Zhaohui answered "我自己写的" ("I wrote it
+myself"). Translated by Claude Code; originals below as R1–R6. These replace the short answers
+above, which are kept as written.
+
+1. Both clips use the AnimationPlayer route: the lantern switches cells through a property track on
+   `Sprite2D.frame`; the kick drives the rig through the AnimationPlayer's property tracks. The
+   AnimationPlayer read-back can check the animation's name, length, key times and track settings;
+   the SpriteFrames route can check the frame count, frame textures, playback speed and loop setting
+   in the animation resource, but cannot check an AnimationPlayer's track paths and key setup.
+2. Adjacent lantern keys differ by only 1, but at the loop seam the value goes from 7 back to 0, a
+   difference of 7. With `LOOP_LINEAR` and continuous interpolation the seam passes through the
+   in-between frames 6, 5, 4, 3, 2, 1 instead of switching straight from 7 to 0, so the flame plays
+   backwards for a moment and looks like a sudden reversed flicker. So use discrete updates.
+3. Set it to 1.0 / 60.0, about 0.01667 s. Godot 4.7.2's default is 1.0 / 30.0; it sets the editor's
+   key-time snapping, and does not change key times already written in the animation resource. So
+   if keys are written directly in the resource text, the default does not change those times, but
+   it affects the precision of keys created or moved in the editor later.
+4. The lantern's `Sprite2D.frame` is written by its AnimationPlayer's frame track; the kick rig's
+   `Polygon2D` and `Node2D` properties are written by the rig's AnimationPlayer. The player's state
+   machine sets the rig clip's time position by calling `seek()`. `fighter.gd` already writes the
+   fighter's own `Sprite2D`, so the new rig must not modify that `Sprite2D`.
+   *(Claude Code: in this brief the `seek()` is called by the rig controller, which reads the state
+   machine's `state` and `frame`; `fighter.gd` itself is not edited. See "The state machine".)*
+5. The lantern advances on the AnimationPlayer's normal clock, the idle tick; the kick rig uses
+   MANUAL mode and is advanced by the player's state machine calling `seek()` on every physics
+   tick. The game also reads the kick's active window on the physics tick, so the two agree on the
+   same tick, with a largest disagreement of 0 s. The lantern takes part in no attack check.
+   *(Claude Code: same note as answer 4 on who calls `seek()`.)*
+6. The seam must not play an extra repeated frame: the last frame goes straight to the first. And
+   the distance from the last key to the animation's `length` must stay one normal frame interval,
+   0.1 s (10 fps). With an extra repeated frame at the seam the flame pauses briefly and looks like
+   a stutter.
+
+R1. 两个片段都使用 AnimationPlayer 路线：灯笼通过 Sprite2D 的 frame 属性轨道切换帧；踢腿通过 AnimationPlayer 的属性轨道控制 Rig。AnimationPlayer 的回读可以检查动画名称、长度、关键帧时间和属性轨道设置；SpriteFrames 路线则可以检查动画资源中的帧数量、帧纹理、播放速度和循环设置，但无法检查 AnimationPlayer 的轨道路径和关键帧配置。
+
+R2. 灯笼相邻关键帧之间只相差 1，但循环接缝从第 7 帧回到第 0 帧，相差 7。如果使用 LOOP_LINEAR 连续插值，接缝期间就会经过 6、5、4、3、2、1 等中间帧，而不是直接从 7 切换到 0，导致火焰倒序播放一小段，看起来像突然反向闪动。因此应该使用 Discrete 更新模式。
+
+R3. 应该设置为 1.0 / 60.0，约等于 0.01667 秒。Godot 4.7.2 的默认值是 1.0 / 30.0，它影响编辑器关键帧的时间吸附精度，而不是直接修改已经写入动画资源的关键帧时间。因此，如果关键帧已经直接写入资源文本，默认值不会自动改变这些时间，但会影响后续在编辑器中创建或调整关键帧的精度。
+
+R4. 灯笼的 Sprite2D.frame 由对应的 AnimationPlayer 帧轨道写入；踢腿 Rig 的 Polygon2D 和 Node2D 属性由 Rig 对应的 AnimationPlayer 写入。玩家状态机通过调用 seek() 控制 Rig 动画的时间位置。另外，项目原有的 fighter.gd 已经负责写入角色自己的 Sprite2D 属性，因此新的 Rig 不应该再修改这个 Sprite2D。
+
+R5. 灯笼由 AnimationPlayer 的常规动画时钟推进，使用 Idle tick；踢腿 Rig 使用 MANUAL 模式，由玩家状态机在每个 Physics tick 调用 seek() 推进。游戏也在 Physics tick 读取踢腿的 active 判定窗口，因此两者在同一个 tick 上同步，最大时间差为 0 秒。灯笼不参与任何游戏攻击判定。
+
+R6. 循环接缝不能重复播放额外的帧，最后一帧到第一帧必须直接衔接；同时，最后一个关键帧到动画 length 的距离应该保持一个正常帧间隔，即 0.1 秒（10 fps）。如果接缝处多出一帧重复，火焰就会短暂停顿，看起来像卡顿。
