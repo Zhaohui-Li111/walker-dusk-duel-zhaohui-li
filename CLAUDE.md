@@ -16,24 +16,19 @@
 - **Clip 1, lantern flame (cycle):** route Sprite2D + AnimationPlayer frame track
   (`CHANGE-BRIEF.md:59`). One scene, `godot/animations/lantern_flame.tscn`: `Sprite2D`,
   `AnimationPlayer` with `flicker`, root script that only `play()`s and `seek()`s a per-instance
-  start offset (`CHANGE-BRIEF.md:283-287`). Two instances in `main.tscn` after `Stage`
-  (`godot/game/main.tscn:18`; `CHANGE-BRIEF.md:176`). Sheet
-  `godot/art/sheets/lantern_flame.png`, 12 × 16 cells, 4 × 2 (`CHANGE-BRIEF.md:90-99`).
-  None of this exists yet.
+  start offset (`CHANGE-BRIEF.md:283-287`); two instances in `main.tscn` after `Stage`
+  (`godot/game/main.tscn:18`; `CHANGE-BRIEF.md:176`). Sheet `godot/art/sheets/lantern_flame.png`,
+  12 × 16 cells, 4 × 2 (`CHANGE-BRIEF.md:90-99`). Not built yet.
 - **Clip 2, kick arc (committing):** route cutout rig keyed as resource text (`CHANGE-BRIEF.md:59`):
-  a `Node2D` pivot with `Polygon2D` segments, its `AnimationPlayer` and a rig controller, all in
+  `Node2D` pivot, `Polygon2D` segments, `AnimationPlayer`, rig controller, all in
   `godot/fighter/fighter.tscn` (`CHANGE-BRIEF.md:60`), so on P1 and P2 (`main.tscn:23`, `:28`).
-  Does not exist yet.
-- **Scenes:** `main.tscn` children `Stage`, `Embers`, `P1`, `P2`, `Effects`, `HitSpark0-3`,
-  `HitSparkPool`, `EmbersController`, `HUD`, `AudioDirector`, `DebugVsync` (`:15-65`);
-  `fighter.tscn` = `Fighter` → `Sprite2D` → `HurtFlash` (`godot/fighter/fighter.tscn:6-13`).
-- **Tests** — from the repo root, only through the wrapper:
-  `scripts/run-test.sh <file in godot/tests/> <fps|realtime> [timeout-seconds]`
-  (`scripts/run-test.sh:2`). `GODOT` names the console build when `godot` is not on PATH (`:4-8`).
-  Always `--headless`; a number adds `--fixed-fps N` and logs to `logs/<name>_<N>fps.log`;
-  `realtime` adds no fps flag and logs to `logs/<name>_realtime.log` (`:10-16`). Timeout defaults
-  to 120 s (`:16`, exit 124 = timeout). Exit 1 if the log has `SHADER ERROR`, `SCRIPT ERROR` or
-  `Failed loading resource` (`:18`).
+- **Scenes:** `main.tscn` (`Stage`, `Embers`, `P1`, `P2`, `Effects`, A6 hit sparks, `HUD`, audio,
+  `:15-65`); `fighter.tscn` = `Fighter` → `Sprite2D` → `HurtFlash` (`fighter.tscn:6-13`).
+- **Tests** — repo root, only `scripts/run-test.sh <file in godot/tests/> <fps|realtime> [timeout]`
+  (`scripts/run-test.sh:2`); `GODOT` names the console build if `godot` is not on PATH (`:4-8`).
+  Always `--headless`; a number adds `--fixed-fps N` → `logs/<name>_<N>fps.log`; `realtime` adds
+  none → `logs/<name>_realtime.log` (`:10-16`). Timeout 120 s default (`:16`, exit 124). Exit 1 on
+  `SHADER ERROR`, `SCRIPT ERROR` or `Failed loading resource` in the log (`:18`).
 
   ```bash
   scripts/run-test.sh test_runner.gd 60            # 94 / 0 (logs/test_runner_60fps.log:24)
