@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://animations/lantern_flame.gd" id="1_lantern"]
+[ext_resource type="Texture2D" path="res://art/sheets/lantern_flame.png" id="2_sheet"]
+[ext_resource type="Animation" path="res://animations/lantern_flicker.tres" id="3_flicker"]
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lantern"]
+_data = {
+&"flicker": ExtResource("3_flicker")
+}
+
+[node name="LanternFlame" type="Node2D"]
+script = ExtResource("1_lantern")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_sheet")
+centered = false
+offset = Vector2(-6, -15)
+hframes = 4
+vframes = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_lantern")
+}
