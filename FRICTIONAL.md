@@ -1277,4 +1277,85 @@ Code's.
 
 ## 2026-11-22 — Zhaohui's own account (Zhaohui's words)
 
-**TO DO (Zhaohui).**
+Pasted in chat on 2026-11-22. Asked once whether it was written with AI, Zhaohui answered
+"我自己写的" ("I wrote it myself"). Original first, then Claude Code's translation; Claude Code's
+fact notes are marked and do not change Zhaohui's words.
+
+这次作业中，我主要尝试了两部分动画：灯笼火焰的循环动画，以及 Akaken 踢腿时的 Rig 动画。
+
+首先，对于灯笼火焰，我选择了通过代码生成精灵表（spritesheet）的方式制作动画素材，而不是完全依赖手工绘制。我使用了 8 帧火焰动画，并选择两盏灯笼分别使用自己的 AnimationPlayer。我的预期是让火焰能够自然循环，同时保持左右两盏灯笼的动画相互独立。在实现过程中，我开始注意到循环动画不仅要考虑帧的顺序，还要考虑最后一帧与动画长度之间的关系。如果循环接缝处理不正确，即使每一帧本身都正确，整体播放仍然可能出现停顿或反向变化。
+
+其次，对于角色踢腿动作，我选择使用 Node2D 和 Polygon2D 构建独立的视觉 Rig，并采用 8/5/15 的相位表来组织 startup、active 和 recovery 阶段。我希望视觉动作能够与实际攻击判定保持同步，同时避免直接修改 fighter.gd 中已经由角色脚本控制的 Sprite2D。通过这次设计，我进一步理解了一个节点应该只有一个明确的属性写入者，否则不同动画或脚本可能互相覆盖。
+
+这次作业让我特别注意到两个不同的动画时钟：灯笼动画由 AnimationPlayer 的常规时钟推进，而踢腿 Rig 使用 MANUAL 模式，由玩家状态机在每个 physics tick 中调用 seek()。这样可以让踢腿视觉动画与游戏的攻击判定处于同一个物理更新节奏中。另一个让我印象比较深刻的问题是 AnimationPlayer 的轨道路径。如果路径写错，动画可能无法作用于预期节点，但不一定会直接产生明显错误，因此仅仅确认动画能够播放是不够的，还需要检查实际的节点属性是否发生了预期变化。
+
+在 AI 协作方面，我使用 AI 帮助生成部分动画素材、整理实现方案、检查 Godot 动画机制，并协助编写简答题。我没有直接接受所有建议。例如，最初的简答题答案中出现了与项目实际架构不一致的 AnimatedSprite2D 方案，以及对 Animation.step 默认值的错误解释。我根据项目 brief 重新检查了动画路线、节点写入权和时钟关系，并要求修改答案。在代码实现过程中，我也没有接受最初认为不需要修改的结论，而是进一步检查实现并批准了 r1 修订版本。我认为 AI 可以帮助加快实现和分析，但最终的技术选择仍然需要由我根据项目实际情况判断。
+
+这次经历让我认识到，动画系统并不只是让画面动起来，还涉及资源配置、时间精度、节点所有权以及游戏状态之间的协调。我目前仍然希望进一步理解 Godot 在不同更新模式下的具体执行顺序，以及动画轨道路径错误时引擎内部的处理方式。后续我会继续通过实际运行、属性回读和画面观察来验证这些行为，而不是仅凭代码生成成功就认为实现正确。
+
+相关证据：本次动画素材及其实现记录、灯笼与踢腿 Rig 的运行截帧、动画配置与属性回读记录，以及 r1 修订版本。具体提交版本以本次仓库中的 Git 记录为准。
+
+**Translation (Claude Code):**
+
+In this assignment I mainly tried two animations: the lantern flame's loop, and a rig animation for
+Akaken's kick.
+
+First, for the lantern flame I chose to make the animation asset as a code-generated sprite sheet
+rather than relying entirely on hand drawing. I used an 8-frame flame animation and chose to give
+each of the two lanterns its own AnimationPlayer. I expected the flame to loop naturally while
+the left and right lanterns' animations stayed independent. While building it I began to notice
+that a looping animation must consider not only the order of the frames but also the relation
+between the last frame and the animation's length. If the loop seam is wrong, the whole playback
+can still pause or run backwards even when every single frame is correct.
+
+Second, for the kick I chose to build a separate visual rig from Node2D and Polygon2D, and used the
+8/5/15 phase table to organise startup, active and recovery. I wanted the visual action to stay in
+step with the actual hit check, while not directly modifying the Sprite2D that the fighter script
+in fighter.gd already controls. Through this design I came to understand better that a node should
+have exactly one clear writer for its properties; otherwise different animations or scripts can
+overwrite each other.
+
+This assignment made me notice the two different animation clocks in particular: the lantern
+animation is advanced by the AnimationPlayer's normal clock, while the kick rig uses MANUAL mode,
+and the player's state machine calls seek() on every physics tick. That keeps the kick's visual
+animation on the same physics update rhythm as the game's hit check. Another problem that made an
+impression on me is the AnimationPlayer's track paths. If a path is wrong, the animation may not
+act on the intended node, without necessarily producing an obvious error; so confirming that the
+animation plays is not enough, one also has to check that the actual node properties changed as
+expected.
+
+On working with AI: I used AI to help generate part of the animation asset, organise the
+implementation plan, check Godot's animation mechanics, and assist with writing the short answers.
+I did not accept every suggestion directly. For example, the first short answers contained an
+AnimatedSprite2D route inconsistent with the project's actual architecture, and a wrong
+explanation of Animation.step's default. Following the project brief I rechecked the animation
+routes, node write ownership and clock relations, and asked for the answers to be changed. During
+implementation I also did not accept the initial conclusion that nothing needed changing; I
+checked the implementation further and approved revision r1. I think AI can help speed up
+implementation and analysis, but the final technical choices still have to be judged by me from
+the project's actual situation.
+
+This experience made me realise that an animation system is not only about making the picture
+move; it also involves resource configuration, timing precision, node ownership and coordination
+with game state. I still want to understand better Godot's exact execution order under the
+different update modes, and how the engine handles a wrong track path internally. I will keep
+verifying these behaviours by actually running the game, reading properties back and watching the
+picture, rather than assuming an implementation is right just because the code was generated.
+
+Evidence: this assignment's animation asset and its implementation record, run captures of the
+lanterns and the kick rig, the animation settings and read-back records, and revision r1. The
+exact commits are those in this repository's Git history.
+
+**Fact notes (Claude Code; Zhaohui's text above is unchanged):**
+
+1. "协助编写简答题" (AI assisted with writing the short answers): asked about this, Zhaohui answered
+   "简答是我写的" (the short answers are mine); the AI's part was pointing out where version 1
+   disagreed with the brief (`c0fd5b3`), after which Zhaohui rewrote them (`037b14d`).
+2. "没有接受最初认为不需要修改的结论" (did not accept the initial conclusion that nothing needed
+   changing): the "nothing to change" verdict on r0 was Zhaohui's own (`a82293f`); r1 came from
+   Claude Code's r0 reading, which Zhaohui then approved (`8049c54`) and kept after play
+   (`b580d17`).
+3. "由玩家状态机……调用 seek()" (the player's state machine calls seek()): `seek()` is called by
+   the rig controller `godot/fighter/kick_rig.gd`, which reads the state machine's `state` and
+   `frame`; `fighter.gd` is not edited.
+4. The commits behind the evidence are listed in the entries above this account.
