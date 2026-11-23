@@ -254,3 +254,20 @@ made because Zhaohui did not see anything in play to change. This is recorded as
 - **Claude's prediction (written before the change):** frame 10 shows a faint arc under the knee,
   about 25 % opaque, pointing down-forward (85°), where r0 showed none; frames 11–12 slightly
   brighter than r0 (fading in from 0.25 instead of 0); frame 13 onward identical to r0.
+
+Strip r1 (fixture capture, Zhaohui ran Movie Maker, 2026-11-22): `captures/kick_arc/r1/`, frames
+0–24 kept. Side by side: `captures/kick_arc/r1/claude_r0_vs_r1_frames_10-16.png` (top r0, bottom r1).
+
+### Claude's comparison of r1 with the prediction (a claim, 2026-11-22)
+
+Pixels that differ by more than 25 (of 255, greyscale) between r0 and r1 in the crop around P1
+(capture x 330–620, y 380–630). Every frame differs by 35–50 such pixels (max 41) even where the
+clip did not change: the A6 embers drift differently from run to run (whole-frame differences span
+x 50–1190 from frame 1).
+
+| Frame | Predicted | Measured | Match |
+|---|---|---|---|
+| 10 | a new faint arc under the knee, about 25 %, pointing down-forward | 740 pixels, max 69: a faint arc at the shin, pointing down-forward | yes |
+| 11 | slightly brighter than r0 | 185 pixels: a little brighter | yes |
+| 12 | slightly brighter than r0 | 37 pixels: at the noise level, not visible | partly (too small to see) |
+| 13–24 | identical to r0 | 35–50 pixels each, noise level | yes |
