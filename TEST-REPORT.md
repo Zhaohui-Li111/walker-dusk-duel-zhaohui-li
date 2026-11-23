@@ -695,12 +695,26 @@ drop. The only imported file the clips use, `lantern_flame.png`, reimported clea
 See mutation 4: from an empty cache the lantern read-back is 47 / 0, the kick read-back 51 / 0,
 the state test 58 / 0.
 
-## TO DO (human, Zhaohui)
+## Human checks (Zhaohui, running game, 2026-11-22, source `b580d17`)
 
-- **Frame strips (fixture captures):** the kick strip at the brief's capture frames (10, 13, 14,
-  16, 17, 23, 24) and the lantern strip; read against the phase table and cycle spec.
-- **The cycle seam:** the lantern flame through at least five wraps at normal speed.
-- **The action in play:** kicks in normal play, including a hit in each phase.
-- **Registration:** the lantern strip, the flame does not drift.
-- **Against the background:** both clips over the darkest and lightest art they appear on.
-- **Claude against you:** each of Claude's strip readings beside your verdict.
+Zhaohui's words, as given in chat, with Claude Code's translation. Claude Code did not watch.
+
+| Check | Evidence |
+|---|---|
+| **Frame strips (fixture captures)** | `captures/kick_arc/r0/`, `captures/kick_arc/r1/`, frames 0–24 each, recorded by Zhaohui with Movie Maker; read in TUNING.md (A7) |
+| **The cycle seam (HUMAN CHECK)** | the right lantern watched for at least five wraps: "没有卡顿" (no stutter) |
+| **The action in play (HUMAN CHECK)** | kicks in normal play, hits and whiffs, Aotake hitting P1 during kicks: "能分清，打断后消失" (the phases can be told apart; after an interrupt [the arc] disappears) |
+| **Registration (HUMAN CHECK)** | the flame: "在同一位置，没有漂移" (stays in the same place, no drift) |
+| **Against the background (HUMAN CHECK)** | the kick near the lantern-lit stretch (x ≈ 510) and the darkest stretch (x ≈ 364), and both lantern flames: "看得清" (clearly visible) |
+
+## Claude against you
+
+| Claude's reading | Zhaohui's verdict | Agreed? |
+|---|---|---|
+| r0 frame 10: no arc on the first startup frame | first look before any reading: "刚好" (just right); later approved the r1 change and kept it after play: "能看的出来，刚好" | Zhaohui did not see it at first; agreed after r1 |
+| r0 frames 17–21: a line at the arc's head, guessed to be a polygon seam | Zhaohui saw the line in slow motion | the line was real, but Claude's cause was wrong: it is `effects.gd`'s whiff streak (TUNING.md A7) |
+| r0: the left lantern is hidden behind Akaken at the start position | not acted on; Zhaohui's checks used the right lantern | open, no verdict |
+| r1 matches the prediction (frame 10 gains the arc, 13–24 unchanged) | "能看的出来，刚好" | yes |
+
+No point where Zhaohui overruled a reading of Claude's; the one reading that was wrong (the line's
+cause) was overturned by Claude Code's own scratch renders.
