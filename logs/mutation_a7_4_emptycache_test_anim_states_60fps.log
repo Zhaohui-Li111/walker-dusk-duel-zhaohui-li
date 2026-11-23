@@ -1,0 +1,90 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+A7 animation states: Godot 4.7.2-stable (official); headless, nothing is drawn
+
+== structure ==
+PASS [structure] kick_rig.gd requests clips ["kick_arc", "rest"]
+PASS [structure] AKAKEN's KickRig runs kick_rig.gd
+PASS [structure] AKAKEN: requested clip `kick_arc` exists
+PASS [structure] AKAKEN: requested clip `rest` exists
+PASS [structure] AKAKEN: state idle maps to an existing clip `rest`
+PASS [structure] AKAKEN: state walk maps to an existing clip `rest`
+PASS [structure] AKAKEN: state crouch maps to an existing clip `rest`
+PASS [structure] AKAKEN: state block maps to an existing clip `rest`
+PASS [structure] AKAKEN: state jump maps to an existing clip `rest`
+PASS [structure] AKAKEN: state punch maps to an existing clip `rest`
+PASS [structure] AKAKEN: state kick maps to an existing clip `kick_arc`
+PASS [structure] AKAKEN: state hurt maps to an existing clip `rest`
+PASS [structure] AKAKEN: state ko maps to an existing clip `rest`
+PASS [structure] AKAKEN: state win maps to an existing clip `rest`
+PASS [clock] AKAKEN's rig controller runs after main in each physics tick (priority 100 > 0)
+PASS [structure] AOTAKE's KickRig runs kick_rig.gd
+PASS [structure] AOTAKE: requested clip `kick_arc` exists
+PASS [structure] AOTAKE: requested clip `rest` exists
+PASS [structure] AOTAKE: state idle maps to an existing clip `rest`
+PASS [structure] AOTAKE: state walk maps to an existing clip `rest`
+PASS [structure] AOTAKE: state crouch maps to an existing clip `rest`
+PASS [structure] AOTAKE: state block maps to an existing clip `rest`
+PASS [structure] AOTAKE: state jump maps to an existing clip `rest`
+PASS [structure] AOTAKE: state punch maps to an existing clip `rest`
+PASS [structure] AOTAKE: state kick maps to an existing clip `kick_arc`
+PASS [structure] AOTAKE: state hurt maps to an existing clip `rest`
+PASS [structure] AOTAKE: state ko maps to an existing clip `rest`
+PASS [structure] AOTAKE: state win maps to an existing clip `rest`
+PASS [clock] AOTAKE's rig controller runs after main in each physics tick (priority 100 > 0)
+PASS [lantern] LanternLeft is an instance of lantern_flame.tscn
+PASS [lantern] LanternLeft at (238.0, 218.0) (got (238.0, 218.0))
+PASS [lantern] LanternLeft start_offset 0.0 s (got 0.00)
+PASS [lantern] LanternLeft draws after Stage and Embers (A6 keeps Embers right after Stage) and behind the fighters
+PASS [lantern] LanternLeft plays `flicker`
+PASS [lantern] LanternRight is an instance of lantern_flame.tscn
+PASS [lantern] LanternRight at (439.0, 219.0) (got (439.0, 219.0))
+PASS [lantern] LanternRight start_offset 0.4 s (got 0.40)
+PASS [lantern] LanternRight draws after Stage and Embers (A6 keeps Embers right after Stage) and behind the fighters
+PASS [lantern] LanternRight plays `flicker`
+PASS [lantern] the right lantern runs half a cycle (0.4 s) after the left (0.400 vs 0.000)
+    INPUT: Enter (title)
+PASS [harness] Enter started round 1 and the intro ran into the fight
+    HARNESS (writes no fight state): P2's controller set to null when the round starts
+
+== kick out of range: the clip follows Fighter.frame ==
+PASS [table] idle: `rest`, the arc hidden
+PASS [rig] the arc faces each fighter's opponent (P1 scale.x 1.008, P2 -1.259)
+PASS [rig] sized to each kick hitbox: Akaken 1.008, Aotake 1.259
+    INPUT: K (kick)
+PASS [harness] K started a kick (tick 67)
+PASS [table] kick: `kick_arc`, the arc shown, on all 28 kick ticks
+    MEASURED two clocks: largest |clip time - Fighter.frame / 60| over the kick = 0.000000000 s
+PASS [clock] the clip time equals Fighter.frame / 60 on every physics tick (largest gap 0.000000000 s)
+PASS [table] frame 28: idle, `rest`, the arc hidden on the same tick
+
+== kick in range: hitstop freezes the arc ==
+    INPUT: K (kick)
+PASS [harness] K started a kick (tick 201)
+PASS [clock] the kick hits on frame 8 (hitstop from tick k0+8)
+PASS [clock] hitstop: the arc holds at frame 8 (clip time 0.1333 s, same rotation) for the hit tick and 4 more
+PASS [clock] after hitstop the arc goes on at frame 9
+
+== pause during a kick ==
+    INPUT: K (kick)
+    INPUT: P (pause)
+PASS [clock] 30 paused ticks: the arc stays at 0.1667 s, rotation 0.4800
+PASS [lantern] the lanterns keep burning through the pause (left 0.12 -> 0.62 s)
+    INPUT: P (unpause)
+
+== kick interrupted by a hit (SETUP) ==
+    INPUT: K (kick)
+PASS [harness] K started a kick (tick 348)
+    SETUP (not input): on P1 kick frame 10, P1.receive_hit(P2, 8) then P1.flush_ko(), as P2's check_hit() does
+PASS [interrupt] on the hit tick: P1 hurt, `rest`, the arc hidden (got hurt, rest, visible false)
+
+== round reset during a kick (SETUP) ==
+    INPUT: K (kick)
+PASS [harness] K started a kick (tick 380)
+    SETUP (not input): main.start_fight_now() on P1 kick frame 4
+PASS [reset] the tick after the reset: P1 idle, `rest`, the arc hidden (got idle, rest)
+58 checks, 0 failed
+WARNING: 14 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 6 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

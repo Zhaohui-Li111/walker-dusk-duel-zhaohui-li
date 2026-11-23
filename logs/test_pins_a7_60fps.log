@@ -42,7 +42,7 @@ PASS [pin 4] 30 ticks of pause: P1 still kick on frame 5 (got kick 5)
     kick start tick 410, pause from about 419 to 453, 34 paused ticks
 PASS [pin 4] the kick ends after 28 unpaused ticks (62 in all, 34 paused)
 19 checks, 0 failed
-WARNING: 14 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+WARNING: 16 ObjectDB instances were leaked at exit (run with `--verbose` for details).
    at: cleanup (core/object/object.cpp:2536)
 ERROR: 6 resources still in use at exit (run with --verbose for details).
    at: clear (core/io/resource.cpp:822)

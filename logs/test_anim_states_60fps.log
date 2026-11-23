@@ -84,3 +84,7 @@ PASS [harness] K started a kick (tick 380)
     SETUP (not input): main.start_fight_now() on P1 kick frame 4
 PASS [reset] the tick after the reset: P1 idle, `rest`, the arc hidden (got idle, rest)
 58 checks, 0 failed
+WARNING: 14 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 6 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

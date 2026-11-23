@@ -1,0 +1,56 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+kick arc read-back: Godot 4.7.2-stable (official)
+PASS [scene] Fighter has KickRig and KickRig/AnimationPlayer
+PASS [scene] the player's root_node (..) is KickRig
+PASS [clip] the AnimationPlayer has `kick_arc`
+PASS [clip] the AnimationPlayer has `rest`
+PASS [clip] both clips are resources in godot/animations/ (res://animations/kick_arc.tres, res://animations/kick_rest.tres)
+    track problem: kick_arc track 1: Pivot has no property rotaton
+FAIL [tracks] every track resolves to a real node and property (1 problems)
+PASS [authority] kick_arc track 0 (Pivot:visible) writes inside KickRig, not the fighter or its Sprite2D
+PASS [update] kick_arc track 0 (visible) is UPDATE_DISCRETE
+PASS [authority] kick_arc track 1 (Pivot:rotaton) writes inside KickRig, not the fighter or its Sprite2D
+PASS [authority] kick_arc track 2 (Pivot:modulate) writes inside KickRig, not the fighter or its Sprite2D
+PASS [authority] rest track 0 (Pivot:visible) writes inside KickRig, not the fighter or its Sprite2D
+PASS [update] rest track 0 (visible) is UPDATE_DISCRETE
+PASS [authority] rest track 1 (Pivot:rotation) writes inside KickRig, not the fighter or its Sprite2D
+PASS [authority] rest track 2 (Pivot:modulate) writes inside KickRig, not the fighter or its Sprite2D
+PASS [step] kick_arc step is one frame period at 60 fps, 0.016667 s (got 0.016667)
+PASS [length] kick_arc length is frame 28 / 60 = 0.4667 s (got 0.466667)
+PASS [loop] kick_arc loop_mode is Animation.LOOP_NONE (got 0)
+PASS [loop] rest loop_mode is Animation.LOOP_NONE (got 0)
+PASS [keys] visible: shown from frame 0, hidden at frame 28
+PASS [keys] rotaton: 7 keys (got 7)
+PASS [keys] rotaton key 0 at 0.000000 s = frame 0 (0.000000)
+PASS [keys] rotaton key 1 at 0.116667 s = frame 7 (0.116667)
+PASS [keys] rotaton key 2 at 0.133333 s = frame 8 (0.133333)
+PASS [keys] rotaton key 3 at 0.200000 s = frame 12 (0.200000)
+PASS [keys] rotaton key 4 at 0.216667 s = frame 13 (0.216667)
+PASS [keys] rotaton key 5 at 0.450000 s = frame 27 (0.450000)
+PASS [keys] rotaton key 6 at 0.466667 s = frame 28 (0.466667)
+PASS [boundary] rotaton has a key where startup begins, frame 0
+PASS [boundary] rotaton has a key where active begins, frame 8
+PASS [boundary] rotaton has a key where recovery begins, frame 13
+PASS [boundary] rotaton has a key where end begins, frame 28
+PASS [spacing] rotaton eases in (accelerates) from frame 7 into active (transition 2.00 > 1)
+PASS [spacing] rotaton eases out (settles) through recovery from frame 13 (transition 0.40 < 1)
+PASS [keys] modulate: 7 keys (got 7)
+PASS [keys] modulate key 0 at 0.000000 s = frame 0 (0.000000)
+PASS [keys] modulate key 1 at 0.116667 s = frame 7 (0.116667)
+PASS [keys] modulate key 2 at 0.133333 s = frame 8 (0.133333)
+PASS [keys] modulate key 3 at 0.200000 s = frame 12 (0.200000)
+PASS [keys] modulate key 4 at 0.216667 s = frame 13 (0.216667)
+PASS [keys] modulate key 5 at 0.450000 s = frame 27 (0.450000)
+PASS [keys] modulate key 6 at 0.466667 s = frame 28 (0.466667)
+PASS [boundary] modulate has a key where startup begins, frame 0
+PASS [boundary] modulate has a key where active begins, frame 8
+PASS [boundary] modulate has a key where recovery begins, frame 13
+PASS [boundary] modulate has a key where end begins, frame 28
+PASS [spacing] modulate eases in (accelerates) from frame 7 into active (transition 2.00 > 1)
+PASS [spacing] modulate eases out (settles) through recovery from frame 13 (transition 0.40 < 1)
+PASS [clock] callback_mode_process is ANIMATION_CALLBACK_MODE_PROCESS_MANUAL (got 2)
+PASS [authority] autoplay is empty
+PASS [authority] one AnimationPlayer in fighter.tscn (got 1)
+PASS [rest] the arc starts hidden
+51 checks, 1 failed

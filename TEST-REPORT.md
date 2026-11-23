@@ -584,3 +584,123 @@ shader decides how particles move and change; draw decides what they finally loo
 as the built-in `LIFETIME`), as are `amount`, `one_shot`, `explosiveness` and `local_coords`;
 and in this generated file the colour ramp, alpha and scale curve are absent (finding above).
 
+
+# Assignment 7 — animation
+
+> Automated results recorded by Claude Code, 2026-11-22. Godot 4.7.2 stable, GL Compatibility,
+> Windows 11. Source revision for the results below: `48a3b60`. All runs through
+> `scripts/run-test.sh` (A7 wrapper: exit 1 also on `Failed loading resource`). No log below
+> contains `SHADER ERROR`, `SCRIPT ERROR` or `Failed loading resource`. Sections marked
+> **TO DO (human)** need Zhaohui's own check and words.
+
+## Baseline (earlier suites), before and after
+
+| Test | Mode | Before A7 (`8bd0d84`) | After (`48a3b60`) |
+|---|---|---|---|
+| `test_runner.gd` | 60 | 94 / 0 | 94 / 0 |
+| `check_props3d.gd` | 60 | 49 / 0 | 49 / 0 |
+| `test_hurt_flash.gd` | 30, 60, 144 | 69 / 0 each | 69 / 0 each |
+| `test_materials.gd` | 60 | 96 / 0 | 96 / 0 |
+| `test_hit_spark_config.gd` | 60 | 69 / 0 | 69 / 0 |
+| `test_hit_spark_state.gd` | 60 | 57 / 0 | 57 / 0 |
+| `test_embers_config.gd` | 60 | 85 / 0 | 85 / 0 |
+| `test_embers_state.gd` | 60 | 38 / 0 | 38 / 0 (37 / 38 once during step 5, see Findings) |
+
+## Pins (`test_pins_a7.gd`, 60)
+
+Committed before any clip (`29d991b`): 19 / 0, run twice. After the clips were wired (`a0161d6`)
+and at `48a3b60`: 19 / 0. No pin changed, as the brief predicted. Pinned: P1's state sequence for
+one scripted run; kick 28 / punch 18 ticks, whiff on kick frame 13 and punch frame 9, jump airtime
+42 ticks; a kick in range hits on frame 8 with `Fighter.frame` 8, hitstop holds it 4 ticks, the
+kick ends at 28 + 4; the game's pause freezes the kick frame. (The jump value was first guessed as
+44 and the first run failed it; pinned as measured, 42.)
+
+## Read-backs
+
+- **Lantern** (`test_lantern_readback.gd`, 60): **47 / 0.** Scene loads; texture is the sheet;
+  sliced 4 × 2; sheet 48 × 32 = 12 × 16 cells × grid; registration offset (−6, −15); `flicker` is
+  `godot/animations/lantern_flicker.tres`; `track_problems()` clean; one value track on
+  `Sprite2D:frame`, `UPDATE_DISCRETE`; 8 keys at k × 0.1 s within half a frame period (0.05 s);
+  cell order 0–7; every cell < `hframes × vframes` = 8; `step` 0.1; `length` 0.8; `LOOP_LINEAR`;
+  seam gap (0.8 − 0.7) = key interval 0.1 s; last cell 7 ≠ first cell 0; autoplay empty; clock
+  `ANIMATION_CALLBACK_MODE_PROCESS_IDLE`; one `AnimationPlayer`; the root script's code never names
+  the sprite. First run 46 / 47: the authority check matched words in comments; it now strips them.
+- **Kick arc** (`test_kick_readback.gd`, 60): **51 / 0.** `KickRig/AnimationPlayer`, `root_node` =
+  `KickRig`; `kick_arc` and `rest` exist as `.tres` in `godot/animations/`; `track_problems()`
+  clean (branching on track type); every track writes inside `KickRig`, never the fighter or its
+  `Sprite2D`; `visible` tracks `UPDATE_DISCRETE`; `step` 1/60; `length` 28/60 within half a frame
+  (1/120 s); `LOOP_NONE` on both; rotation and modulate keyed at frames 0, 7, 8, 12, 13, 27, 28, so
+  at every phase boundary (0, 8, 13, 28); transition > 1 into active, < 1 through recovery; clock
+  `ANIMATION_CALLBACK_MODE_PROCESS_MANUAL`; autoplay empty; one `AnimationPlayer`; arc starts hidden.
+
+## State machine (`test_anim_states.gd`, 60): 58 / 0
+
+Structure against the resources: every clip `kick_rig.gd` requests (`kick_arc`, `rest`) exists on
+both fighters; every fighter state maps to an existing clip; the rig controller runs after `Main`
+(priority 100 > 0); both lanterns are `lantern_flame.tscn` instances at (238, 218) / (439, 219),
+offsets 0.0 / 0.4, after `Embers` and before `P1`, playing `flicker`, half a cycle apart.
+Behaviour, real loop and `Input.parse_input_event` (current clip read with `current_animation`):
+`rest` and the arc hidden while idle; `kick_arc` and the arc shown on all 28 kick ticks; the arc
+faces each opponent and is sized to each kick hitbox (1.008, 1.259); `rest` on frame 28; hitstop
+holds the arc at frame 8 for the hit tick and 4 more; 30 paused ticks hold it while the lanterns
+keep burning; a SETUP hit mid-kick and a SETUP round reset give `rest`. First run: one `%e`
+format error in a message and one always-true check; both fixed, 58 / 0 twice.
+
+## Edges (`test_kick_edges.gd`, 60): 38 / 0, twice
+
+| Interrupt | Frames (`Fighter.frame` on the tick that reads it) | Result |
+|---|---|---|
+| Hit (SETUP, in-tick) | 0, 1 · 7, 8, 9 · 12, 13, 14 · 27, 28 | P1 hurt, `rest`, arc hidden on that same tick; the tick before shows `kick_arc` at (f − 1)/60 |
+| K key (real input) | 7, 8, 9 · 12, 13, 14 · 27 | ignored; `kick_arc` at f/60 goes on |
+| K key | 28 | dropped: the kick ends on that tick inside the kick branch, so input is not read |
+| K key | 29 | a new kick on that tick, `kick_arc` from 0 |
+
+First run 26 / 28: the harness armed the frame-0 and frame-1 hits after those ticks had passed.
+It now arms them before the kick and checks the tick each SETUP hit ran on.
+
+## Two clocks (measured)
+
+Lantern: `AnimationPlayer` on the idle (process) tick; it reads no gameplay fact. Kick arc:
+`MANUAL`, positioned by `seek(Fighter.frame / 60, true)` on the physics tick, after `Main` steps
+the fighters and checks hits (`check_hit`, `7 < frame <= 12`, physics tick). Largest
+|clip time − `Fighter.frame` / 60| over a kick: **0.000000000 s** (`logs/test_anim_states_60fps.log:58`).
+
+## Mutations (each in `git worktree add ../a7-mutate HEAD` at `48a3b60`, then removed)
+
+| # | Mutation | Test | Result | Log |
+|---|---|---|---|---|
+| 1 | `kick_arc.tres` track 1 `Pivot:rotation` → `Pivot:rotaton` | `test_kick_readback.gd` 60 | **exit 1**, 1 of 51 failed: `kick_arc track 1: Pivot has no property rotaton` | `logs/mutation_a7_1_subname_60fps.log` |
+| 2 | `lantern_flicker.tres` `loop_mode = 1` → `0` (`LOOP_NONE`) | `test_lantern_readback.gd` 60 | **exit 1**, 1 of 47: `loop_mode is Animation.LOOP_LINEAR (got 0)` | `logs/mutation_a7_2_loop_none_60fps.log` |
+| 3 | last frame key 7 → 8 (= `hframes × vframes`) | `test_lantern_readback.gd` 60 | **exit 1**, 2 of 47: cell order and `key 7's cell 8 is inside the sheet (< 8)` | `logs/mutation_a7_3_cell_8_60fps.log` |
+| 4 | empty import cache: worktree with no `godot/.godot`, `--import`, read-backs | lantern, kick, states | **exit 0** (47 / 0, 51 / 0, 58 / 0), no `Failed loading resource` | `logs/mutation_a7_4_emptycache_*_60fps.log` |
+
+Mutation 4 did not fail, as expected: neither clip is imported. Both loop modes live in the
+committed `.tres` text, not in an importer's per-animation settings, so a reimport has nothing to
+drop. The only imported file the clips use, `lantern_flame.png`, reimported cleanly.
+
+## Findings
+
+1. **Draw order (step 5).** With the lanterns placed right after `Stage`, A6's
+   `test_embers_state.gd` failed its draw-order check (37 / 38: Embers must be right after Stage).
+   The A6 expectation stayed; the lanterns moved after `Embers` (brief revision 3).
+2. **Input on the kick's last tick.** A K press read on frame 28 is dropped; input is read again
+   from frame 29. The game is unchanged (pins 19 / 0); the brief's phase-table row "(end) 28,
+   input read again" is one frame early (brief revision 4).
+3. **A probe's own track was silently inert.** During the CLAUDE.md review a probe keyed
+   `..:rotation` from a player whose `root_node` was already the parent; it moved nothing and
+   printed nothing. Recorded in CLAUDE.md's headless facts.
+
+## Fresh cache
+
+See mutation 4: from an empty cache the lantern read-back is 47 / 0, the kick read-back 51 / 0,
+the state test 58 / 0.
+
+## TO DO (human, Zhaohui)
+
+- **Frame strips (fixture captures):** the kick strip at the brief's capture frames (10, 13, 14,
+  16, 17, 23, 24) and the lantern strip; read against the phase table and cycle spec.
+- **The cycle seam:** the lantern flame through at least five wraps at normal speed.
+- **The action in play:** kicks in normal play, including a hit in each phase.
+- **Registration:** the lantern strip, the flame does not drift.
+- **Against the background:** both clips over the darkest and lightest art they appear on.
+- **Claude against you:** each of Claude's strip readings beside your verdict.

@@ -395,3 +395,11 @@ the brief did not name. Nothing in the phase table, cycle spec, clocks or rules 
 - **Rest pose.** Every non-kick state plays `rest` (`godot/animations/kick_rest.tres`): the arc
   hidden. The flame rises above the 7 px lit window (the flame cells are 11–13 px tall); whether
   that reads well is for Zhaohui's first look.
+
+## Revision 4 · 2026-11-22 · One fact corrected (Claude Code)
+
+- **Phase table, row "(end)":** on frame 28 the fighter becomes `idle`, but that tick is still
+  handled by the kick branch of `fighter.gd` `step()` (`:102-108`), so input is **not** read on
+  frame 28; it is read again from frame 29. Found by `test_kick_edges.gd` (K read on 28: no new
+  kick; on 29: a new kick that tick). The game is unchanged (pins 19 / 0). Claude Code's error in
+  the facts it filled in; no design value changed.

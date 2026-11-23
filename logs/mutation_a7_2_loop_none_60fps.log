@@ -1,0 +1,51 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+lantern read-back: Godot 4.7.2-stable (official)
+PASS [scene] res://animations/lantern_flame.tscn loads
+PASS [scene] LanternFlame has a Sprite2D and an AnimationPlayer
+PASS [sheet] Sprite2D.texture is res://art/sheets/lantern_flame.png (got res://art/sheets/lantern_flame.png)
+PASS [sheet] sliced hframes 4 x vframes 2 (got 4 x 2)
+PASS [sheet] sheet 48 x 32 = cell 12 x 16 times the grid (got 48 x 32)
+PASS [sheet] registration: the cells' flame base (6, 15) sits on the node origin (offset (-6.0, -15.0))
+PASS [clip] the AnimationPlayer has `flicker`
+PASS [clip] `flicker` is the resource res://animations/lantern_flicker.tres (got 'res://animations/lantern_flicker.tres')
+PASS [tracks] every track resolves to a real node and property (0 problems)
+PASS [tracks] one track (got 1)
+PASS [tracks] track 0 is a value track on Sprite2D:frame (got Sprite2D:frame)
+PASS [update] the frame track uses Animation.UPDATE_DISCRETE (got 1)
+PASS [keys] 8 keys (got 8)
+PASS [keys] key 0 at 0.0000 s, brief 0.0000 s
+PASS [order] key 0 shows cell 0 (brief 0)
+PASS [range] key 0's cell 0 is inside the sheet (< 8)
+PASS [keys] key 1 at 0.1000 s, brief 0.1000 s
+PASS [order] key 1 shows cell 1 (brief 1)
+PASS [range] key 1's cell 1 is inside the sheet (< 8)
+PASS [keys] key 2 at 0.2000 s, brief 0.2000 s
+PASS [order] key 2 shows cell 2 (brief 2)
+PASS [range] key 2's cell 2 is inside the sheet (< 8)
+PASS [keys] key 3 at 0.3000 s, brief 0.3000 s
+PASS [order] key 3 shows cell 3 (brief 3)
+PASS [range] key 3's cell 3 is inside the sheet (< 8)
+PASS [keys] key 4 at 0.4000 s, brief 0.4000 s
+PASS [order] key 4 shows cell 4 (brief 4)
+PASS [range] key 4's cell 4 is inside the sheet (< 8)
+PASS [keys] key 5 at 0.5000 s, brief 0.5000 s
+PASS [order] key 5 shows cell 5 (brief 5)
+PASS [range] key 5's cell 5 is inside the sheet (< 8)
+PASS [keys] key 6 at 0.6000 s, brief 0.6000 s
+PASS [order] key 6 shows cell 6 (brief 6)
+PASS [range] key 6's cell 6 is inside the sheet (< 8)
+PASS [keys] key 7 at 0.7000 s, brief 0.7000 s
+PASS [order] key 7 shows cell 7 (brief 7)
+PASS [range] key 7's cell 7 is inside the sheet (< 8)
+PASS [step] step is one frame period, 0.1000 s (got 0.100000)
+PASS [length] length 0.80 s (got 0.8000)
+FAIL [loop] loop_mode is Animation.LOOP_LINEAR (got 0)
+PASS [seam] gap from the last key to length (0.1000 s) equals the key interval (0.1000 s)
+PASS [seam] no duplicate across the wrap: last cell 7, first cell 0
+PASS [authority] autoplay is empty; the root script starts the clip once
+PASS [clock] callback_mode_process is ANIMATION_CALLBACK_MODE_PROCESS_IDLE (got 1)
+PASS [authority] one AnimationPlayer in the lantern scene (got 1)
+PASS [authority] lantern_flame.gd's code (comments stripped) never names the sprite or its frame
+PASS [authority] after _ready, `flicker` is playing (current_animation 'flicker')
+47 checks, 1 failed
