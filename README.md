@@ -340,7 +340,7 @@ godot --path godot res://previews/kick_arc_preview.tscn --write-movie "$PWD/capt
 
 - **A7 film: "Dusk Duel, Animated".** A Brutalist explainer made with the `godot-gamedev` skill in
   walker mode. 7:39.7, 3840 × 2160, 30 fps.
-  - **Link:** PENDING (Google Drive)
+  - **Link:** https://drive.google.com/file/d/1TYkiBOUcC-Wmi4-TbCMUwKvcN_ZCdb5c/view?usp=sharing
   - **File name:** `claude-liam-walker-dusk-duel-zhaohui-li-a7-gamedev.mp4`
   - **SHA-256:** `8496e357676eef3aaea118863e090a8dff57b06e2771efa412c45019974e674b`
   - **Game source shown:** `godot/` at `8049c54`.

@@ -33,7 +33,7 @@
 - **Sprite sheet source and licence (or model, version, and terms):** written by code in this
   repository (`godot/art/sheets/make_lantern_flame_sheet.gd`), MIT; `godot/art/sheets/ATTRIBUTION.md`.
   No generative model.
-- **Final film URL and filename:** **link PENDING** (Google Drive) · `claude-liam-walker-dusk-duel-zhaohui-li-a7-gamedev.mp4`
+- **Final film URL and filename:** https://drive.google.com/file/d/1TYkiBOUcC-Wmi4-TbCMUwKvcN_ZCdb5c/view?usp=sharing · `claude-liam-walker-dusk-duel-zhaohui-li-a7-gamedev.mp4`
   ("Dusk Duel, Animated", 7:39.7, 3840 × 2160, 30 fps, 43.3 MB)
 - **Final film SHA-256:** `8496e357676eef3aaea118863e090a8dff57b06e2771efa412c45019974e674b`
 - **Summary of my work:** I chose to generate the sheet by code, chose both clips, their routes and
