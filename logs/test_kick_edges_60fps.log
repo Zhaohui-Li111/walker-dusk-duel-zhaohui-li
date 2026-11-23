@@ -1,0 +1,58 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+A7 kick edges: Godot 4.7.2-stable (official); headless
+PASS [harness] round 1 started
+    HARNESS (writes no fight state): P2's controller set to null when the round starts
+    SETUP (not input): tick 67, P1 kick frame 0: P1.receive_hit(P2, 1), P1.flush_ko()
+PASS [harness] the SETUP hit ran on tick k0 + 0 (got k0 + 0)
+PASS [edge] hit on frame  0 (startup): P1 hurt, `rest`, arc hidden on that tick (got hurt, rest, visible false)
+    SETUP (not input): tick 90, P1 kick frame 1: P1.receive_hit(P2, 1), P1.flush_ko()
+PASS [harness] the SETUP hit ran on tick k0 + 1 (got k0 + 1)
+PASS [edge] hit on frame  1 (startup): P1 hurt, `rest`, arc hidden on that tick (got hurt, rest, visible false)
+PASS [edge]   the tick before (frame 0): `kick_arc` at 0.0000 s
+    SETUP (not input): tick 119, P1 kick frame 7: P1.receive_hit(P2, 1), P1.flush_ko()
+PASS [harness] the SETUP hit ran on tick k0 + 7 (got k0 + 7)
+PASS [edge] hit on frame  7 (startup): P1 hurt, `rest`, arc hidden on that tick (got hurt, rest, visible false)
+PASS [edge]   the tick before (frame 6): `kick_arc` at 0.1000 s
+    SETUP (not input): tick 149, P1 kick frame 8: P1.receive_hit(P2, 1), P1.flush_ko()
+PASS [harness] the SETUP hit ran on tick k0 + 8 (got k0 + 8)
+PASS [edge] hit on frame  8 (active): P1 hurt, `rest`, arc hidden on that tick (got hurt, rest, visible false)
+PASS [edge]   the tick before (frame 7): `kick_arc` at 0.1167 s
+    SETUP (not input): tick 180, P1 kick frame 9: P1.receive_hit(P2, 1), P1.flush_ko()
+PASS [harness] the SETUP hit ran on tick k0 + 9 (got k0 + 9)
+PASS [edge] hit on frame  9 (active): P1 hurt, `rest`, arc hidden on that tick (got hurt, rest, visible false)
+PASS [edge]   the tick before (frame 8): `kick_arc` at 0.1333 s
+    SETUP (not input): tick 214, P1 kick frame 12: P1.receive_hit(P2, 1), P1.flush_ko()
+PASS [harness] the SETUP hit ran on tick k0 + 12 (got k0 + 12)
+PASS [edge] hit on frame 12 (active): P1 hurt, `rest`, arc hidden on that tick (got hurt, rest, visible false)
+PASS [edge]   the tick before (frame 11): `kick_arc` at 0.1833 s
+    SETUP (not input): tick 249, P1 kick frame 13: P1.receive_hit(P2, 1), P1.flush_ko()
+PASS [harness] the SETUP hit ran on tick k0 + 13 (got k0 + 13)
+PASS [edge] hit on frame 13 (recovery): P1 hurt, `rest`, arc hidden on that tick (got hurt, rest, visible false)
+PASS [edge]   the tick before (frame 12): `kick_arc` at 0.2000 s
+    SETUP (not input): tick 285, P1 kick frame 14: P1.receive_hit(P2, 1), P1.flush_ko()
+PASS [harness] the SETUP hit ran on tick k0 + 14 (got k0 + 14)
+PASS [edge] hit on frame 14 (recovery): P1 hurt, `rest`, arc hidden on that tick (got hurt, rest, visible false)
+PASS [edge]   the tick before (frame 13): `kick_arc` at 0.2167 s
+    SETUP (not input): tick 334, P1 kick frame 27: P1.receive_hit(P2, 1), P1.flush_ko()
+PASS [harness] the SETUP hit ran on tick k0 + 27 (got k0 + 27)
+PASS [edge] hit on frame 27 (recovery): P1 hurt, `rest`, arc hidden on that tick (got hurt, rest, visible false)
+PASS [edge]   the tick before (frame 26): `kick_arc` at 0.4333 s
+    SETUP (not input): tick 384, P1 idle frame 0: P1.receive_hit(P2, 1), P1.flush_ko()
+PASS [harness] the SETUP hit ran on tick k0 + 28 (got k0 + 28)
+PASS [edge] hit on frame 28 (after the end): P1 hurt, `rest`, arc hidden on that tick (got hurt, rest, visible false)
+PASS [edge] K read on frame  7 (startup): ignored, the kick and the arc go on (kick_arc at 0.1167 s)
+PASS [edge] K read on frame  8 (active): ignored, the kick and the arc go on (kick_arc at 0.1333 s)
+PASS [edge] K read on frame  9 (active): ignored, the kick and the arc go on (kick_arc at 0.1500 s)
+PASS [edge] K read on frame 12 (active): ignored, the kick and the arc go on (kick_arc at 0.2000 s)
+PASS [edge] K read on frame 13 (recovery): ignored, the kick and the arc go on (kick_arc at 0.2167 s)
+PASS [edge] K read on frame 14 (recovery): ignored, the kick and the arc go on (kick_arc at 0.2333 s)
+PASS [edge] K read on frame 27 (recovery): ignored, the kick and the arc go on (kick_arc at 0.4500 s)
+PASS [edge] K read on frame 28 (the kick ends that tick, input not read): no new kick, `rest` (new kick at -1)
+PASS [edge] K read on frame 29 (idle, input read again): a new kick that tick, `kick_arc` from 0 (tick +29)
+    P1 health after the SETUP hits: 90
+38 checks, 0 failed
+WARNING: 14 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 4 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
