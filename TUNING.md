@@ -217,3 +217,17 @@ kicks. The flames rise above the lit windows like candle flames.
 
 Possible causes, not confirmed: the line at the arc's head appears only when `Pivot.modulate`
 alpha < 1, which suggests a polygon seam that shows under transparency.
+
+### The line at the arc's head (2026-11-22)
+
+- **Zhaohui, in the running preview at `--time-scale 0.25`:** saw the thin grey horizontal line at
+  the arc's head during recovery. (Answer "看到了" to Claude Code's question about that line, so the
+  observation was prompted by Claude's reading of r0.)
+- **Claude's r0 guess was wrong.** Two scratch renders of the arc alone at alpha 0.9, enlarged 4×
+  and at the game's own scale and position (`captures/kick_arc/r0/claude_probe_arc_alone_game_scale.png`),
+  show no line. Crops of frames 15–24 (`claude_line_crops_15-24.png`) show the line only from
+  frame 17 (`Fighter.frame` 14), right after the whiff on frame 13, fading over frames 17–21.
+- **Cause:** the pre-A7 whiff streak, `godot/game/effects.gd:40-41`: a 14 px horizontal line at
+  35 % alpha, drawn for 10 ticks at the whiff point (the kick hitbox centre), spawned by
+  `main.gd:136`. It is not part of the A7 clip, and `effects.gd` is out of scope, so no change.
+  In play a kick that hits shows the hit spark instead.
