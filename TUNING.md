@@ -231,3 +231,12 @@ alpha < 1, which suggests a polygon seam that shows under transparency.
   35 % alpha, drawn for 10 ticks at the whiff point (the kick hitbox centre), spawned by
   `main.gd:136`. It is not part of the A7 clip, and `effects.gd` is out of scope, so no change.
   In play a kick that hits shows the hit spark instead.
+
+### Zhaohui's verdict on r0 (2026-11-22)
+
+"Nothing to change" (Zhaohui's answer after the line was traced to the whiff streak; Claude Code
+had listed two other points from its r0 reading, no arc on the first startup frame and the left
+lantern hidden behind Akaken at the start position, as things Zhaohui could check). r0 is kept.
+
+**No observation-driven revision was made in A7.** The handout asks for at least one; none was
+made because Zhaohui did not see anything in play to change. This is recorded as it is.
