@@ -272,6 +272,72 @@ godot --path godot res://previews/hit_spark_preview.tscn --write-movie "$PWD/cap
   - **Film source and evidence:** [youtube/claude-liam-walker-dusk-duel-zhaohui-li-a6-gamedev/](youtube/claude-liam-walker-dusk-duel-zhaohui-li-a6-gamedev/)
     (start with BUILD-LOG.md, FACTCHECK.md and SOURCES.md).
 
+## Assignment 7: animation
+
+Two clips, each with exactly one authority, as resources in `godot/animations/`:
+
+- **Lantern flame (the cycle)**: route *Sprite2D + AnimationPlayer frame track*. A sprite sheet
+  written by code (`godot/art/sheets/make_lantern_flame_sheet.gd` → `lantern_flame.png`, 12 × 16
+  cells, 4 × 2, credits in `godot/art/sheets/ATTRIBUTION.md`). `lantern_flicker.tres` keys
+  `Sprite2D:frame` 0–7 at 10 fps, `UPDATE_DISCRETE`, `LOOP_LINEAR`. Two instances on the background
+  lanterns in `main.tscn` (`LanternLeft`, `LanternRight`, half a cycle apart). Each lantern's own
+  `AnimationPlayer` is the only writer to its sprite's `frame`; it keeps burning through the pause.
+- **Kick arc (the committing action)**: route *cutout rig keyed as resource text*. A `Polygon2D`
+  swing arc in `fighter.tscn` (`KickRig` → `Pivot` → `Trail`, `Core`), keyed in `kick_arc.tres` at
+  the phase table's boundaries: startup frames 0–7, active 8–12, recovery 13–27, at 60 fps (step
+  1/60). Driven by the fighter's state machine through `godot/fighter/kick_rig.gd`, which reads
+  `state` and `frame` and calls `seek(frame / 60, true)` on a `MANUAL` player every physics tick,
+  so hitstop and pause freeze the arc and the clip never disagrees with the hit check. A hit during
+  the kick returns the arc to rest at once. `fighter.gd` is unchanged.
+- **Tuning:** one revision, r1 (the arc shows from the first startup frame), with a prediction,
+  strips r0 and r1 and Zhaohui's verdict ([TUNING.md](TUNING.md)); preview
+  `godot/previews/kick_arc_preview.tscn`, strips in `captures/kick_arc/` (fixture captures).
+- **Documents:** [CHANGE-BRIEF.md](CHANGE-BRIEF.md) (A7, Revisions 2–5) · [CLAUDE.md](CLAUDE.md) ·
+  [TUNING.md](TUNING.md) · [TEST-REPORT.md](TEST-REPORT.md) (Assignment 7) ·
+  [FRICTIONAL.md](FRICTIONAL.md) · prompt in `prompts/a7/`, the two failed `claude -p` attempts in
+  `sessions/a7/`.
+
+Run the A7 checks through the wrapper (now also exit 1 on `Failed loading resource`; set `GODOT`
+to the console build if `godot` is not on PATH; run `--import` once after cloning):
+
+```bash
+./scripts/run-test.sh test_pins_a7.gd 60
+```
+
+```bash
+./scripts/run-test.sh test_lantern_readback.gd 60
+```
+
+```bash
+./scripts/run-test.sh test_kick_readback.gd 60
+```
+
+```bash
+./scripts/run-test.sh test_anim_states.gd 60
+```
+
+```bash
+./scripts/run-test.sh test_kick_edges.gd 60
+```
+
+Expected: 19 / 0, 47 / 0, 52 / 0, 58 / 0, 38 / 0. The earlier suites keep their counts. The strip
+needs a window:
+
+```bash
+godot --path godot res://previews/kick_arc_preview.tscn --write-movie "$PWD/captures/kick_arc/r1/frame.png" --fixed-fps 30 --quit-after 90
+```
+
+- **A7 known limitations:**
+  - Headless runs prove structure and timing, never the look: that is the strips and the human
+    checks.
+  - The interrupt and round-reset edges use labelled test setup (a hit injected where
+    `check_hit()` would make it), because only P1 takes input.
+  - The left lantern is hidden behind Akaken at the start position (noted, not changed).
+  - The empty-cache mutation cannot fail here: neither clip is imported.
+  - The tuning revision came from Claude Code's strip reading, approved and judged by Zhaohui,
+    not from an observation Zhaohui made first.
+  - A kick pressed on the kick's last tick is dropped (existing game behaviour, unchanged).
+
 ## Final film
 
 **"Dusk Duel, Generated"**: a Brutalist explainer made with the `godot-gamedev` skill in walker

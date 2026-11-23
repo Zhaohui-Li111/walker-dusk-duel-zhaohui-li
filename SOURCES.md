@@ -128,6 +128,38 @@ available on this machine; `cost_effects.gd` was written from the handout's desc
     `godot/game/debug_vsync.gd` (F9), the strip readings and predictions in TUNING.md, the
     TEST-REPORT entries, README and these notes.
 
+## Assignment 7: the sheet, tools and who did what
+
+**Sprite sheet:** `godot/art/sheets/lantern_flame.png`, written by code in this repository
+(`godot/art/sheets/make_lantern_flame_sheet.gd`, by Claude Code), licence MIT (`LICENSE`), checked
+2026-11-22; credits in `godot/art/sheets/ATTRIBUTION.md`. The course sprite set was not used: the
+handout's path and licence were placeholders and the set was not found. No downloaded or generated
+image and no generative model made any A7 asset. The kick arc is `Polygon2D` geometry in
+`godot/fighter/fighter.tscn`.
+
+**Tools:** Godot 4.7.2 stable (Compatibility; Movie Maker for the strips, run by Zhaohui); Claude
+Code 2.1.311 (Opus 5.5) in the desktop app; `scripts/run-test.sh` is the course handout's A7
+wrapper with the local `GODOT` variable kept. Both `claude -p` attempts for prompt-1 stopped on an
+expired sign-in (`sessions/a7/`), so every A7 agent step ran in the desktop session.
+
+**Who did what in A7:**
+- **Zhaohui Li:**
+  - Chose a code-generated sheet; chose the two clips and their routes, where each plays, the
+    frame order and 10 fps, the 8 / 5 / 15 phase table (measured from the code), the interrupt
+    rule, the rig's `MANUAL` clock, both fighters, and the lanterns' pause and offset behaviour,
+    answering a question list and options laid out by Claude Code (recorded in the brief).
+  - Wrote the brief's intent answers, predictions of failure and short answers (asked twice:
+    "I wrote it myself"; the short answers rewritten after Claude's consistency notes).
+  - Approved the Step 5 plan; ran both Movie Maker captures; gave the first look, the r0 verdict
+    ("nothing to change"), the approval of r1 and the r1 verdict after play; did the four human
+    checks in the running game; wrote the own account in FRICTIONAL.md.
+  - Delegated the remaining agent steps ("你把剩下的都自己做了吧").
+- **Claude Code (Opus 5.5):**
+  - The sheet generator, the brief's project facts, structure and translations, and Revisions 3–5.
+  - CLAUDE.md (draft, then a separate review), the pins, both clips and scenes, `kick_rig.gd`,
+    the read-backs, the state, edge and mutation runs, the preview, the strip readings, the r1
+    proposal and prediction, TEST-REPORT, README, these notes and the FRICTIONAL factual record.
+
 ## References consulted (not copied)
 
 - GDQuest, godot-4-hitbox-hurtbox demo: https://github.com/gdquest-demos/godot-4-hitbox-hurtbox
