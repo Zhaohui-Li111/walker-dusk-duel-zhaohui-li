@@ -175,3 +175,18 @@ My verdict (running game, <window size>): kept | reverted, because
 Strips: captures/<effect>/r<N>/, captures/<effect>/r<N+1>/
 Commits:
 -->
+
+# TUNING — Assignment 7
+
+Same rules as A6: every revision has Claude's prediction, the strips before and after, Claude's
+comparison and Zhaohui's verdict in the running game. Strips from `godot/previews/` are **fixture
+captures** (`kick_arc_preview.tscn`: the real `main.tscn`, title skipped, P2 still, P1 kicking by
+`ScriptedController`). Claude's readings are claims; Zhaohui's verdict in the running game decides.
+Capture frame N lines up with line N + 1 of `logs/kick_arc_preview_frames.log`.
+
+## r0 — first look (before Claude reads any strip)
+
+What I saw (preview window, 2026-11-22, Zhaohui's words, before any capture was read):
+踢腿弧线可以看清，对的上，刚好。火焰自然，没有卡顿，看的出来。
+(Translation: the kick arc can be seen clearly, lines up, is just right. The flame looks natural,
+no stutter, and [the two lanterns' offset] can be seen.)
