@@ -73,3 +73,7 @@ PASS [no feedback loop] scene: amount stayed 48 on every tick
     F: hidden for the whole fade: -1
     F: after showing again: 151
 38 checks, 0 failed
+WARNING: 24 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 6 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

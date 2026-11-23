@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://fighter/fighter.gd" id="1_fighter"]
 [ext_resource type="Script" path="res://fighter/hurt_flash.gd" id="2_hurt_flash"]
 [ext_resource type="Animation" path="res://animations/kick_arc.tres" id="3_kick_arc"]
 [ext_resource type="Animation" path="res://animations/kick_rest.tres" id="4_kick_rest"]
+[ext_resource type="Script" path="res://fighter/kick_rig.gd" id="5_kick_rig"]
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_kick"]
 _data = {
@@ -22,6 +23,7 @@ centered = false
 script = ExtResource("2_hurt_flash")
 
 [node name="KickRig" type="Node2D" parent="."]
+script = ExtResource("5_kick_rig")
 
 [node name="Pivot" type="Node2D" parent="KickRig"]
 visible = false

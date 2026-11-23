@@ -370,3 +370,28 @@ R4. 灯笼的 Sprite2D.frame 由对应的 AnimationPlayer 帧轨道写入；踢�
 R5. 灯笼由 AnimationPlayer 的常规动画时钟推进，使用 Idle tick；踢腿 Rig 使用 MANUAL 模式，由玩家状态机在每个 Physics tick 调用 seek() 推进。游戏也在 Physics tick 读取踢腿的 active 判定窗口，因此两者在同一个 tick 上同步，最大时间差为 0 秒。灯笼不参与任何游戏攻击判定。
 
 R6. 循环接缝不能重复播放额外的帧，最后一帧到第一帧必须直接衔接；同时，最后一个关键帧到动画 length 的距离应该保持一个正常帧间隔，即 0.1 秒（10 fps）。如果接缝处多出一帧重复，火焰就会短暂停顿，看起来像卡顿。
+
+## Revision 3 · 2026-11-22 · Wiring facts (Claude Code; no design value changed)
+
+Step 5 plan approved by Zhaohui ("Approve plan"). Recorded here because the build added structure
+the brief did not name. Nothing in the phase table, cycle spec, clocks or rules changed.
+
+- **`KickRig` parent node.** The rig is `Fighter` → `KickRig` (script `godot/fighter/kick_rig.gd`)
+  → `Pivot` → `Trail`, `Core` (`Polygon2D`), plus `KickRig/AnimationPlayer`. `KickRig`'s own script
+  is the one writer of its `position` (the hip, kick hitbox centre y + 10) and `scale` (size from
+  each fighter's kick hitbox: Akaken 1.008, Aotake 1.259; flipped with `facing`). The
+  `AnimationPlayer` is the one writer of `Pivot` and its segments. The rig controller of "The two
+  clips" is `kick_rig.gd`.
+- **Physics order.** `kick_rig.gd` runs at `process_physics_priority` 100, after `Main` (0) steps
+  the fighters and checks hits, so it sees a hit and the new `frame` on the same tick. Measured:
+  clip time = `Fighter.frame / 60` on every kick tick, largest gap 0 s
+  (`logs/test_anim_states_60fps.log:58`), matching the predicted 0 s.
+- **Lantern placement.** `LanternLeft` (238, 218) and `LanternRight` (439, 219), the flame base at
+  the bottom centre of each lantern's lit window (measured from `bg.png`: x 234–242, y 213–219 and
+  x 435–444, y 211–220). They sit after `Embers`, not straight after `Stage` as "Boundaries" said:
+  the first full run put them after `Stage`, and the A6 test `test_embers_state.gd` failed its
+  draw-order check (Embers must be right after Stage), 37 / 38. Moving the lanterns after `Embers`
+  keeps that A6 expectation unchanged (38 / 0); they still draw behind the fighters.
+- **Rest pose.** Every non-kick state plays `rest` (`godot/animations/kick_rest.tres`): the arc
+  hidden. The flame rises above the 7 px lit window (the flame cells are 11–13 px tall); whether
+  that reads well is for Zhaohui's first look.

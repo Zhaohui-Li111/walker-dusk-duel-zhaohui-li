@@ -16,9 +16,8 @@
 - **Clip 1, lantern flame (cycle):** route Sprite2D + AnimationPlayer frame track
   (`CHANGE-BRIEF.md:59`). One scene, `godot/animations/lantern_flame.tscn`: `Sprite2D`,
   `AnimationPlayer` with `flicker`, root script that only `play()`s and `seek()`s a per-instance
-  start offset (`CHANGE-BRIEF.md:283-287`); two instances in `main.tscn` after `Stage`
-  (`godot/game/main.tscn:18`; `CHANGE-BRIEF.md:176`). Sheet `godot/art/sheets/lantern_flame.png`,
-  12 × 16 cells, 4 × 2 (`CHANGE-BRIEF.md:90-99`). Not built yet.
+  start offset; `LanternLeft`/`LanternRight` in `main.tscn` after `Embers` (`godot/game/main.tscn:24-29`).
+  Sheet `godot/art/sheets/lantern_flame.png`, 12 × 16 cells, 4 × 2 (`CHANGE-BRIEF.md:90-99`).
 - **Clip 2, kick arc (committing):** route cutout rig keyed as resource text (`CHANGE-BRIEF.md:59`):
   `Node2D` pivot, `Polygon2D` segments, `AnimationPlayer`, rig controller, all in
   `godot/fighter/fighter.tscn` (`CHANGE-BRIEF.md:60`), so on P1 and P2 (`main.tscn:23`, `:28`).
@@ -57,6 +56,7 @@
 - `value_track_get_update_mode` applies only to value tracks (on a 3D position track it prints
   `ERROR: Condition "t->type != TYPE_VALUE"` and returns `UPDATE_CONTINUOUS`, same probe).
 - Frame strips come from a windowed Movie Maker run, which Zhaohui starts.
+- Two clocks, measured: kick clip time = `Fighter.frame / 60` on every tick, gap 0 s (`logs/test_anim_states_60fps.log:58`).
 - `--fixed-fps N` fixes the frame delta; physics still runs 60 ticks per game second.
 - A track path resolves from the player's `root_node` (default `..`); a wrong path is silently
   inert (the 2026-11-22 probe's own `..:rotation` track moved nothing).
@@ -82,7 +82,8 @@ has one; if a change needs one, stop and say so.
 | Animated node | Its one writer |
 |---|---|
 | Lantern `Sprite2D.frame` (each instance) | that lantern's `AnimationPlayer` (`CHANGE-BRIEF.md:61`) |
-| Arc pivot and `Polygon2D` segments (each fighter) | that fighter's rig `AnimationPlayer`, positioned by the rig controller's `seek()` (`CHANGE-BRIEF.md:61`, `:162`) |
+| Arc `Pivot` and its `Polygon2D` segments (each fighter) | that fighter's rig `AnimationPlayer`, positioned by the rig controller's `seek()` (`CHANGE-BRIEF.md:61`, `:162`) |
+| `KickRig` `position` and `scale` (hip pivot, size, facing) | `KickRig`'s own script, `godot/fighter/kick_rig.gd` (`_fit()`, `_physics_process`); no clip keys it |
 | Fighter `Sprite2D` (`texture`, `flip_h`, `offset`) | `fighter.gd` `_update_sprite()` (`fighter.gd:286-291`); no clip keys it |
 | Fighter `Sprite2D.material` / `hurt_amount` | `HurtFlash` (`godot/fighter/hurt_flash.gd:21`, `:28`) |
 
@@ -113,7 +114,5 @@ has one; if a change needs one, stop and say so.
 
 ## Unconfirmed
 
-- Physics order: the rig controller must `seek()` after `main.step()` in the same tick for the
-  brief's 0 s disagreement (`CHANGE-BRIEF.md:166-168`); not yet measured in the game.
 - `blender/prop_taiko.blend` has an uncommitted change from before A5; never commit it with A7.
 - There is no `AGENTS.md` at the repository root (checked 2026-11-22), so none is imported.
