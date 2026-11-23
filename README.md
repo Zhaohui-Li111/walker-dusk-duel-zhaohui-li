@@ -338,6 +338,15 @@ godot --path godot res://previews/kick_arc_preview.tscn --write-movie "$PWD/capt
     not from an observation Zhaohui made first.
   - A kick pressed on the kick's last tick is dropped (existing game behaviour, unchanged).
 
+- **A7 film: "Dusk Duel, Animated".** A Brutalist explainer made with the `godot-gamedev` skill in
+  walker mode. 7:39.7, 3840 × 2160, 30 fps.
+  - **Link:** PENDING (Google Drive)
+  - **File name:** `claude-liam-walker-dusk-duel-zhaohui-li-a7-gamedev.mp4`
+  - **SHA-256:** `8496e357676eef3aaea118863e090a8dff57b06e2771efa412c45019974e674b`
+  - **Game source shown:** `godot/` at `8049c54`.
+  - **Film source and evidence:** [youtube/claude-liam-walker-dusk-duel-zhaohui-li-a7-gamedev/](youtube/claude-liam-walker-dusk-duel-zhaohui-li-a7-gamedev/)
+    (start with BUILD-LOG.md, FACTCHECK.md and _qc/REPORT.md).
+
 ## Final film
 
 **"Dusk Duel, Generated"**: a Brutalist explainer made with the `godot-gamedev` skill in walker

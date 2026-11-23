@@ -11,7 +11,8 @@
 - **Git tag and submitted commit SHA:** tag `a7`. The commit SHA is the one the tag points at; it is
   entered in the Canvas note, because a file cannot contain its own commit hash. The source ZIP is
   `git archive` of that commit.
-- **Game-source revision shown in the film:** **PENDING** (filled in when the film is rendered).
+- **Game-source revision shown in the film:** `8049c54`, the last commit that changed `godot/`.
+  Later commits add only the film source, documentation and this note; `godot/` is unchanged.
 - **Godot version, renderer, and operating system:** Godot 4.7.2 stable, GL Compatibility,
   Windows 11 Home
 - **Sprite clip: route, node, scene, frame rate:** Sprite2D + AnimationPlayer frame track;
@@ -32,8 +33,9 @@
 - **Sprite sheet source and licence (or model, version, and terms):** written by code in this
   repository (`godot/art/sheets/make_lantern_flame_sheet.gd`), MIT; `godot/art/sheets/ATTRIBUTION.md`.
   No generative model.
-- **Final film URL and filename:** **PENDING**
-- **Final film SHA-256:** **PENDING**
+- **Final film URL and filename:** **link PENDING** (Google Drive) · `claude-liam-walker-dusk-duel-zhaohui-li-a7-gamedev.mp4`
+  ("Dusk Duel, Animated", 7:39.7, 3840 × 2160, 30 fps, 43.3 MB)
+- **Final film SHA-256:** `8496e357676eef3aaea118863e090a8dff57b06e2771efa412c45019974e674b`
 - **Summary of my work:** I chose to generate the sheet by code, chose both clips, their routes and
   objects, the lantern frame order and 10 fps, the kick's 8 / 5 / 15 phase table from the code,
   the interrupt rule, the rig's clock and the lanterns' behaviour, and wrote the brief's answers,

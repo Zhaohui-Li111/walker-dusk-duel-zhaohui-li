@@ -1359,3 +1359,11 @@ exact commits are those in this repository's Git history.
    the rig controller `godot/fighter/kick_rig.gd`, which reads the state machine's `state` and
    `frame`; `fighter.gd` is not edited.
 4. The commits behind the evidence are listed in the entries above this account.
+
+## 2026-11-22 — The A7 film, watched by Zhaohui (recorded by Claude Code)
+
+- Built by a Claude Code subagent with the Brutalist `godot-gamedev` skill (walker), about an hour;
+  its own record is `youtube/claude-liam-walker-dusk-duel-zhaohui-li-a7-gamedev/BUILD-LOG.md`
+  (`00bea31`). Claude Code checked the file, hash, format and that `godot/` was unchanged.
+- Zhaohui watched the whole export and said: "看完了，没问题，可以用" ("watched it, no problems,
+  it can be used").
