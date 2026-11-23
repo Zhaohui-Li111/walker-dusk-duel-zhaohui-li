@@ -1220,3 +1220,61 @@ Code's.
    of the burst's extent was wrong (58 → 48 px), recorded in TUNING.md (`1fa6370`).
 10. "把一些重复得步骤交给了claude" (I handed some repetitive steps to Claude.) — the delegation
     "你把剩下的任务自己做完吧"; later prompts in `prompts/a6/` say so.
+
+# Assignment 7 — animation
+
+> Entries marked "recorded by Claude Code" are a factual record of what happened in the session,
+> with commits; they are not Zhaohui's experience. Zhaohui's own account follows in their words.
+
+## 2026-11-22 — Setup: wrapper, baseline, the sheet (recorded by Claude Code)
+
+- The A7 wrapper (fails on `Failed loading resource`) and the baseline through it: `ddf5397`,
+  `8bd0d84`. Every earlier suite at its A6 count.
+- The course sprite set's path and licence were placeholders in the handout; it was not on this
+  machine. Zhaohui chose a code-generated sheet ("直接用代码生成吧"). Claude Code wrote
+  `make_lantern_flame_sheet.gd` and the credits: `42525e8`.
+
+## 2026-11-22 — The brief (recorded by Claude Code)
+
+- Zhaohui answered a question list in Chinese and chose from options Claude Code laid out (lantern
+  flame cycle; kick arc rig on both fighters; MANUAL seek per physics tick; lanterns keep burning,
+  right one offset). Claude Code found the code's kick counts as 8 / 5 / 15, not the constants'
+  7 / 5 / 16; Zhaohui chose the measured counts. `c0fd5b3`.
+- Zhaohui asked Claude Code to write and then to "fix and commit" the short answers; Claude Code
+  declined (they are the student's) and added consistency notes only. Zhaohui rewrote them
+  ("我自己写的"): revision 2, `037b14d`.
+
+## 2026-11-22 — Step 1, CLAUDE.md (recorded by Claude Code)
+
+- `claude -p` with prompt-1 stopped twice on turn 1: "OAuth session expired"
+  (`sessions/a7/session-1-attempt*`); `claude auth status` stayed `loggedIn: false` after Zhaohui
+  signed in. On Zhaohui's choice ("Do it here") the prompt was carried out in the desktop session;
+  there is no session-1 transcript. Draft `d3b1638`, review `5d3ffe8`, `c18d4b5` (two wrong brief
+  line ranges fixed; headless facts confirmed by probe).
+- A probe of Claude Code's own had a silently inert track (`..:rotation`): the failure the
+  assignment describes, met by the agent itself.
+
+## 2026-11-22 — Steps 2–6 (recorded by Claude Code)
+
+- Pins before any clip, `29d991b`: a guessed jump airtime (44) failed; pinned as measured (42).
+- Lantern clip `867ad72`, kick rig `cfdc572`, wiring `a0161d6` (plan approved by Zhaohui:
+  "Approve plan"), edges `48a3b60`, mutations `c23e338`.
+- Findings: the lanterns first broke A6's embers draw-order test, so they moved after `Embers`; a
+  K press on the kick's frame 28 is dropped (brief revision 4, Claude Code's fact error).
+- First runs that failed on the harness, not the game: comment text in an authority check, a `%e`
+  format, an always-true check, hits armed too late for frames 0 and 1. Each fixed and recorded.
+
+## 2026-11-22 — Tuning (recorded by Claude Code; details in TUNING.md)
+
+- Zhaohui's first look before any reading: arc "刚好", flame natural. r0 strip `7bdb2a2`.
+- The line at the arc's head: Zhaohui saw it in slow motion (asked by Claude Code); Claude's
+  polygon-seam guess was wrong, it is `effects.gd`'s whiff streak: `f20ac07`.
+- Zhaohui first said "nothing to change" (`a82293f`), then asked for Claude's r0 points to be
+  changed ("改吧"). r1, one change: frame-0 arc alpha 0 → 0.25, prediction first (`8049c54`), strip
+  and comparison (`fd041ac`), kept after play: "能看的出来，刚好" (`b580d17`). Recorded as driven by
+  Claude's reading, approved and judged by Zhaohui.
+- Human checks in the running game: `8588ddd`.
+
+## 2026-11-22 — Zhaohui's own account (Zhaohui's words)
+
+**TO DO (Zhaohui).**
