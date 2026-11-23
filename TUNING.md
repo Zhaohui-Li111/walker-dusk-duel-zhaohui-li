@@ -190,3 +190,30 @@ What I saw (preview window, 2026-11-22, Zhaohui's words, before any capture was 
 踢腿弧线可以看清，对的上，刚好。火焰自然，没有卡顿，看的出来。
 (Translation: the kick arc can be seen clearly, lines up, is just right. The flame looks natural,
 no stutter, and [the two lanterns' offset] can be seen.)
+
+Strip (fixture capture, Zhaohui ran Movie Maker, 2026-11-22): `captures/kick_arc/r0/`, 1280 × 720,
+30 fps, frames 0–24 kept (the brief's lantern range, which holds every kick frame); frames 25–89
+and the audio track deleted. The windowed run's `logs/kick_arc_preview_frames.log` was identical to
+the committed headless one, so frame N is the logged line N + 1.
+
+### Claude's reading of r0 (a claim, not a verdict; 2026-11-22)
+
+Read from 2× crops around P1 (viewport x 165–310, y 190–315) and 3× crops of both lanterns.
+
+| Capture frame (`Fighter.frame`) | Brief | What the strip shows | Match |
+|---|---|---|---|
+| 10 (0) | startup begins: faint wind-up arc | no arc: `modulate` alpha is 0 on key 0 | partly |
+| 13 (6) | late startup, arc wound back | faint arc under the knee, pointing down | yes |
+| 14 (8) | active opens, arc sweeping, full strength | bright crescent ahead of the hip | yes |
+| 16 (12) | last active frame | arc upright, its head on the foot (the kick hitbox) | yes |
+| 17 (14) | recovery | still nearly as bright as active (alpha 0.9); a thin grey horizontal line at the arc's head, also on 19, not on 16 | partly |
+| 23 (26) | late recovery, nearly settled | arc already gone | yes |
+| 24 (28) | idle, no arc | no arc | yes |
+
+Lanterns: the right flame is clear on every frame and changes cell every 3 capture frames
+(0.1 s at 30 fps); frame 24 shows the same cell as frame 0. The left lantern is covered by
+Akaken's raised arm at the start position (frames 0–9 and 24); its flame shows only while P1
+kicks. The flames rise above the lit windows like candle flames.
+
+Possible causes, not confirmed: the line at the arc's head appears only when `Pivot.modulate`
+alpha < 1, which suggests a polygon seam that shows under transparency.
