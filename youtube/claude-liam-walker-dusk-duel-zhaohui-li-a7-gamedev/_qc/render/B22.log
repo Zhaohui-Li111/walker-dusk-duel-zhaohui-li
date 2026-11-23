@@ -1,0 +1,3 @@
+[remotion] B22: ok: ClaudeTitleOutro -> media/B22.mp4
+[remotion] stamped provenance in beat_sheet.json + updated consumers.json
+[remotion] done — run `bash scripts/run.sh <REEL>` to compile the cut
