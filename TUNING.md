@@ -271,3 +271,8 @@ x 50–1190 from frame 1).
 | 11 | slightly brighter than r0 | 185 pixels: a little brighter | yes |
 | 12 | slightly brighter than r0 | 37 pixels: at the noise level, not visible | partly (too small to see) |
 | 13–24 | identical to r0 | 35–50 pixels each, noise level | yes |
+
+### Zhaohui's verdict on r1 (running game, 2026-11-22)
+
+能看的出来，刚好。
+(Translation: it can be seen, just right.) **r1 is kept.**

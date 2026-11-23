@@ -403,3 +403,12 @@ the brief did not name. Nothing in the phase table, cycle spec, clocks or rules 
   frame 28; it is read again from frame 29. Found by `test_kick_edges.gd` (K read on 28: no new
   kick; on 29: a new kick that tick). The game is unchanged (pins 19 / 0). Claude Code's error in
   the facts it filled in; no design value changed.
+
+## Revision 5 · 2026-11-22 · Kick arc tuning r1 kept
+
+- `godot/animations/kick_arc.tres`, `Pivot:modulate` key 0 (frame 0) alpha 0 → **0.25**, so the
+  wind-up arc shows from the first startup frame, as "Frame strips" (capture frame 10) asks.
+  Phase table, key times and transitions unchanged. Driven by Claude Code's reading of r0 and
+  approved by Zhaohui ("批准"); kept by Zhaohui after play ("能看的出来，刚好": "it can be seen,
+  just right"). Prediction, strips and comparison: TUNING.md, "Kick arc, revision r1". The
+  read-back carries the value (`test_kick_readback.gd`, 52 / 0). Appended by Claude Code.
