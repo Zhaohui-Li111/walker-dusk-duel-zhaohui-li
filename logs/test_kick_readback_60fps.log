@@ -48,8 +48,9 @@ PASS [boundary] modulate has a key where recovery begins, frame 13
 PASS [boundary] modulate has a key where end begins, frame 28
 PASS [spacing] modulate eases in (accelerates) from frame 7 into active (transition 2.00 > 1)
 PASS [spacing] modulate eases out (settles) through recovery from frame 13 (transition 0.40 < 1)
+PASS [r1] modulate key 0: the arc is visible from frame 0 (alpha 0.25, r1 0.25)
 PASS [clock] callback_mode_process is ANIMATION_CALLBACK_MODE_PROCESS_MANUAL (got 2)
 PASS [authority] autoplay is empty
 PASS [authority] one AnimationPlayer in fighter.tscn (got 1)
 PASS [rest] the arc starts hidden
-51 checks, 0 failed
+52 checks, 0 failed

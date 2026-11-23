@@ -95,6 +95,11 @@ func _run() -> void:
 				"%s eases in (accelerates) from frame 7 into active (transition %.2f > 1)" % [sub, clip.track_get_key_transition(t, k7)])
 		check(clip.track_get_key_transition(t, k13) < 1.0, "spacing",
 				"%s eases out (settles) through recovery from frame 13 (transition %.2f < 1)" % [sub, clip.track_get_key_transition(t, k13)])
+		if sub == "modulate":
+			# TUNING.md A7 r1 (Zhaohui approved): the wind-up arc shows from frame 0.
+			var a0: float = (clip.track_get_key_value(t, 0) as Color).a
+			check(a0 > 0.0 and is_equal_approx(a0, 0.25), "r1",
+					"modulate key 0: the arc is visible from frame 0 (alpha %.2f, r1 0.25)" % a0)
 
 	# The clock and the authority's settings.
 	check(player.callback_mode_process == AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL, "clock",

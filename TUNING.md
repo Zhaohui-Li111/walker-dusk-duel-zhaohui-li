@@ -240,3 +240,17 @@ lantern hidden behind Akaken at the start position, as things Zhaohui could chec
 
 **No observation-driven revision was made in A7.** The handout asks for at least one; none was
 made because Zhaohui did not see anything in play to change. This is recorded as it is.
+
+## 2026-11-22 — Kick arc, revision r1
+
+- **What drove it:** Claude Code's reading of r0 (capture frame 10, `Fighter.frame` 0: no arc,
+  although the brief's strip table says "faint wind-up arc"). After recording "nothing to change",
+  Zhaohui quoted that point and the lantern point and said "改吧" ("change them"); Claude Code
+  proposed one change at a time, and Zhaohui approved this one ("批准"). Not an observation Zhaohui
+  made in play; Zhaohui's verdict on r1 in the running game follows below.
+- **The change:** `godot/animations/kick_arc.tres`, `Pivot:modulate` key 0 (frame 0) alpha
+  **0 → 0.25**. Phase table, key times, rotation and transitions unchanged. The read-back gains one
+  expected value: the arc is visible from frame 0 (key 0 alpha > 0).
+- **Claude's prediction (written before the change):** frame 10 shows a faint arc under the knee,
+  about 25 % opaque, pointing down-forward (85°), where r0 showed none; frames 11–12 slightly
+  brighter than r0 (fading in from 0.25 instead of 0); frame 13 onward identical to r0.

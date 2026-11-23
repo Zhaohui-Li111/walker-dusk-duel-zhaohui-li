@@ -52,3 +52,7 @@ PASS [edge] K read on frame 28 (the kick ends that tick, input not read): no new
 PASS [edge] K read on frame 29 (idle, input read again): a new kick that tick, `kick_arc` from 0 (tick +29)
     P1 health after the SETUP hits: 90
 38 checks, 0 failed
+WARNING: 16 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 4 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
