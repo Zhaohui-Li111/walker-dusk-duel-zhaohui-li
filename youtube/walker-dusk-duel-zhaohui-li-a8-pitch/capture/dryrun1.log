@@ -1,0 +1,84 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+reach punch P1 55.4 kick P1 52.6; P2 half width 11.1
+tick 1  t=0.017s  PHASE  -> title | P1 health 100  P2 health 100
+tick 240  t=4.000s  INPUT confirm
+tick 241  t=4.017s  PHASE title -> intro | P1 health 100  P2 health 100
+tick 300  t=5.000s  PHASE intro -> fight | P1 health 100  P2 health 100
+tick 347  t=5.783s  INPUT p1_punch
+tick 352  t=5.867s  BLOCKED by P1 (punch) | P1 health 100  P2 health 100
+tick 373  t=6.217s  INPUT p1_punch
+tick 378  t=6.300s  HIT by P1 (punch) | P1 health 100  P2 health 92
+tick 402  t=6.700s  INPUT p1_kick
+tick 410  t=6.833s  HIT by P1 (kick) | P1 health 100  P2 health 78
+tick 444  t=7.400s  INPUT p1_punch
+tick 449  t=7.483s  BLOCKED by P1 (punch) | P1 health 100  P2 health 78
+tick 470  t=7.833s  INPUT p1_punch
+tick 475  t=7.917s  HIT by P1 (punch) | P1 health 100  P2 health 70
+tick 501  t=8.350s  INPUT p1_kick
+tick 509  t=8.483s  HIT by P1 (kick) | P1 health 100  P2 health 56
+tick 542  t=9.033s  INPUT p1_punch
+tick 547  t=9.117s  BLOCKED by P1 (punch) | P1 health 100  P2 health 56
+tick 568  t=9.467s  INPUT p1_punch
+tick 573  t=9.550s  HIT by P1 (punch) | P1 health 100  P2 health 48
+tick 598  t=9.967s  INPUT p1_kick
+tick 606  t=10.100s  BLOCKED by P1 (kick) | P1 health 100  P2 health 48
+tick 629  t=10.483s  INPUT p1_punch
+tick 634  t=10.567s  BLOCKED by P1 (punch) | P1 health 100  P2 health 48
+tick 655  t=10.917s  INPUT p1_punch
+tick 664  t=11.067s  WHIFF by P1 (punch) | P1 health 100  P2 health 48
+tick 668  t=11.133s  HIT by P2 (kick) | P1 health 86  P2 health 48
+tick 698  t=11.633s  INPUT p1_kick
+tick 711  t=11.850s  WHIFF by P1 (kick) | P1 health 86  P2 health 48
+tick 727  t=12.117s  INPUT p1_punch
+tick 732  t=12.200s  BLOCKED by P1 (punch) | P1 health 86  P2 health 48
+tick 753  t=12.550s  INPUT p1_punch
+tick 758  t=12.633s  BLOCKED by P1 (punch) | P1 health 86  P2 health 48
+tick 779  t=12.983s  INPUT p1_kick
+tick 787  t=13.117s  HIT by P1 (kick) | P1 health 86  P2 health 34
+tick 821  t=13.683s  INPUT p1_punch
+tick 826  t=13.767s  BLOCKED by P1 (punch) | P1 health 86  P2 health 34
+tick 847  t=14.117s  INPUT p1_punch
+tick 852  t=14.200s  BLOCKED by P1 (punch) | P1 health 86  P2 health 34
+tick 873  t=14.550s  INPUT p1_kick
+tick 886  t=14.767s  WHIFF by P1 (kick) | P1 health 86  P2 health 34
+tick 902  t=15.033s  INPUT p1_punch
+tick 907  t=15.117s  BLOCKED by P1 (punch) | P1 health 86  P2 health 34
+tick 928  t=15.467s  INPUT p1_punch
+tick 933  t=15.550s  BLOCKED by P1 (punch) | P1 health 86  P2 health 34
+tick 954  t=15.900s  INPUT p1_kick
+tick 962  t=16.033s  HIT by P1 (kick) | P1 health 86  P2 health 20
+tick 995  t=16.583s  INPUT p1_punch
+tick 1000  t=16.667s  HIT by P1 (punch) | P1 health 86  P2 health 12
+tick 1026  t=17.100s  INPUT p1_punch
+tick 1034  t=17.233s  INTERRUPTED by P1 (punch) | P1 health 86  P2 health 12
+tick 1034  t=17.233s  HIT by P2 (kick) | P1 health 72  P2 health 12
+tick 1064  t=17.733s  INPUT p1_kick
+tick 1077  t=17.950s  WHIFF by P1 (kick) | P1 health 72  P2 health 12
+tick 1093  t=18.217s  INPUT p1_punch
+tick 1098  t=18.300s  BLOCKED by P1 (punch) | P1 health 72  P2 health 12
+tick 1119  t=18.650s  INPUT p1_punch
+tick 1124  t=18.733s  HIT by P1 (punch) | P1 health 72  P2 health 4
+tick 1150  t=19.167s  INPUT p1_kick
+tick 1163  t=19.383s  WHIFF by P1 (kick) | P1 health 72  P2 health 4
+tick 1179  t=19.650s  INPUT p1_punch
+tick 1184  t=19.733s  BLOCKED by P1 (punch) | P1 health 72  P2 health 4
+tick 1205  t=20.083s  INPUT p1_punch
+tick 1210  t=20.167s  BLOCKED by P1 (punch) | P1 health 72  P2 health 4
+tick 1231  t=20.517s  INPUT p1_kick
+tick 1242  t=20.700s  INTERRUPTED by P1 (kick) | P1 health 72  P2 health 4
+tick 1242  t=20.700s  HIT by P2 (kick) | P1 health 58  P2 health 4
+tick 1272  t=21.200s  INPUT p1_punch
+tick 1277  t=21.283s  HIT by P1 (punch) | P1 health 58  P2 health 0
+tick 1277  t=21.283s  K.O. P2
+tick 1278  t=21.300s  PHASE fight -> ko | P1 health 58  P2 health 0
+tick 1368  t=22.800s  PHASE ko -> result | P1 health 58  P2 health 0
+tick 1518  t=25.300s  INPUT confirm
+tick 1519  t=25.317s  PHASE result -> intro | P1 health 100  P2 health 100
+tick 1578  t=26.300s  PHASE intro -> fight | P1 health 100  P2 health 100
+tick 1676  t=27.933s  HIT by P2 (kick) | P1 health 86  P2 health 100
+capture done, frames 1698; round 2
+WARNING: 48 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 10 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

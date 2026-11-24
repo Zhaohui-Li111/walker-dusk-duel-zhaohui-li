@@ -1,0 +1,17 @@
+{
+ "B00": "I'm Jao Hui Li, this is the pitch for my final project, Dusk Duel, a small fighting game I have been building in Godot since assignment 2.",
+ "B01": "My final project will take dusk duel to a complete playable vertical slice that runs in a web browser. One stage, one player against a CPU opponent from the title screen to the knockout in a rematch.",
+ "B02": "Much of that loop already exists. Today the game starts on a title screen, runs a full round against a CPU opponent, ends on a K, O, and offers a rematch. All of this runs on desktop now.",
+ "B03": "What will be new is three things. A web build, a stronger CPU opponent with adjustable difficulty, and wider tests, with a test report, a stranger can rerun.",
+ "B04": "My reference is the King of Fighters 97 which I played. I like its fast combat, attack timing and defense. Dusk dual takes a smaller approach, one complete single player match for someone who wants a quick fight without installing a large game, finding an online opponent or going through setup.",
+ "B05": "Here's the CPU today in cpucontroller.gd. On line 50, if I attack close by, it often blocks. Line 53 out of kick range, it walks in. Line 55, too close, it steps back. Line 57 in range, it kicks. It makes a new decision every 10 ticks.",
+ "B06": "And here it is in the capture. Arotake blocks Akakan's punches than kicks. In round two, the capture stops sending keys, so Arotake walks in and kicks a standing Akakan. Next, I want its choices to be more deliberate, not just more frequent.",
+ "B07": "I'm aiming at gameplay programmer roles, the reader is a technical lead or a recruiter. In the first 60 seconds they should open the page, press enter, fight around and see the KO, and the rematch without reading any code.",
+ "B08": "Behind the game is the evidence, shaders and materials from assignment 5, particle effects from assignment 6, animation clips from assignment 7, each with headless tests. The round itself is pinned by 94 checks, all passing.",
+ "B09": "I have measured cost before. On this laptop's Intel UHD graphics, the hit sparks added about a hundredth of a millisecond of GPU time. I will measure desktop against the browser the same way.",
+ "B10": "What it will not do, no online play, one stage only, no character select, no saves and no big roster.",
+ "B11": "The first new piece is Milestone 1, a full match in a web browser. I will check it on this machine in Microsoft Edge. The game loads, I start from the title, the CPU approaches, attacks and blocks, the effects draw, the round reaches the K, O, and a rematch plays. A recording and a test report will show it ran.",
+ "B12": "The risk is that the web build looks or runs differently from desktop, shader color, particle blending, frame rate, so the web export comes first, not last. I will compare both in the same scene and give any effect that fails a simpler fallback.",
+ "B13": "Why this project shaders, particles, animation and tests or skills I already have, and each has a tagged assignment behind it. What is new to me is a smarter CPU opponent, shipping a God out game to the web, repeatable benchmarks and wider gameplay tests.",
+ "B14": "Dusk Duel, a fighting game a stranger can open, play, and verify. Godot 4.7.2, compatibility renderer, exported to the web."
+}

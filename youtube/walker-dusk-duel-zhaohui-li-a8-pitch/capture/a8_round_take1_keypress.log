@@ -1,0 +1,75 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 - Build 31.0.101.4502 - Compatibility - Using Device: Intel - Intel(R) UHD Graphics
+
+Movie Maker mode enabled, recording movie in 3840×2160 @ 60 FPS...
+reach punch P1 55.4 kick P1 52.6; P2 half width 11.1
+tick 1  t=0.017s  PHASE  -> title | P1 health 100  P2 health 100
+tick 127  t=2.117s  PHASE title -> intro | P1 health 100  P2 health 100
+tick 186  t=3.100s  PHASE intro -> fight | P1 health 100  P2 health 100
+tick 233  t=3.883s  INPUT p1_punch
+tick 238  t=3.967s  BLOCKED by P1 (punch) | P1 health 100  P2 health 100
+tick 259  t=4.317s  INPUT p1_punch
+tick 264  t=4.400s  HIT by P1 (punch) | P1 health 100  P2 health 92
+tick 297  t=4.950s  INPUT p1_kick
+tick 305  t=5.083s  HIT by P1 (kick) | P1 health 100  P2 health 78
+tick 336  t=5.600s  INPUT p1_punch
+tick 341  t=5.683s  BLOCKED by P1 (punch) | P1 health 100  P2 health 78
+tick 362  t=6.033s  INPUT p1_punch
+tick 371  t=6.183s  WHIFF by P1 (punch) | P1 health 100  P2 health 78
+tick 372  t=6.200s  HIT by P2 (kick) | P1 health 86  P2 health 78
+tick 402  t=6.700s  INPUT p1_kick
+tick 410  t=6.833s  HIT by P1 (kick) | P1 health 86  P2 health 64
+tick 449  t=7.483s  INPUT p1_punch
+tick 454  t=7.567s  INTERRUPTED by P2 (kick) | P1 health 86  P2 health 64
+tick 454  t=7.567s  HIT by P1 (punch) | P1 health 86  P2 health 56
+tick 478  t=7.967s  INPUT p1_punch
+tick 483  t=8.050s  HIT by P1 (punch) | P1 health 86  P2 health 48
+tick 508  t=8.467s  INPUT p1_kick
+tick 516  t=8.600s  INTERRUPTED by P2 (kick) | P1 health 86  P2 health 48
+tick 516  t=8.600s  HIT by P1 (kick) | P1 health 86  P2 health 34
+tick 546  t=9.100s  INPUT p1_punch
+tick 551  t=9.183s  HIT by P1 (punch) | P1 health 86  P2 health 26
+tick 577  t=9.617s  INPUT p1_punch
+tick 586  t=9.767s  WHIFF by P1 (punch) | P1 health 86  P2 health 26
+tick 586  t=9.767s  HIT by P2 (kick) | P1 health 72  P2 health 26
+tick 616  t=10.267s  INPUT p1_kick
+tick 629  t=10.483s  WHIFF by P1 (kick) | P1 health 72  P2 health 26
+tick 645  t=10.750s  INPUT p1_punch
+tick 650  t=10.833s  BLOCKED by P1 (punch) | P1 health 72  P2 health 26
+tick 671  t=11.183s  INPUT p1_punch
+tick 676  t=11.267s  BLOCKED by P1 (punch) | P1 health 72  P2 health 26
+tick 697  t=11.617s  INPUT p1_kick
+tick 705  t=11.750s  HIT by P1 (kick) | P1 health 72  P2 health 12
+tick 738  t=12.300s  INPUT p1_punch
+tick 743  t=12.383s  BLOCKED by P1 (punch) | P1 health 72  P2 health 12
+tick 764  t=12.733s  INPUT p1_punch
+tick 769  t=12.817s  HIT by P1 (punch) | P1 health 72  P2 health 4
+tick 807  t=13.450s  INPUT p1_kick
+tick 818  t=13.633s  INTERRUPTED by P1 (kick) | P1 health 72  P2 health 4
+tick 818  t=13.633s  HIT by P2 (kick) | P1 health 58  P2 health 4
+tick 846  t=14.100s  INPUT p1_punch
+tick 851  t=14.183s  HIT by P1 (punch) | P1 health 58  P2 health 0
+tick 851  t=14.183s  K.O. P2
+tick 852  t=14.200s  PHASE fight -> ko | P1 health 58  P2 health 0
+tick 942  t=15.700s  PHASE ko -> result | P1 health 58  P2 health 0
+tick 1092  t=18.200s  INPUT confirm
+tick 1093  t=18.217s  PHASE result -> intro | P1 health 100  P2 health 100
+tick 1152  t=19.200s  PHASE intro -> fight | P1 health 100  P2 health 100
+tick 1250  t=20.833s  HIT by P2 (kick) | P1 health 86  P2 health 100
+tick 1294  t=21.567s  HIT by P2 (kick) | P1 health 72  P2 health 100
+tick 1338  t=22.300s  HIT by P2 (kick) | P1 health 58  P2 health 100
+tick 1392  t=23.200s  HIT by P2 (kick) | P1 health 44  P2 health 100
+tick 1436  t=23.933s  HIT by P2 (kick) | P1 health 30  P2 health 100
+tick 1480  t=24.667s  HIT by P2 (kick) | P1 health 16  P2 health 100
+capture done, frames 1512; round 2
+--------------------------------------------------------------------------------
+Done recording movie at path: D:/courses/7270/walker-dusk-duel-zhaohui-li/youtube/walker-dusk-duel-zhaohui-li-a8-pitch/capture/a8_round.avi
+798 frames at 60 FPS (movie length: 00:00:13:18), recorded in 00:09:41 (2% of real-time speed).
+CPU render time: 0.65 seconds (average: 0.82 ms/frame)
+GPU render time: 1.78 seconds (average: 2.23 ms/frame)
+Encoding time: 219.92 seconds (average: 275.59 ms/frame)
+--------------------------------------------------------------------------------
+WARNING: 4 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 2 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
